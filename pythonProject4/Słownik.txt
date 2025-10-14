@@ -1,0 +1,9 @@
+Ala:7
+Aniela:10
+Kolor:fioletowy
+Kot:cat
+Pies:dog
+Osoba:person
+aaa:bbb
+zwierzę:animal
+impreza:party

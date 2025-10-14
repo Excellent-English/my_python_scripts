@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<teamdata>
+ <team>
+  <teamID>98633</teamID>
+  <name>huana team</name>
+  <countryID>1</countryID>
+  <regionID>6</regionID>
+  <dateCreated>2007-12-10 14:49</dateCreated>
+  <rank>4527.23</rank>
+  <national>0</national>
+  <colShirtKeep>8417659</colShirtKeep>
+  <colTrausKeep>3918085</colTrausKeep>
+  <colShirt>14373888</colShirt>
+  <colTraus>0</colTraus>
+  <colShirt2>0</colShirt2>
+  <colTraus2>5152768</colTraus2>
+  <arenaName>Miedziana Arena</arenaName>
+ </team>
+ <arena>
+  <stand>
+   <location>1</location>
+   <type>3</type>
+   <size>9000</size>
+   <isRoof>1</isRoof>
+  </stand>
+  <stand>
+   <location>2</location>
+   <type>3</type>
+   <size>6000</size>
+   <isRoof>1</isRoof>
+  </stand>
+  <stand>
+   <location>3</location>
+   <type>3</type>
+   <size>3500</size>
+   <isRoof>1</isRoof>
+  </stand>
+  <stand>
+   <location>4</location>
+   <type>3</type>
+   <size>3500</size>
+   <isRoof>1</isRoof>
+  </stand>
+  <stand>
+   <location>5</location>
+   <type>3</type>
+   <size>5000</size>
+   <isRoof>1</isRoof>
+  </stand>
+  <stand>
+   <location>6</location>
+   <type>3</type>
+   <size>5000</size>
+   <isRoof>1</isRoof>
+  </stand>
+  <stand>
+   <location>7</location>
+   <type>2</type>
+   <size>7000</size>
+   <isRoof>0</isRoof>
+  </stand>
+  <stand>
+   <location>8</location>
+   <type>2</type>
+   <size>7000</size>
+   <isRoof>0</isRoof>
+  </stand>
+ </arena>
+ <user>
+  <userID>440531</userID>
+  <login>hano77</login>
+ </user>
+</teamdata>

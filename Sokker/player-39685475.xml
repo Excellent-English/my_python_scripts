@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<player>
+ <ID>39685475</ID>
+ <name>Krystian</name>
+ <surname>Kożukar</surname>
+ <countryID>1</countryID>
+ <age>16</age>
+ <height>178</height>
+ <weight>66.1</weight>
+ <BMI>20.86</BMI>
+ <teamID>140304</teamID>
+ <youthTeamID>2684</youthTeamID>
+ <value>14000</value>
+ <wage>1600</wage>
+ <cards>0</cards>
+ <goals>0</goals>
+ <assists>0</assists>
+ <matches>0</matches>
+ <ntCards>0</ntCards>
+ <ntGoals>0</ntGoals>
+ <ntAssists>0</ntAssists>
+ <ntMatches>0</ntMatches>
+ <injuryDays>0</injuryDays>
+ <national>0</national>
+ <skillForm>11</skillForm>
+ <skillExperience>0</skillExperience>
+ <skillTeamwork>0</skillTeamwork>
+ <skillDiscipline>0</skillDiscipline>
+ <transferList>0</transferList>
+</player>

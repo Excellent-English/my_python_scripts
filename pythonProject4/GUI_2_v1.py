@@ -1,0 +1,321 @@
+import customtkinter as ctk
+from CTkMessagebox import CTkMessagebox
+import tkinter as tk
+import random
+import os
+from tkinter import messagebox
+
+# region Podstawowa kontrola słownika i lokalizacji
+# Pobierz ścieżkę do katalogu Dokumenty użytkownika
+desktop_path = os.path.join(os.path.expanduser('~'), 'Downloads')
+file_path = os.path.join(desktop_path, 'Słownik.txt')
+
+# Utwórz plik, jeśli nie istnieje
+if not os.path.exists(file_path):
+    with open(file_path, 'w', encoding='utf-8') as plik:
+        pass  # Utwórz pusty plik
+# endregion
+
+# region Funkcja do zapamiętywania liczby słówek, które mają być dostarczone użytkownikowi w trakcie pojedynczej sesji
+def save_number(entry3):
+    global number
+    try:
+        number = int(entry3.get())  # Konwersja na int
+        print(f"Wpisana liczba: {number}")
+    except ValueError:
+        print("Proszę wpisać poprawną liczbę.")
+# endregion
+
+# region Funkcja potwierdzająca zamknięcie aplikacji
+def confirm_exit():
+    msg = CTkMessagebox(title="Zakończ", message="Czy na pewno chcesz zamknąć aplikację?", icon="question", option_1="Nie", option_2="Tak")
+    if msg.get() == "Tak":
+        root.quit()
+# endregion
+
+# region Funkcje do otwierania nowych okien i ukrywania głównego okna
+def przegladaj(bg_color):
+    root.withdraw()
+    new_window = ctk.CTkToplevel(root)
+    new_window.title("Przeglądaj słówka dodane do Twojej listy")
+    new_window.geometry("600x400")
+    new_window.configure(fg_color=bg_color)
+    new_window.focus_force()  # Ustawienie fokusu na nowe okno
+
+
+    # Utwórz główną ramkę
+    main_frame_przegladaj = ctk.CTkFrame(new_window)
+    main_frame_przegladaj.pack(expand=True, fill='both', padx=10, pady=10)
+
+    # Utwórz ramkę, aby umieścić pole z tekstem i przyciski
+    frame_przegladaj = ctk.CTkFrame(main_frame_przegladaj)
+    frame_przegladaj.pack(expand=True, fill='both', padx=10, pady=10)
+
+    # Utwórz wewnętrzną ramkę do wyśrodkowania tekstu
+    inner_frame = ctk.CTkFrame(frame_przegladaj)
+    inner_frame.grid(row=0, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
+
+    # Utwórz pole tekstowe i dodaj je do wewnętrznej ramki (inner_frame)
+    ctk.CTkLabel(inner_frame,
+                         text="W tym oknie masz możliwość przeglądania słówek dodanych do Twojego słownika.\nW celu sprawdzenia kolejnego słówka, naciskaj klawisz >>.\nAby powrócić do głównego menu, użyj przycisku na dole. Miłej nauki!",
+                         wraplength=400, font=("Helvetica", 14)).pack(pady=10, padx=10)
+
+    # Ustawienie równomiernego rozkładu wierszy i kolumn
+    frame_przegladaj.grid_rowconfigure(0, weight=1)
+    frame_przegladaj.grid_columnconfigure(0, weight=1)
+
+
+    # Utwórz pusty słownik
+    slownik = {}
+
+    # Otwórz plik txt do odczytu
+    try:
+        with open(file_path, 'r', encoding='utf-8') as plik:
+            for linia in plik:
+                # Usuń białe znaki z początku i końca linii oraz podziel na klucz i wartość
+                klucz, wartosc = linia.strip().split(':')
+                # Przypisz wartości do słownika, konwertując wartości numeryczne
+                slownik[klucz] = int(wartosc) if wartosc.isdigit() else wartosc
+    except FileNotFoundError:
+        messagebox.showerror("Błąd", "Plik Słownik.txt nie istnieje. Dodaj słówka, aby utworzyć plik.")
+
+    # Funkcja aktualizująca etykiety
+    def update_labels():
+        if slownik:
+            losowy_klucz = random.choice(list(slownik.keys()))
+            losowa_wartosc = slownik[losowy_klucz]
+            label_left.configure(text=losowy_klucz)
+            label_right.configure(text=losowa_wartosc)
+        else:
+            label_left.configure(text="Brak słówek")
+            label_right.configure(text="Wróć do głównego menu, wybierz opcję Dodaj, aby stworzyć nowy słownik.", wraplength=200)
+
+    # Dodawanie etykiet z losowym kluczem i wartością
+    frame = ctk.CTkFrame(new_window, fg_color=bg_color)
+    frame.pack(pady=10)
+
+    label_left = ctk.CTkLabel(frame, text="", font=("Helvetica", 14), wraplength=300)
+    label_left.pack(side="left", padx=10)
+
+    label_right = ctk.CTkLabel(frame, text="", font=("Helvetica", 14), wraplength=150)
+    label_right.pack(side="right", padx=10)
+
+    # Pierwsze wywołanie funkcji aktualizującej etykiety
+    update_labels()
+
+    # Dodawanie przycisku ">>"
+    new_button = ctk.CTkButton(new_window, text=">>", font=("Helvetica", 14),text_color="white", command=update_labels)
+    new_button.pack(pady=10)
+
+    # Dodawanie przycisku "Powrót do menu"
+    back_button = ctk.CTkButton(new_window, text="Powrót do menu", font=("Helvetica", 14), text_color="white",
+                                command=lambda: (new_window.destroy(), root.deiconify()))
+    back_button.pack(pady=10)
+
+    new_window.protocol("WM_DELETE_WINDOW", lambda: (new_window.destroy(), root.deiconify()))
+
+
+def dodaj(bg_color):
+    root.withdraw()
+    new_window = ctk.CTkToplevel(root)
+    new_window.title("Dodaj słówko do listy")
+    new_window.geometry("600x400")
+    new_window.configure(fg_color=bg_color)
+    new_window.focus_force()  # Ustawienie fokusu na nowe okno
+
+    # Utwórz główną ramkę
+    main_frame_dodaj = ctk.CTkFrame(new_window, height=80)
+    main_frame_dodaj.pack(expand=True, fill='both', padx=10, pady=10)
+    main_frame_dodaj.pack_propagate(False)  # Wyłączenie automatycznego dostosowywania rozmiaru
+
+    # Utwórz ramkę, aby umieścić pole z tekstem i przyciski
+    frame_dodaj = ctk.CTkFrame(main_frame_dodaj, height=30)
+    frame_dodaj.pack(expand=True, fill='both', padx=10, pady=10)
+    frame_dodaj.pack_propagate(False)  # Wyłączenie automatycznego dostosowywania rozmiaru
+
+    # Utwórz wewnętrzną ramkę do wyśrodkowania tekstu
+    inner_frame = ctk.CTkFrame(frame_dodaj, height=80)
+    inner_frame.grid(row=0, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
+
+    # Utwórz pole tekstowe i dodaj je do wewnętrznej ramki (inner_frame)
+    label = ctk.CTkLabel(inner_frame,
+                         text="W tym oknie masz możliwość dodawania nowych słówek do Twojego słownika. Jedyne, co musisz zrobić, to wpisać słowo angielskie po lewej stronie oraz jego polskie tłumaczenie po prawej. Na koniec wciśnij klawisz Dodaj, który przeniesie słówko do słownika.",
+                         wraplength=400, font=("Helvetica", 14), height=80)
+    label.pack(expand=True)
+
+    # Ustawienie równomiernego rozkładu wierszy i kolumn
+    frame_dodaj.grid_rowconfigure(0, weight=1)
+    frame_dodaj.grid_columnconfigure(0, weight=1)
+
+
+
+    # Funkcja do zapisywania rekordu do pliku
+    def save_record():
+        klucz = entry_key.get()
+        wartosc = entry_value.get()
+        if not klucz or not wartosc:
+            messagebox.showwarning("Brakujące dane", "Uzupełnij wszystkie pola, aby dodać nowe słówko do słownika.")
+        else:
+            with open(file_path, 'a', encoding='utf-8') as plik:
+                plik.write(f"{klucz}:{wartosc}\n")
+            entry_key.delete(0, "end")
+            entry_value.delete(0, "end")
+            messagebox.showinfo("Sukces", "Rekord został pomyślnie dodany do słownika.")
+
+
+    # Tworzenie i stylizacja widgetów
+    frame_dodaj = ctk.CTkFrame(master=new_window)
+    frame_dodaj.pack(pady=5, padx=20, expand=True, fill='both')
+
+    # Ustawienie proporcji kolumn
+    frame_dodaj.grid_columnconfigure(0, weight=1)
+    frame_dodaj.grid_columnconfigure(1, weight=2)
+    frame_dodaj.grid_columnconfigure(2, weight=1)
+    frame_dodaj.grid_columnconfigure(3, weight=2)
+
+    label_key = ctk.CTkLabel(master=frame_dodaj, text="Polskie tłumaczenie:")
+    label_key.grid(row=0, column=0, padx=5, pady=5, sticky="e")
+
+    entry_key = ctk.CTkEntry(master=frame_dodaj)
+    entry_key.grid(row=0, column=1, padx=5, pady=5, sticky="we")
+
+    label_value = ctk.CTkLabel(master=frame_dodaj, text="Angielskie słówko:")
+    label_value.grid(row=0, column=2, padx=5, pady=5, sticky="e")
+
+    entry_value = ctk.CTkEntry(master=frame_dodaj)
+    entry_value.grid(row=0, column=3, padx=5, pady=5, sticky="we")
+
+    save_button = ctk.CTkButton(master=frame_dodaj, text="Zapisz rekord", text_color="white", command=save_record)
+    save_button.grid(row=1, column=0, columnspan=4, pady=15)
+
+
+    # Dodawanie przycisku "Powrót do menu"
+    back_button = ctk.CTkButton(new_window, text="Powrót do menu", font=("Helvetica", 14), text_color="white",
+                                command=lambda: (new_window.destroy(), root.deiconify()))
+    back_button.pack(pady=15)
+
+    new_window.protocol("WM_DELETE_WINDOW", lambda: (new_window.destroy(), root.deiconify()))
+
+def uczsie(bg_color):
+    root.withdraw()
+    new_window = ctk.CTkToplevel(root)
+    new_window.title("Ucz się")
+    new_window.geometry("600x400")
+    new_window.configure(fg_color=bg_color)
+    new_window.focus_force()  # Ustawienie fokusu na nowe okno
+
+    ctk.CTkLabel(new_window,
+                 text="W tym oknie będziesz w stanie sprawdzić swoją wiedzę.",
+                 font=("Helvetica", 16), wraplength=400).pack(pady=20)
+
+    # Tworzenie etykiety tekstowej
+    label = ctk.CTkLabel(new_window, text='Ile słówek chcesz pobrać do dzisiejszej sesji? Wpisz konkretną liczbę i kliknij przycisk "Rozpocznij naukę"', font=("Helvetica", 14), wraplength=400)
+    label.pack(pady=10)
+
+    # Tworzenie pola do wpisywania tekstu
+    entry3 = ctk.CTkEntry(new_window, font=("Helvetica", 14), width=5, justify='center')
+    entry3.pack(pady=10)
+
+    # Dodawanie przycisku "Rozpocznij naukę"
+    wykonaj_button = ctk.CTkButton(new_window, text="Rozpocznij naukę", font=("Helvetica", 14), text_color="white", command=lambda: save_number(entry3))
+    wykonaj_button.pack(pady=10)
+
+    # Dodawanie przycisku "Powrót do menu"
+    back_button = ctk.CTkButton(new_window, text="Powrót do menu", font=("Helvetica", 14), text_color="white",
+                                command=lambda: (new_window.destroy(), root.deiconify()))
+    back_button.pack(pady=10)
+
+    new_window.protocol("WM_DELETE_WINDOW", lambda: (new_window.destroy(), root.deiconify()))
+# endregion
+
+# region Utwórz główne okno
+root = ctk.CTk()
+root.title("Wszystko dzięki Easy English!")
+root.geometry("600x400")  # Ustawienie rozmiaru okna na 600x400 pikseli
+
+# Przechwycenie zdarzenia zamknięcia okna
+root.protocol("WM_DELETE_WINDOW", lambda: None)
+
+# Tworzenie menu
+menu = tk.Menu(root)
+root.config(menu=menu)
+
+# Dodanie menu "Plik"
+file_menu = tk.Menu(menu, tearoff=0)
+menu.add_cascade(label="Plik", menu=file_menu)
+file_menu.add_command(label="Przeglądaj", command=lambda: przegladaj("white"))
+file_menu.add_command(label="Dodaj", command=lambda: dodaj("white"))
+file_menu.add_command(label="Ucz się", command=lambda: uczsie("white"))
+file_menu.add_separator()
+file_menu.add_command(label="Zamknij", command=confirm_exit)
+
+# Dodanie menu "Pomoc"
+help_menu = tk.Menu(menu, tearoff=0)
+menu.add_cascade(label="Pomoc", menu=help_menu)
+help_menu.add_command(label="O programie")
+# endregion
+
+# region Tworzenie ramki głównej i wewnętrznej po to, aby pole z tekstem znajdowało się na samym środku
+# Utwórz główną ramkę
+main_frame = ctk.CTkFrame(root)
+main_frame.pack(expand=True, fill='both', padx=10, pady=10)
+
+# Utwórz ramkę, aby umieścić pole z tekstem i przyciski
+frame = ctk.CTkFrame(main_frame, height=200)
+frame.pack(expand=True, fill='both', padx=10, pady=10)
+
+# Utwórz wewnętrzną ramkę do wyśrodkowania tekstu
+inner_frame = ctk.CTkFrame(frame)
+inner_frame.grid(row=0, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
+
+# Utwórz pole tekstowe i dodaj je do wewnętrznej ramki
+label = ctk.CTkLabel(inner_frame,
+                     text="Witaj w moim świecie języka angielskiego. Ta aplikacja przygotowana jest dla wszystkich osób, które chciałyby nauczyć się komunikować w tym języku. Spróbuj i przekonaj się, jakie to proste!\nDo dyspozycji masz 3 tryby, z których możesz korzystać: przeglądanie słownika, dodawanie słów do słownika oraz tryb nauki. Powodzenia!",
+                     wraplength=400, font=("Helvetica", 14))
+label.pack(expand=True)
+
+# Ustawienie równomiernego rozkładu wierszy i kolumn
+frame.grid_rowconfigure(0, weight=1)
+frame.grid_columnconfigure(0, weight=1)
+# endregion
+
+# region Umieszczenie 8 przycisków w głównym oknie
+# Utwórz ramkę, aby umieścić przyciski
+frame = ctk.CTkFrame(root)
+frame.pack(expand=True, fill='both', padx=20, pady=20)
+
+# Utwórz 4 przyciski i dodaj je do ramki na przyciski
+button1 = ctk.CTkButton(frame, text="Przeglądaj", height=50, text_color="white", command=lambda: przegladaj("white"))
+button1.grid(row=1, column=0, padx=5, pady=10, sticky="nsew")
+
+button2 = ctk.CTkButton(frame, text="Dodaj", height=50, text_color="white", command=lambda: dodaj("white"))
+button2.grid(row=1, column=1, padx=5, pady=10, sticky="nsew")
+
+button3 = ctk.CTkButton(frame, text="Ucz się", height=50, text_color="white", command=lambda: uczsie("white"))
+button3.grid(row=1, column=2, padx=5, pady=10, sticky="nsew")
+
+button4 = ctk.CTkButton(frame, text="---", height=50, fg_color="#D3D3D3")
+button4.grid(row=1, column=3, padx=5, pady=10, sticky="nsew")
+
+button5 = ctk.CTkButton(frame, text="---", height=50, fg_color="#D3D3D3")
+button5.grid(row=2, column=0, padx=5, pady=10, sticky="nsew")
+
+button6 = ctk.CTkButton(frame, text="---", height=50, fg_color="#D3D3D3")
+button6.grid(row=2, column=1, padx=5, pady=10, sticky="nsew")
+
+button7 = ctk.CTkButton(frame, text="---", height=50, fg_color="#D3D3D3")
+button7.grid(row=2, column=2, padx=5, pady=10, sticky="nsew")
+
+button8 = ctk.CTkButton(frame, text="Zakończ", height=50,text_color="white", command=confirm_exit)
+button8.grid(row=2, column=3, padx=5, pady=10, sticky="nsew")
+
+# Ustawienie równomiernego rozkładu kolumn
+frame.grid_columnconfigure(0, weight=1)
+frame.grid_columnconfigure(1, weight=1)
+frame.grid_columnconfigure(2, weight=1)
+frame.grid_columnconfigure(3, weight=1)
+# endregion
+
+# region Uruchom aplikację
+root.mainloop()
+# endregion

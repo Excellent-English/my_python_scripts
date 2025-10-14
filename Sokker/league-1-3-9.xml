@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<league>
+ <info>
+  <leagueID>192</leagueID>
+  <name>Liga III.09</name>
+  <countryID>1</countryID>
+  <division>3</division>
+  <round>5</round>
+  <season>72</season>
+  <type>0</type>
+  <isOfficial>1</isOfficial>
+  <isCup>0</isCup>
+  <userID>0</userID>
+ </info>
+</league>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../GUI/.idea/GUI.iml" filepath="$PROJECT_DIR$/../GUI/.idea/GUI.iml" />
+      <module fileurl="file://$USER_HOME$/Merito/.idea/Merito.iml" filepath="$USER_HOME$/Merito/.idea/Merito.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Skrypty.iml" filepath="$PROJECT_DIR$/.idea/Skrypty.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Sokker_gotowe_skrypty/.idea/Sokker_gotowe_skrypty.iml" filepath="$PROJECT_DIR$/../Sokker_gotowe_skrypty/.idea/Sokker_gotowe_skrypty.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../pythonProject4/.idea/pythonProject4.iml" filepath="$PROJECT_DIR$/../pythonProject4/.idea/pythonProject4.iml" />
+    </modules>
+  </component>
+</project>

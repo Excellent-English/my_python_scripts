@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<player>
+ <ID>39502548</ID>
+ <name>Lucjan</name>
+ <surname>Filar</surname>
+ <countryID>1</countryID>
+ <age>21</age>
+ <height>178</height>
+ <weight>73.8</weight>
+ <BMI>23.29</BMI>
+ <teamID>3604</teamID>
+ <youthTeamID>25169</youthTeamID>
+ <value>1004000</value>
+ <wage>9800</wage>
+ <cards>0</cards>
+ <goals>0</goals>
+ <assists>0</assists>
+ <matches>0</matches>
+ <ntCards>0</ntCards>
+ <ntGoals>0</ntGoals>
+ <ntAssists>0</ntAssists>
+ <ntMatches>0</ntMatches>
+ <injuryDays>0</injuryDays>
+ <national>0</national>
+ <skillForm>17</skillForm>
+ <skillExperience>2</skillExperience>
+ <skillTeamwork>11</skillTeamwork>
+ <skillDiscipline>7</skillDiscipline>
+ <transferList>1</transferList>
+</player>
