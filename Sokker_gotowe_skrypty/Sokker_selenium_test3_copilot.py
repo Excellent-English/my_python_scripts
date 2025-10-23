@@ -38,7 +38,7 @@ WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR,
 select_element = driver.find_element(By.XPATH, '/html/body/main/div/div[2]/div[2]/div[2]/form/div[3]/div[3]/div/div/select')
 select = Select(select_element)
 # select.select_by_visible_text("Belarus")
-driver.find_element(By.NAME, 'age_max').send_keys('16')
+driver.find_element(By.NAME, 'age_max').send_keys('20')
 
 #przycisk wyszukaj otwierajacy liste wszystkich zawodnikow na sprzedaz
 WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '/html/body/main/div/div[2]/div[2]/div[2]/form/div[6]/div[2]/div/div/button[1]'))).click()
