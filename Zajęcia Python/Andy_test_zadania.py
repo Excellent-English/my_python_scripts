@@ -18,7 +18,7 @@ class TestZadania(unittest.TestCase):
         mock_print.assert_called_with('Suma to:', 7.0)
 
     @patch('builtins.input', return_value='8')
-    @patch('builtins.print')git remote add origin https://github.com/Excellent-English/my_python_scripts.git
+    @patch('builtins.print')
 
     def test_zadanie3_even(self, mock_print, mock_input):
         Andy_zadania.zadanie3()
