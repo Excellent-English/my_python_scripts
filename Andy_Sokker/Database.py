@@ -13,6 +13,8 @@ class Database:
             c.execute("""
             CREATE TABLE IF NOT EXISTS players (
                 LP INTEGER PRIMARY KEY AUTOINCREMENT,
+                Season INTEGER,
+                Round INTEGER,
                 ID INTEGER,
                 Name STRING,
                 TeamID INTEGER,
@@ -22,6 +24,9 @@ class Database:
                 Salary INTEGER,
                 Price INTEGER,
                 EndOfSale STRING,
+                Matches INTEGER,
+                Goals INTEGER,
+                Assists INTEGER,
                 Stamina INTEGER,
                 Speed INTEGER,
                 Technique INTEGER,

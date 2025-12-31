@@ -1,18 +1,24 @@
 from Player import Player
 from Database import Database
 
+
 class PlayerDatabase(Database):
     def create_player(self, player:Player):
+
+        # self.get_player_from_id(player)
+
+
         with self.connect() as conn:
             c = conn.cursor()
             c.execute("""
             INSERT INTO players (
-            ID, Name, TeamID, Age, Country, Value, Salary, Price, EndOfSale, Stamina, Speed, Technique, Passing, GK, DEF, MID, ATT
+            Season, Round, ID, Name, TeamID, Age, Country, Value, Salary, Price, EndOfSale, Matches, Goals, Assists, Stamina, Speed, Technique, Passing, GK, DEF, MID, ATT
             )
-            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
             """,
-            (player.ID, player.Name, player.TeamID, player.Age, player.Country, player.Value, player.Salary, player.Price, player.EndOfSale, player.Stamina,
-            player.Speed, player.Technique, player.Passing, player.GK, player.DEF, player.MID, player.ATT))
+            (player.Season, player.Round, player.ID, player.Name, player.TeamID, player.Age, player.Country,
+            player.Value, player.Salary, player.Price, player.EndOfSale,player.Matches, player.Goals, player.Assists,
+            player.Stamina, player.Speed, player.Technique, player.Passing, player.GK, player.DEF, player.MID, player.ATT))
             conn.commit()
 
 
@@ -23,6 +29,20 @@ class PlayerDatabase(Database):
             rows = c.fetchall()
             # print(rows)
             return rows
+
+
+    def get_player_from_id(self, new_player:Player):
+        with self.connect() as conn:
+            c = conn.cursor()
+            c.execute(f"SELECT Season, Round, ID FROM players WHERE ID = {new_player.ID} ORDER BY LP DESC LIMIT 1")
+            row = c.fetchone()
+            if row is None:
+                return None, None, None
+
+            return row
+            # season, round, ID = row
+
+            return season, round, ID
 
 
     def update_player(self):
