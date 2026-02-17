@@ -80,7 +80,19 @@ class Sokker:
     def log_in_to_sokker(self):
 
         try:
-            self.driver = webdriver.Chrome()
+            # self.driver = webdriver.Chrome()
+
+            from selenium.webdriver.chrome.options import Options
+
+            options = Options()
+            options.add_argument("--headless")  # Tryb bez interfejsu graficznego
+            options.add_argument("--disable-dev-shm-usage")  # Ważne w Dockerze (ogranicza problemy z pamięcią)
+            options.add_argument("--no-sandbox")  # Wymagane w kontenerach
+
+            self.driver = webdriver.Chrome(options=options)
+
+
+
             self.driver.get('https://sokker.org/pl/')
             self.driver.maximize_window()
 
