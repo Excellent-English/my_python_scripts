@@ -1,0 +1,74 @@
+
+
+# Base Configuration
+base:
+  file_location: 'H:\Haina Python Replacement - JJ Report\'
+  chrome_driver: '\chromedriver\chromedriver.exe'
+  log_location:  '\logs'
+  # INFO, DEBUG, ERROR
+  log_level: DEBUG
+
+
+
+
+
+
+
+
+# Do not update information below this line unless there has been a password or user name change.
+#*********************************************************************************************#
+
+
+# Validation Login Information
+dea:
+  login_info:
+    dea_id: 'RF0593687'
+    company_id: 'FRESENIUS KABI, LLC'
+    tax_id: '364879921'
+    zip_code: '53158'
+    exp_mo: '09'
+    exp_year: '2024'
+  files:
+    lookup_file: '\test Haina\dea_lookup.xlsx'
+    results_file: '\test Haina\dea_results.xlsx'
+    invalid_results_file: 'test Haina\dea_results_invalid.xlsx'
+    dea_db_file: 'test Haina\dea_db_file.txt'
+
+hin:
+  api_login_info:
+    account_id: 'AAP04303F'
+    api_key: 'STaB91CDpDvyxC16'
+  url_login_info:
+    login_id: 'russell.jarencio@fresenius-kabi.com'
+    password: '6UUgZ3f2'
+  files:
+    lookup_file: '\test Haina\hin_lookup.xlsx'
+    results_file: '\test Haina\hin_results.xlsx'
+    invalid_results_file: '\test Haina\hin_results_invalid.xlsx'
+
+
+# Customer Review Information
+customer:
+  files:
+    customer_list: '\files\01_input\customer_list.xlsx'
+    customer_list_csv: '\files\01_input\customer_list.csv'
+    sales_area: '\files\maintenance_files\sales_area_table.xlsx'
+    distribution_centers: '\files\maintenance_files\distribution_center_table.xlsx'
+    cot_schema: '\files\maintenance_files\cot_schema_table.xlsx'
+    cot_table: '\files\maintenance_files\full_cot_table.xlsx'
+    matched_output: '\files\inprocess\matched_output.csv'
+    unmatched_output: '\files\inprocess\unmatched_output.csv'
+    ship_to_output: '\files\inprocess\shipto_output.csv'
+    review_output: '\files\inprocess\review_output.csv'
+    cache_file: '\files\inprocess\cust_reviewed.txt'
+    unmatched_review_file: '\files\02_review\pre_upload_customer_review.xlsx'
+    further_review_file: '\files\02_review\further_customer_review.xlsx'
+    matched_review_file: '\files\02_review\update_existing_customer_review.xlsx'
+    ship_to_review: '\files\02_review\ship_to_create_review.xlsx'
+    invalid_ids: '\files\02_review\invalid_dea_hin.xlsx'
+    sap_upload: '\files\03_complete\indirect_sap_upload.txt'
+    cust_update: '\files\03_complete\indirect_customer_updates.xlsx'
+    ship_to: '\files\03_complete\ship_to_creation.xlsx'
+    dea_unmatched_out: '\files\inprocess\dea_results.xlsx'
+    dea_matched_out: '\files\inprocess\dea_update_date.xlsx'
+    dea_update: '\files\03_complete\dea_update.xlsx'

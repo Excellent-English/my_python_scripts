@@ -1,0 +1,21 @@
+{
+    "RoleArn":  "arn:aws:iam::598145236792:role/SchedulerExecutionRole",
+    "EcsParameters":  {
+                          "TaskCount":  1,
+                          "TaskDefinitionArn":  "arn:aws:ecs:eu-central-1:598145236792:task-definition/selenium-scraper:2",
+                          "NetworkConfiguration":  {
+                                                       "awsvpcConfiguration":  {
+                                                                                   "Subnets":  [
+                                                                                                   "subnet-00fcabf27c008a8d7",
+                                                                                                   "subnet-06fb3f4fb4a28f04d"
+                                                                                               ],
+                                                                                   "AssignPublicIp":  "ENABLED",
+                                                                                   "SecurityGroups":  [
+                                                                                                          "sg-0af959bbe84377e47"
+                                                                                                      ]
+                                                                               }
+                                                   },
+                          "LaunchType":  "FARGATE"
+                      },
+    "Arn":  "arn:aws:ecs:eu-central-1:598145236792:cluster/scraper-cluster"
+}

@@ -1,0 +1,24 @@
+{
+  "family": "selenium-scraper",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "1024",
+  "memory": "2048",
+  "executionRoleArn": "arn:aws:iam::598145236792:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::598145236792:role/scraperTaskRole",
+  "containerDefinitions": [
+    {
+      "name": "scraper",
+      "image": "598145236792.dkr.ecr.eu-central-1.amazonaws.com/selenium-scraper:latest",
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/selenium-scraper",
+          "awslogs-region": "eu-central-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}
