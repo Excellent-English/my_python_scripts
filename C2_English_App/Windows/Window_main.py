@@ -1,8 +1,8 @@
 import customtkinter as ctk
 from PIL import Image
 
-from Window_menu import run_window_menu
-from class_AppButton import AppButton
+from C2_English_App.Windows.Window_menu import run_window_menu
+from C2_English_App.AllClasses.class_AppButton import AppButton
 
 
 # wymiary głównego okna oraz przesunięcie od krawędzi ekranu
@@ -13,7 +13,7 @@ main_page.resizable(False,False)
 
 # Photo for main page
 # 1. Wczytanie obrazu z pliku.
-image = Image.open("Photo for title page.png")
+image = Image.open("../Images/Photo for title page.png")
 # 2. Utworzenie obiektu CTkImage.
 photo_for_main_page = ctk.CTkImage(light_image=image, dark_image=image, size=(280,140))
 # 3. Utworzenie Labela, który TEN obraz wyświetla.

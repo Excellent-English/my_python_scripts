@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from PIL import Image
-from class_AppButton import AppButton
-from class_AppWindow import AppWindow
+from C2_English_App.AllClasses.class_AppButton import AppButton
+from C2_English_App.AllClasses.class_AppWindow import AppWindow
 
 def run_window_menu(main_page):
     # Zamknij / ukryj główne okno
@@ -15,7 +15,7 @@ def run_window_menu(main_page):
 
     # Dodanie przycisku zawierającego ikonę- przycisk zamyka aplikację
     # 1. Wczytanie obrazu z pliku
-    image = Image.open("Power_off_icon.png")
+    image = Image.open("../Images/Power_off_icon.png")
     # 2. Utworzenie CTkImage
     power_off_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(50, 50))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze

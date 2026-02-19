@@ -1,7 +1,7 @@
 import sqlite3
 
 class Database:
-    def __init__(self, name="vocabulary.db"):
+    def __init__(self, name):
         self.name = name
 
     def connect(self):
@@ -52,7 +52,10 @@ class Database:
                 LIMIT 1
             """)
             row = c.fetchone()
-            return dict(row) if row else None
+
+            row = dict(row)
+            print(f"Słówko angielskie: {row['ENG_word']}\nPolskie tłumaczenie: {row['PL_translation']}")
+            print(f"Przykład zdania: {row['ENG_sentence']}")
 
 
 # ---------------------------------------------------------------------------------------
@@ -270,9 +273,14 @@ class Database:
 
 
 
-my_database = Database()
-rec = my_database.get_random_element_1()
-if rec is None:
-    print("Brak danych w tabeli.")
-else:
-    print(f"{rec['ENG_word']} → {rec['PL_translation']}\n{rec['ENG_sentence']}")
+# my_database = Database("C:/Users/PSzczubiala/PycharmProjects/PythonProject/C2_English_App/database_1.db")
+# rec = my_database.get_random_element_1()
+#
+# if rec is None:
+#     print("Brak danych w tabeli.")
+# else:
+#     print(f"{rec['ENG_word']} → {rec['PL_translation']}\n{rec['ENG_sentence']}")
+
+
+my_database = Database("C:/Users/PSzczubiala/PycharmProjects/PythonProject/C2_English_App/database_1.db")
+my_database.get_random_element_1()
