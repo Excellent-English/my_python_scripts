@@ -1,7 +1,7 @@
 import sqlite3
 
 class Database:
-    def __init__(self, name="vocabulary.db"):
+    def __init__(self, name):
         self.name = name
 
     def connect(self):
@@ -51,8 +51,13 @@ class Database:
                 ORDER BY RANDOM()
                 LIMIT 1
             """)
-            row = c.fetchone()
-            return dict(row) if row else None
+            random_line_database_1 = c.fetchone()
+
+            random_line_database_1 = dict(random_line_database_1)
+            # print(f"Słówko angielskie: {random_line_database_1['ENG_word']}\nPolskie tłumaczenie: {random_line_database_1['PL_translation']}")
+            # print(f"Przykład zdania: {random_line_database_1['ENG_sentence']}")
+
+            return random_line_database_1["ENG_word"], random_line_database_1["PL_translation"], random_line_database_1["ENG_sentence"]
 
 
 # ---------------------------------------------------------------------------------------
@@ -270,9 +275,11 @@ class Database:
 
 
 
-my_database = Database()
-rec = my_database.get_random_element_1()
-if rec is None:
-    print("Brak danych w tabeli.")
-else:
-    print(f"{rec['ENG_word']} → {rec['PL_translation']}\n{rec['ENG_sentence']}")
+# wywołanie randomowego rekordu z database_1
+my_database = Database("../Databases/database_1.db")
+random_line = my_database.get_random_element_1()
+eng, pl, sentence = random_line
+# opcjonalnie można wydrukować, ale nie jest to niezbędne
+# print(eng)
+# print(pl)
+# print(sentence)
