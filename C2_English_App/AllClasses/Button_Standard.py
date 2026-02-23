@@ -1,6 +1,6 @@
 import customtkinter as ctk
 
-class AppButton(ctk.CTkButton):
+class Button_Standard(ctk.CTkButton):
 
     """
     Przycisk z domyślnymi właściwościami opartymi na Twojej konfiguracji.

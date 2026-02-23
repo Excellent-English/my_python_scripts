@@ -51,11 +51,13 @@ class Database:
                 ORDER BY RANDOM()
                 LIMIT 1
             """)
-            row = c.fetchone()
+            random_line_database_1 = c.fetchone()
 
-            row = dict(row)
-            print(f"Słówko angielskie: {row['ENG_word']}\nPolskie tłumaczenie: {row['PL_translation']}")
-            print(f"Przykład zdania: {row['ENG_sentence']}")
+            random_line_database_1 = dict(random_line_database_1)
+            # print(f"Słówko angielskie: {random_line_database_1['ENG_word']}\nPolskie tłumaczenie: {random_line_database_1['PL_translation']}")
+            # print(f"Przykład zdania: {random_line_database_1['ENG_sentence']}")
+
+            return random_line_database_1["ENG_word"], random_line_database_1["PL_translation"], random_line_database_1["ENG_sentence"]
 
 
 # ---------------------------------------------------------------------------------------
@@ -273,14 +275,11 @@ class Database:
 
 
 
-# my_database = Database("C:/Users/PSzczubiala/PycharmProjects/PythonProject/C2_English_App/database_1.db")
-# rec = my_database.get_random_element_1()
-#
-# if rec is None:
-#     print("Brak danych w tabeli.")
-# else:
-#     print(f"{rec['ENG_word']} → {rec['PL_translation']}\n{rec['ENG_sentence']}")
-
-
-my_database = Database("C:/Users/PSzczubiala/PycharmProjects/PythonProject/C2_English_App/database_1.db")
-my_database.get_random_element_1()
+# wywołanie randomowego rekordu z database_1
+my_database = Database("../Databases/database_1.db")
+random_line = my_database.get_random_element_1()
+eng, pl, sentence = random_line
+# opcjonalnie można wydrukować, ale nie jest to niezbędne
+# print(eng)
+# print(pl)
+# print(sentence)
