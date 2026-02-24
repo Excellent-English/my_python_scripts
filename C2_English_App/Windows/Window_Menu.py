@@ -10,8 +10,7 @@ from C2_English_App.Windows.Window_UOE__Word_Formation import run_word_formation
 from C2_English_App.Windows.Window_Vocabulary_Edit import run_vocabulary_edit
 from C2_English_App.Windows.Window_Vocabulary_Learn import run_vocabulary_learn
 from C2_English_App.Windows.Window_Vocabulary_Listen import run_vocabulary_listen
-
-from Window_Vocabulary_Review import run_vocabulary_review
+from C2_English_App.Windows.Window_Vocabulary_Review import run_vocabulary_review
 
 
 def run_window_menu(main_page):
