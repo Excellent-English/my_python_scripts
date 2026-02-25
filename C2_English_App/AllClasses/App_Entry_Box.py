@@ -10,8 +10,8 @@ class App_Entry_Box(ctk.CTkEntry):
 
     DEFAULTS = {
         # Rozmiar
-        "width": 250,
-        "height": 80,
+        "width": 300,
+        "height": 40,
 
         # Styl (spójny z AppButton/AppFrame)
         "fg_color": "#f1f4f9",
@@ -23,6 +23,10 @@ class App_Entry_Box(ctk.CTkEntry):
 
         # Zawijanie linii (word/char/none)
         # "wrap": "word",
+
+        # Wyrównanie tekstu
+        "justify": "center"
+
     }
 
 
