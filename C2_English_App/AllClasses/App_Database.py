@@ -60,6 +60,91 @@ class Database:
             return random_line_database_1["ENG_word"], random_line_database_1["PL_translation"], random_line_database_1["ENG_sentence"]
 
 
+
+    def word_exists_1(self, eng_word: str) -> bool:
+        """
+        Zwraca True, jeśli ENG_word istnieje w database_1_vocabulary (case-insensitive), w przeciwnym razie False.
+        """
+        if eng_word is None:
+            return False
+        candidate = eng_word.strip()
+        if candidate == "":
+            return False
+
+        with self.connect() as conn:
+            c = conn.cursor()
+            # Używamy COLLATE NOCASE, aby 'Apple' == 'apple'
+            c.execute("""
+                SELECT 1
+                FROM database_1_vocabulary
+                WHERE ENG_word = ? COLLATE NOCASE
+                LIMIT 1
+            """, (candidate,))
+            return c.fetchone() is not None
+
+
+    def get_word_1(self, eng_word: str):
+        """
+        Zwraca pełen rekord (dict) dla podanego ENG_word (case-insensitive) lub None jeśli nie istnieje.
+        """
+        if eng_word is None:
+            return None
+        candidate = eng_word.strip()
+        if candidate == "":
+            return None
+
+        with self.connect() as conn:
+            conn.row_factory = sqlite3.Row
+            c = conn.cursor()
+            c.execute("""
+                SELECT Ordinal_number, ENG_word, PL_translation, ENG_sentence, Correct, Incorrect
+                FROM database_1_vocabulary
+                WHERE ENG_word = ? COLLATE NOCASE
+                LIMIT 1
+            """, (candidate,))
+            row = c.fetchone()
+            return dict(row) if row else None
+
+    def create_or_update_word_1(self, eng_word: str, pl_translation: str, eng_sentence: str) -> str:
+        """
+        Jeżeli ENG_word istnieje → UPDATE.
+        Jeżeli nie istnieje → INSERT z Correct=0, Incorrect=0.
+        Zwraca 'updated' lub 'inserted'.
+        """
+        if not eng_word or not eng_word.strip():
+            return "invalid"
+        candidate = eng_word.strip()
+
+        with self.connect() as conn:
+            c = conn.cursor()
+
+            # Sprawdzenie istnienia
+            c.execute("""
+                SELECT 1
+                FROM database_1_vocabulary
+                WHERE ENG_word = ? COLLATE NOCASE
+                LIMIT 1
+            """, (candidate,))
+            exists = c.fetchone() is not None
+
+            if exists:
+                c.execute("""
+                    UPDATE database_1_vocabulary
+                    SET PL_translation = ?, ENG_sentence = ?
+                    WHERE ENG_word = ? COLLATE NOCASE
+                """, (pl_translation, eng_sentence, candidate))
+                conn.commit()
+                return "updated"
+            else:
+                c.execute("""
+                    INSERT INTO database_1_vocabulary (ENG_word, PL_translation, ENG_sentence, Correct, Incorrect)
+                    VALUES (?, ?, ?, 0, 0)
+                """, (candidate, pl_translation, eng_sentence))
+                conn.commit()
+                return "inserted"
+
+
+
 # ---------------------------------------------------------------------------------------
 # database_2_1 - baza danych dla górnej części menu -> Word Formation
 # ---------------------------------------------------------------------------------------

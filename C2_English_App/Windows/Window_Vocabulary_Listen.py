@@ -58,6 +58,9 @@ def run_vocabulary_listen(menu_page):
 # zmiana zestawu widocznego na ekranie
     def change_word():
 
+        label_enter_right.configure(text_color= "#808080")
+        label_enter_left.configure(text_color= "white")
+
         button_replay.configure(state = "normal")
         button_next.configure(state="normal")
         button_check.configure(state="normal")
@@ -158,15 +161,17 @@ def run_vocabulary_listen(menu_page):
     label_pl = App_Label_Standard(frame_pl, justify="center", anchor="center", text="", text_color= "white")
     label_pl.place(relx=0.5, rely=0.5, anchor="center")
 
-# 4 labele z tekstami: opis okna, znak równości, Enter, jedynka do odsłuchania zdania
+# labele z tekstami: opis okna, znak równości, Enter, jedynka do odsłuchania zdania
     label_description = App_Label_Standard(vocabulary_listen_page, font=("Open Sans", 20), wraplength=700, width=700,
                                            justify="center", anchor="center",
                                            text="What did you hear?")
     label_description.place(x=85, y=180)
     label_equal = App_Label_Standard(vocabulary_listen_page, text="=")
     label_equal.place(x=425, y=350)
-    label_enter = App_Label_Standard(vocabulary_listen_page, font=("Open Sans", 12), text="press Enter")
-    label_enter.place(x=610, y=270)
+    label_enter_right = App_Label_Standard(vocabulary_listen_page, text_color = "white", font=("Open Sans", 12), text="press Enter")
+    label_enter_right.place(x=608, y=270)
+    label_enter_left = App_Label_Standard(vocabulary_listen_page, font=("Open Sans", 12), text="press Enter")
+    label_enter_left.place(x=100, y=250)
 
 # 1 button odświeżający słowa/zdania widoczne na ekranie
     button_next = Button_Standard(vocabulary_listen_page, state = "disabled", width=100, height=40, text=">>", command=change_word)

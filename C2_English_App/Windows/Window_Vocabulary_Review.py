@@ -88,12 +88,12 @@ def run_vocabulary_review(menu_page):
     label_sentence.place(relx=0.5, rely=0.5, anchor="center")
 
 # 4 labele z tekstami: opis okna, znak równości, Enter, jedynka do odsłuchania zdania
-    label_description = App_Label_Standard(vocabulary_review_page, font = ("Open Sans", 16) , wraplength = 700, width=700, justify="center", anchor="center", text="W tym oknie masz możliwość przeglądania słówek dodanych do Twojej bazy.\nW celu sprawdzenia kolejnego słówka, naciskaj klawisz >> (lub wybierz Enter na klawiaturze).\nMiłej nauki!")
+    label_description = App_Label_Standard(vocabulary_review_page, font = ("Open Sans", 16) , wraplength = 700, width=700, justify="center", anchor="center", text="You have a possibility to review the words added to your dictionary.\nUse >> button to move on to the next word (or press Enter).\nGood luck!")
     label_description.place(x=90, y=110)
     label_equal = App_Label_Standard(vocabulary_review_page, text="=")
     label_equal.place(x=425, y=230)
     label_enter = App_Label_Standard(vocabulary_review_page, font = ("Open Sans", 12), text="press Enter")
-    label_enter.place(x=400, y=450)
+    label_enter.place(x=400, y=442)
     label_press_1 = App_Label_Standard(vocabulary_review_page, font = ("Open Sans", 12), text="press 1")
     label_press_1.place(x=806, y=355)
 
