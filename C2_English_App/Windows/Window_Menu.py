@@ -40,6 +40,7 @@ def run_window_menu(main_page):
     )
     power_btn.image = power_off_icon  # trzymaj referencję!
     power_btn.place(x=800, y=12)
+    menu_page.bind("<Escape>", lambda event: menu_page.close_the_app(main_page))
 
 
     # zablokuj zamknięcie okna za pomocą "X"

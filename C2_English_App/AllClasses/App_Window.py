@@ -1,47 +1,3 @@
-# import customtkinter as ctk
-#
-# class AppWindow(ctk.CTkToplevel):
-#     """Proste okno z banerem – minimalna liczba parametrów."""
-#
-#     def __init__(
-#         self,
-#         title: str = "The ultimate guide to C2 Proficiency level!",
-#         width: int = 900,
-#         height: int = 530,
-#         x: int = 230,
-#         y: int = 80,
-#         banner_text: str = "Welcome page",
-#         banner_bg: str = "#755a44",
-#         fg_color: str = "white",
-#         focus: bool = True,
-#     ):
-#         super().__init__(fg_color=fg_color)
-#
-#         # Okno
-#         self.title(title)
-#         self.geometry(f"{width}x{height}+{x}+{y}")
-#         self.resizable(False, False)
-#         if focus:
-#             self.focus_force()
-#
-#         # Baner
-#         self.banner_frame = ctk.CTkFrame(self, width=width, height=75, fg_color=banner_bg, corner_radius=0)
-#         self.banner_frame.place(x=0, y=0)
-#
-#         # Tytuł w banerze
-#         self.banner_label = ctk.CTkLabel(
-#             self.banner_frame,
-#             text=banner_text,
-#             font=ctk.CTkFont(family="Open Sans", size=30, weight="normal"),
-#             text_color="white",
-#         )
-#         self.banner_label.place(x=110, y=20)
-
-
-
-
-
-
 import customtkinter as ctk
 from C2_English_App.AllClasses.Button_Return import Button_Return
 
@@ -60,7 +16,7 @@ class AppWindow(ctk.CTkToplevel):
         banner_bg: str = "#755a44",
         fg_color: str = "white",
         focus: bool = True,
-        return_pos: tuple[int, int] = (20, 12),
+        return_pos: tuple[int, int] = (20, 12)
     ):
         super().__init__(fg_color=fg_color)
 
@@ -90,15 +46,6 @@ class AppWindow(ctk.CTkToplevel):
         self.return_button = Button_Return(self.banner_frame)
         rx, ry = return_pos
         self.return_button.place(x=800, y=12)
-
-
-
-
-
-
-
-
-
 
 
 
