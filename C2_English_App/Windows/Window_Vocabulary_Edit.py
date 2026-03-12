@@ -77,6 +77,7 @@ def run_vocabulary_edit(menu_page):
 
         else:
             label_check_result.configure(text="The word doesn't exist in your dictionary.", text_color="#E57373")
+            button_update.configure(state="normal")
 
     def change_or_add():
         eng_word = entry_box_word.get()
