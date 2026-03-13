@@ -361,9 +361,9 @@ class Database:
 
 
 # wywołanie randomowego rekordu z database_1
-my_database = Database("../Databases/database_1.db")
-random_line = my_database.get_random_element_1()
-eng, pl, sentence = random_line
+# my_database = Database("../Databases/database_1.db")
+# random_line = my_database.get_random_element_1()
+# eng, pl, sentence = random_line
 # opcjonalnie można wydrukować, ale nie jest to niezbędne
 # print(eng)
 # print(pl)
