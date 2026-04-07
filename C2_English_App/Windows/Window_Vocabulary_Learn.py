@@ -74,17 +74,26 @@ def run_vocabulary_learn(menu_page):
     def check_if_correct():
         global random_pl, random_eng, attempts_correct, attempts_wrong, progress, random_dict
         print(random_dict)
-        if random_eng == entry_box_eng_word.get().strip():
+        if random_eng == entry_box_eng_word.get().strip(): # if the translation is correct
             print("ok")
             frame_pl.configure(fg_color="#A8E6A3")
             label_pl.configure(fg_color="#A8E6A3", text_color= "#808080")
             entry_box_eng_word.configure(fg_color="#A8E6A3", text_color= "#808080")
 
+            del random_dict[random_eng]
+            words_left = len(random_dict)
+            label_words_left.configure(text=f"Words to learn: {words_left}")
+
+            random_eng, random_pl = random.choice(list(random_dict.items()))
+
             frame_pl.after(3000, lambda: (
             frame_pl.configure(fg_color="transparent"),
             label_pl.configure(fg_color="white"),
             entry_box_eng_word.configure(fg_color="#f1f4f9", text_color="#4d4d4d"),
-            entry_box_eng_word.delete(0, "end")
+            entry_box_eng_word.delete(0, "end"),
+            print(random_eng),
+            print(random_pl),
+            label_pl.configure(text=random_pl)
             ))
 
             attempts_correct += 1
@@ -96,17 +105,23 @@ def run_vocabulary_learn(menu_page):
             label_percentage.configure(text=f"{progress * 100:.1f}%")
             print(attempts_correct)
             print(attempts_wrong)
-        else:
+
+        else: # if the translation is wrong
             print("nie ok")
             frame_pl.configure(fg_color="#F8D7DA")
             label_pl.configure(fg_color="#F8D7DA", text_color= "#808080")
             entry_box_eng_word.configure(fg_color="#F8D7DA", text_color= "#808080")
 
+            random_eng, random_pl = random.choice(list(random_dict.items()))
+
             frame_pl.after(5000, lambda: (
             frame_pl.configure(fg_color="transparent"),
             label_pl.configure(fg_color="white"),
             entry_box_eng_word.configure(fg_color="#f1f4f9", text_color="#4d4d4d"),
-            entry_box_eng_word.delete(0, "end")
+            entry_box_eng_word.delete(0, "end"),
+            print(random_eng),
+            print(random_pl),
+            label_pl.configure(text=random_pl)
             ))
 
             attempts_wrong += 1
@@ -118,6 +133,8 @@ def run_vocabulary_learn(menu_page):
             label_percentage.configure(text=f"{progress * 100:.1f}%")
             print(attempts_correct)
             print(attempts_wrong)
+
+
 
         return attempts_correct, attempts_wrong
 
