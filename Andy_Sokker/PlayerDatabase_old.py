@@ -2,7 +2,7 @@ from Player import Player
 from Database import Database
 
 
-class PlayerDatabase(Database):
+class PlayerDatabase_old(Database):
     def create_player(self, player:Player):
 
         # self.get_player_from_id(player)
@@ -14,7 +14,7 @@ class PlayerDatabase(Database):
             INSERT INTO players (
             Season, Round, ID, Name, TeamID, Age, Country, Value, Salary, Price, EndOfSale, Matches, Goals, Assists, Stamina, Speed, Technique, Passing, GK, DEF, MID, ATT
             )
-            VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
             """,
             (player.Season, player.Round, player.ID, player.Name, player.TeamID, player.Age, player.Country,
             player.Value, player.Salary, player.Price, player.EndOfSale,player.Matches, player.Goals, player.Assists,
@@ -46,7 +46,7 @@ class PlayerDatabase(Database):
 
 
     def update_player(self):
-        lp_to_update = input("Which LP should be updated%s: ")
+        lp_to_update = input("Which LP should be updated?: ")
         try:
             lp_to_update = int(lp_to_update)
         except ValueError:
@@ -58,7 +58,7 @@ class PlayerDatabase(Database):
             c.execute("""
             UPDATE players
             SET Age = 18, Salary = 400, Country = 44, Stamina = 4
-            WHERE LP = %s
+            WHERE LP = ?
             """,(lp_to_update,))
             conn.commit()
 
@@ -66,7 +66,7 @@ class PlayerDatabase(Database):
 
 
     def delete_player(self):
-        lp = input("Which LP should be deleted%s: ")
+        lp = input("Which LP should be deleted?: ")
         try:
             lp = int(lp)
         except ValueError:
@@ -76,13 +76,13 @@ class PlayerDatabase(Database):
         with self.connect() as conn:
             c = conn.cursor()
 
-            c.execute("SELECT * FROM players WHERE LP = %s", (lp,))
+            c.execute("SELECT * FROM players WHERE LP = ?", (lp,))
             if c.fetchone() is None:
                 print(f"Player with LP: {lp} does not exist.")
                 return
 
             # usuń zawodnika
-            c.execute("DELETE FROM players WHERE LP = %s", (lp,))
+            c.execute("DELETE FROM players WHERE LP = ?", (lp,))
             conn.commit()
             print(f"Player with LP {lp} has been deleted.")
 
