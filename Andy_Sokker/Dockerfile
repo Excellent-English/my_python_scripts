@@ -21,7 +21,7 @@ WORKDIR /app
 COPY . /app
 
 # 6. Instalacja zależności Pythona
-RUN pip install --no-cache-dir selenium requests pycparser
+RUN pip install --no-cache-dir selenium requests pycparser "psycopg[binary]" python-dotenv
 
 # 7. Komenda startowa
 CMD ["python", "Main.py"]

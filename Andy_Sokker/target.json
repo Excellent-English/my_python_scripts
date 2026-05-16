@@ -2,7 +2,7 @@
     "RoleArn":  "arn:aws:iam::598145236792:role/SchedulerExecutionRole",
     "EcsParameters":  {
                           "TaskCount":  1,
-                          "TaskDefinitionArn":  "arn:aws:ecs:eu-central-1:598145236792:task-definition/selenium-scraper:2",
+                          "TaskDefinitionArn":  "arn:aws:ecs:eu-central-1:598145236792:task-definition/selenium-scraper:4",
                           "NetworkConfiguration":  {
                                                        "awsvpcConfiguration":  {
                                                                                    "Subnets":  [
