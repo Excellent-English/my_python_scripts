@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from PIL import Image
+from click import command
 
 from Fresenius_Kabi_Quality_Check.AllClasses.Button_Brown import Button_Brown
 from Fresenius_Kabi_Quality_Check.AllClasses.Button_Standard import Button_Standard
@@ -8,6 +9,8 @@ from Fresenius_Kabi_Quality_Check.AllClasses.App_Frame import AppFrame
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Label_Title import App_Label_Title
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Dropdown import AppDropdown
 from Fresenius_Kabi_Quality_Check.AllClasses.Button_Brown import Button_Brown
+import Fresenius_Kabi_Quality_Check.Windows.Window_Quality_check_details
+from Fresenius_Kabi_Quality_Check.Windows.Window_Quality_check_details import run_quality_check_details
 
 
 def run_quality_check_menu(menu_page):
@@ -78,7 +81,7 @@ def run_quality_check_menu(menu_page):
     dropdown_company_codes = AppDropdown(frame_quality_check, values=["0001", "0055", "207B"])
     dropdown_company_codes.place(x=40, y=250)
 
-    button_load_items = Button_Brown(frame_quality_check, text= "Load items")
+    button_load_items = Button_Brown(frame_quality_check, text= "Load items", command= lambda: run_quality_check_details(quality_check_page))
     button_load_items.place(x=200, y=310)
 
 
