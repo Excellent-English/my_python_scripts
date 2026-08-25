@@ -119,9 +119,9 @@ class Sokker:
                     (By.XPATH, '/html/body/div/main/div[1]/div/div[2]/div/div/div/div[5]/form/div[3]/div[1]/button'))
             ).click()
 
-            print("✅ Logowanie zakończone sukcesem.")
+            print("Logowanie zakończone sukcesem.")
         except Exception as e:
-            print(f"❌ Błąd podczas logowania: {e}")
+            print(f"Błąd podczas logowania: {e}")
 
         sleep(2)
 
