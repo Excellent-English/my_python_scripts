@@ -12,6 +12,7 @@ from Fresenius_Kabi_Quality_Check.Windows.Window_Quality_check_main import run_q
 def run_window_menu(main_page):
     # Zamknij / ukryj główne okno
     main_page.withdraw()   # albo destroy()
+    # ctk.deactivate_automatic_dpi_awareness()
 
     # Utwórz nowe okno menu
     menu_page = AppWindow(banner_text = "Main menu", width=800, height=550, x= 310, y = 90, fg_color="#F6F7F9")

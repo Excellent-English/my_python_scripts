@@ -1,27 +1,41 @@
 import customtkinter as ctk
 
-class App_ScrollableFrame(ctk.CTk):
+class App_ScrollableFrame(ctk.CTkScrollableFrame):
+    """
+    Ustandaryzowany Scrollable Frame aplikacji.
+    """
 
-    def __init__(self):
-        super().__init__()
+    DEFAULTS = {
+        "width": 300,
+        "height": 350,
+        "fg_color": "#FFFFFF",
+        "corner_radius": 0,
+        "border_width": 0,
+        "scrollbar_fg_color": "#FFFFFF",
+        "scrollbar_button_color": "#7D7D82",
+        "scrollbar_button_hover_color": "#5F6064"
+    }
 
-        self.title("Items")
-        self.geometry("650x760")
-        self.minsize(600, 650)
+    STATUS_COLORS = {
+        "Completed": "#2EAD4A",
+        "In Progress": "#F2A900",
+        "Not Started": "#A8ADB3"
+    }
 
-        self.configure(fg_color="#F7F7F6")
+    def __init__(self, master, **kwargs):
+        settings = self.DEFAULTS.copy()
+        settings.update(kwargs)
+
+        super().__init__(
+            master,
+            **settings
+        )
 
         self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(0, weight=1)
 
-        self.all_items = ITEMS
-        self.current_filter = None
-
-        self.create_main_panel()
-
-    # ========================================================
-    # GŁÓWNY PANEL
-    # ========================================================
+# ========================================================
+# GŁÓWNY PANEL
+# ========================================================
 
     def create_main_panel(self):
 

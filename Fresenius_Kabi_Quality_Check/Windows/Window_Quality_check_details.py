@@ -6,12 +6,22 @@ from Fresenius_Kabi_Quality_Check.AllClasses.Button_Standard import Button_Stand
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Window import AppWindow
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Frame import AppFrame
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Label_Title import App_Label_Title
-from Fresenius_Kabi_Quality_Check.AllClasses.App_Dropdown import AppDropdown
+from Fresenius_Kabi_Quality_Check.AllClasses.App_Dropdown import AppComboBox
 from Fresenius_Kabi_Quality_Check.AllClasses.Button_Brown import Button_Brown
+from Fresenius_Kabi_Quality_Check.AllClasses.App_Database import Database
+from Fresenius_Kabi_Quality_Check.AllClasses.App_ScrollableFrame import App_ScrollableFrame
 
-def run_quality_check_details(quality_check_page):
+db = Database()
+countries = db.get_countries()
+
+
+def run_quality_check_details(quality_check_page, selected_country, selected_company_code, documents):
     # Zamknij / ukryj główne okno
     quality_check_page.withdraw()   # albo destroy()
+
+    company_codes = db.get_company_codes(selected_country)
+    print(selected_country)
+    print(selected_company_code)
 
     # Utwórz nowe okno menu
     quality_check_details_page = AppWindow(banner_text = "Quality check details", width=1200, height=600, x= 30, y = 30, fg_color="#F6F7F9")
@@ -45,6 +55,43 @@ def run_quality_check_details(quality_check_page):
     quality_check_details_page.protocol("WM_DELETE_WINDOW", disable_close)
 
 
+    def on_country_changed(selected_country):
+        company_codes = db.get_company_codes(selected_country)
+
+        dropdown_company_codes.set_values(company_codes)
+        dropdown_company_codes.set("")
+
+
+    # funkcja wywołująca itemy do scrollable frame
+    def get_items():
+        country = dropdown_countries.get()
+        company_code = dropdown_company_codes.get()
+        documents = db.get_sap_documents_based_on_country(country, company_code)
+        print(documents)
+        print(len(documents))
+
+        for widget in scrollable_frame.winfo_children():
+            widget.destroy()
+
+        for row, doc in enumerate(documents):
+            text = (
+            f"{doc['sap']} | "
+            f"{doc['user']} | "
+            f"{doc['verified']}"
+            )
+
+            ctk.CTkLabel(
+                scrollable_frame,
+                text=text,
+                anchor="w"
+            ).grid(
+                row=row,
+                column=0,
+                sticky="w",
+                padx=10,
+                pady=3
+            )
+
 
 # ---------------------------------------------------------------------------------------------------------
 # ramka po lewej stronie
@@ -53,29 +100,48 @@ def run_quality_check_details(quality_check_page):
     frame_quality_check_details_left = AppFrame(quality_check_details_page, width = 350, height = 430)
     frame_quality_check_details_left.place(x=30, y=140)
 
-    label_quality_check_title = App_Label_Title(frame_quality_check_details_left, text="Main title", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
-    label_quality_check_title.place(x=30, y=30)
-
-    label_quality_check_subtitle = App_Label_Title(frame_quality_check_details_left, text="Subtitle", font= ("Open Sans", 14), text_color = "#8B7A6B")
-    label_quality_check_subtitle.place(x=30, y=65)
-
     line_frame_bottom = ctk.CTkFrame(quality_check_details_page, height=2, width=500, fg_color="#DDE2E7", corner_radius=0)
     line_frame_bottom.place(x=600, y=70)
 
     label_quality_check_country = App_Label_Title(quality_check_details_page, text="Country", font= ("Open Sans", 14), text_color = "#755a44", fg_color = "#F6F7F9")
     label_quality_check_country.place(x=30, y=60)
 
-    dropdown_countries = AppDropdown(quality_check_details_page, values=["Poland", "Germany", "France"], width = 200)
+    dropdown_countries = AppComboBox(quality_check_details_page, width = 200, values=countries, command=on_country_changed)
     dropdown_countries.place(x=30, y=88)
+    dropdown_countries.set(selected_country)
 
     label_quality_check_company_code = App_Label_Title(quality_check_details_page, text="Company Code", font= ("Open Sans", 14), text_color = "#755a44", fg_color = "#F6F7F9")
     label_quality_check_company_code.place(x=260, y=60)
 
-    dropdown_company_codes = AppDropdown(quality_check_details_page, values=["0001", "0055", "207B"], width = 200)
+    dropdown_company_codes = AppComboBox(quality_check_details_page, width = 200, values=company_codes)
     dropdown_company_codes.place(x=260, y=88)
+    dropdown_company_codes.set(selected_company_code)
 
-    button_load_items = Button_Brown(quality_check_details_page, text= "Load items")
+    scrollable_frame = App_ScrollableFrame(frame_quality_check_details_left)
+    scrollable_frame.place(x=20, y=60)
+
+    for row, doc in enumerate(documents):
+        text = (
+            f"{doc['sap']} | "
+            f"{doc['user']} | "
+            f"{doc['verified']}"
+        )
+
+        ctk.CTkLabel(
+            scrollable_frame,
+            text=text,
+            anchor="w"
+        ).grid(
+            row=row,
+            column=0,
+            sticky="w",
+            padx=10,
+            pady=3
+        )
+
+    button_load_items = Button_Brown(quality_check_details_page, text= "Load items", command=get_items)
     button_load_items.place(x=480, y=77)
+
 
 # ---------------------------------------------------------------------------------------------------------
 # ramka po prawej stronie
@@ -84,6 +150,11 @@ def run_quality_check_details(quality_check_page):
     frame_quality_check_details_right = AppFrame(quality_check_details_page, width = 750, height = 430)
     frame_quality_check_details_right.place(x=400, y=140)
 
+    label_quality_check_title = App_Label_Title(frame_quality_check_details_right, text="Main title", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
+    label_quality_check_title.place(x=30, y=30)
+
+    label_quality_check_subtitle = App_Label_Title(frame_quality_check_details_right, text="Subtitle", font= ("Open Sans", 14), text_color = "#8B7A6B")
+    label_quality_check_subtitle.place(x=30, y=65)
 
 
 

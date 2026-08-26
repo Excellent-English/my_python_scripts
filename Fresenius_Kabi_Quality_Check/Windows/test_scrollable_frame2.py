@@ -1,8 +1,6 @@
 import customtkinter as ctk
 
-from Fresenius_Kabi_Quality_Check.AllClasses.App_ScrollableFrame import (
-    AppScrollableFrame
-)
+from Fresenius_Kabi_Quality_Check.AllClasses.App_ScrollableFrame import App_ScrollableFrame
 
 
 # ============================================================
@@ -309,7 +307,7 @@ class ItemsApp(ctk.CTk):
 
     def create_items_list(self):
 
-        self.items_scrollable_frame = AppScrollableFrame(
+        self.items_scrollable_frame = App_ScrollableFrame(
             self.main_panel,
             width=520,
             height=500,
@@ -326,7 +324,7 @@ class ItemsApp(ctk.CTk):
             column=0,
             padx=(10, 6),
             pady=0,
-            sticky="nsew"
+            sticky="n"
         )
 
         self.items_scrollable_frame.grid_columnconfigure(

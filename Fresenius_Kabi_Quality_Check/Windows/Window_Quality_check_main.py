@@ -7,11 +7,13 @@ from Fresenius_Kabi_Quality_Check.AllClasses.Button_Standard import Button_Stand
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Window import AppWindow
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Frame import AppFrame
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Label_Title import App_Label_Title
-from Fresenius_Kabi_Quality_Check.AllClasses.App_Dropdown import AppDropdown
+from Fresenius_Kabi_Quality_Check.AllClasses.App_Dropdown import AppComboBox
 from Fresenius_Kabi_Quality_Check.AllClasses.Button_Brown import Button_Brown
-import Fresenius_Kabi_Quality_Check.Windows.Window_Quality_check_details
 from Fresenius_Kabi_Quality_Check.Windows.Window_Quality_check_details import run_quality_check_details
+from Fresenius_Kabi_Quality_Check.AllClasses.App_Database import Database
 
+db = Database()
+countries = db.get_countries()
 
 def run_quality_check_menu(menu_page):
     # Zamknij / ukryj główne okno
@@ -49,6 +51,24 @@ def run_quality_check_menu(menu_page):
     menu_page.protocol("WM_DELETE_WINDOW", disable_close)
 
 
+    def on_country_changed(selected_country):
+        company_codes = db.get_company_codes(selected_country)
+
+        dropdown_company_codes.set_values(company_codes)
+        dropdown_company_codes.set("")
+
+    def load_quality_check():
+        selected_country = dropdown_countries.get()
+        selected_company_code = dropdown_company_codes.get()
+        documents = db.get_sap_documents_based_on_country(selected_country, selected_company_code)
+
+        run_quality_check_details(
+            quality_check_page,
+            selected_country,
+            selected_company_code,
+            documents
+        )
+
     line_bottom = ctk.CTkFrame(quality_check_page, height=2, width=800, fg_color="#DDE2E7", corner_radius=0)
     line_bottom.place(x=0, y=500)
 
@@ -72,16 +92,16 @@ def run_quality_check_menu(menu_page):
     label_quality_check_country = App_Label_Title(frame_quality_check, text="Country", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_country.place(x=35, y=140)
 
-    dropdown_countries = AppDropdown(frame_quality_check, values=["Poland", "Germany", "France"])
+    dropdown_countries = AppComboBox(frame_quality_check, values=countries, command=on_country_changed)
     dropdown_countries.place(x=40, y=170)
 
     label_quality_check_company_code = App_Label_Title(frame_quality_check, text="Company Code", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_company_code.place(x=35, y=220)
 
-    dropdown_company_codes = AppDropdown(frame_quality_check, values=["0001", "0055", "207B"])
+    dropdown_company_codes = AppComboBox(frame_quality_check, values=["---"])
     dropdown_company_codes.place(x=40, y=250)
 
-    button_load_items = Button_Brown(frame_quality_check, text= "Load items", command= lambda: run_quality_check_details(quality_check_page))
+    button_load_items = Button_Brown(frame_quality_check, text= "Load items", command= load_quality_check)
     button_load_items.place(x=200, y=310)
 
 
