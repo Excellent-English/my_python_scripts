@@ -73,21 +73,82 @@ def run_quality_check_details(quality_check_page, selected_country, selected_com
         for widget in scrollable_frame.winfo_children():
             widget.destroy()
 
-        for row, doc in enumerate(documents):
-            text = (
-            f"{doc['sap']} | "
-            f"{doc['user']} | "
-            f"{doc['verified']}"
+        # nagłówki
+        ctk.CTkLabel(
+            scrollable_frame,
+            text="SAP Document",
+            font=("Open Sans", 12, "bold")
+        ).grid(row=0, column=0, sticky="w", padx=10)
+
+        ctk.CTkLabel(
+            scrollable_frame,
+            text="User",
+            font=("Open Sans", 12, "bold")
+        ).grid(row=0, column=1, sticky="w", padx=10)
+
+        ctk.CTkLabel(
+            scrollable_frame,
+            text="Verified",
+            font=("Open Sans", 12, "bold")
+        ).grid(row=0, column=2, sticky="w", padx=10)
+
+
+        # dane
+        for row, doc in enumerate(documents, start=1):
+
+            bg = "#EEF1F4" if row % 2 == 1 else "#FFFFFF"
+            row_color = "#EEF1F4" if row % 2 == 1 else "#FFFFFF"
+
+            row_frame = ctk.CTkFrame(
+                scrollable_frame,
+                fg_color=bg,
+                corner_radius=0,
+                height=30
+            )
+
+            row_frame.grid(
+                row=row,
+                column=0,
+                columnspan=3,
+                sticky="ew",
+                padx=0,
+                pady=0
             )
 
             ctk.CTkLabel(
                 scrollable_frame,
-                text=text,
-                anchor="w"
+                text=doc["sap"],
+                anchor="w",
+                fg_color=row_color
             ).grid(
                 row=row,
                 column=0,
                 sticky="w",
+                padx=10,
+                pady=3
+            )
+
+            ctk.CTkLabel(
+                scrollable_frame,
+                text=doc["user"],
+                anchor="w",
+                fg_color=row_color
+            ).grid(
+                row=row,
+                column=1,
+                sticky="w",
+                padx=10,
+                pady=3
+            )
+
+            ctk.CTkLabel(
+                scrollable_frame,
+                text=doc["verified"],
+                anchor="center",
+                fg_color=row_color
+            ).grid(
+                row=row,
+                column=2,
                 padx=10,
                 pady=3
             )
@@ -117,30 +178,84 @@ def run_quality_check_details(quality_check_page, selected_country, selected_com
     dropdown_company_codes.place(x=260, y=88)
     dropdown_company_codes.set(selected_company_code)
 
+    button_load_items = Button_Brown(quality_check_details_page, text= "⟳  Load items", command=get_items)
+    button_load_items.place(x=480, y=77)
+
+    # ---------------------------------------------------------------------------------------------------------
+    # scrollable frame, które będzie prezentowało wszystkie itemy
+    # ---------------------------------------------------------------------------------------------------------
+
     scrollable_frame = App_ScrollableFrame(frame_quality_check_details_left)
     scrollable_frame.place(x=20, y=60)
 
-    for row, doc in enumerate(documents):
-        text = (
-            f"{doc['sap']} | "
-            f"{doc['user']} | "
-            f"{doc['verified']}"
+    ctk.CTkLabel(scrollable_frame, text="SAP", font=("Open Sans", 12, "bold")).grid(
+        row=0, column=0, sticky="w", padx=10
+    )
+
+    ctk.CTkLabel(scrollable_frame, text="User", font=("Open Sans", 12, "bold")).grid(
+        row=0, column=1, sticky="w", padx=5
+    )
+
+    ctk.CTkLabel(scrollable_frame, text="Verified", font=("Open Sans", 12, "bold")).grid(
+        row=0, column=2, sticky="w", padx=5
+    )
+
+    for row, doc in enumerate(documents, start=1):
+
+        bg = "#EEF1F4" if row % 2 == 1 else "#FFFFFF"
+        row_color = "#EEF1F4" if row % 2 == 1 else "#FFFFFF"
+
+        row_frame = ctk.CTkFrame(
+            scrollable_frame,
+            fg_color=bg,
+            corner_radius=0,
+            height=30
+        )
+
+        row_frame.grid(
+            row=row,
+            column=0,
+            columnspan=3,
+            sticky="ew",
+            padx=0,
+            pady=0
         )
 
         ctk.CTkLabel(
             scrollable_frame,
-            text=text,
-            anchor="w"
+            text=doc["sap"],
+            fg_color=row_color
         ).grid(
             row=row,
             column=0,
             sticky="w",
             padx=10,
-            pady=3
+            pady=2
         )
 
-    button_load_items = Button_Brown(quality_check_details_page, text= "Load items", command=get_items)
-    button_load_items.place(x=480, y=77)
+        ctk.CTkLabel(
+            scrollable_frame,
+            text=doc["user"],
+            fg_color=row_color
+        ).grid(
+            row=row,
+            column=1,
+            sticky="w",
+            padx=5,
+            pady=2
+        )
+
+        ctk.CTkLabel(
+            scrollable_frame,
+            text=doc["verified"],
+            fg_color=row_color
+        ).grid(
+            row=row,
+            column=2,
+            sticky="w",
+            padx=5,
+            pady=2
+        )
 
 
 # ---------------------------------------------------------------------------------------------------------

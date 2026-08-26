@@ -101,11 +101,11 @@ def run_quality_check_menu(menu_page):
     dropdown_company_codes = AppComboBox(frame_quality_check, values=["---"])
     dropdown_company_codes.place(x=40, y=250)
 
-    button_load_items = Button_Brown(frame_quality_check, text= "Load items", command= load_quality_check)
+    button_load_items = Button_Brown(frame_quality_check, text= "⟳  Load items", command= load_quality_check)
     button_load_items.place(x=200, y=310)
 
 
-    # ---------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------
 # grafiki umieszczone w ramkach na głównej stronie
 # ---------------------------------------------------------------------------------------------------------
 
