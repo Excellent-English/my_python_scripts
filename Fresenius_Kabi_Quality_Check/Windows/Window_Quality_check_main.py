@@ -41,9 +41,39 @@ def run_quality_check_menu(menu_page):
         command= lambda: quality_check_page.close_the_app(menu_page)
     )
     power_btn.image = power_off_icon  # trzymaj referencję!
-    power_btn.place(x=700, y=5)
+    power_btn.place(x=650, y=5)
     quality_check_page.bind("<Escape>", lambda event: menu_page.close_the_app(main_page))
 
+    logout_subtitle = ctk.CTkLabel(quality_check_page, text="Logout", font= ("Open Sans", 14), text_color = "white", fg_color = "#755a44")
+    logout_subtitle.place(x=700, y=12)
+
+# ---------------------------------------------------------------------------------
+
+    # Dodanie przycisku zawierającego ikonę return- przycisk powracający do poprzedniego okna
+    def return_to_previous_window():
+        quality_check_page.withdraw()
+        menu_page.deiconify()
+        menu_page.lift()
+        menu_page.focus_force()
+
+    # 1. Wczytanie obrazu z pliku
+    image = Image.open("../Images/Return_icon.png")
+    # 2. Utworzenie CTkImage
+    power_off_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(20, 30))
+    # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
+    power_btn = ctk.CTkButton(
+        quality_check_page.banner_frame,
+        image=power_off_icon,
+        text="",
+        width=20, height=30,
+        fg_color="transparent",
+        hover_color="#755a44",
+        command=lambda: return_to_previous_window()
+    )
+    power_btn.image = power_off_icon  # trzymaj referencję!
+    power_btn.place(x=50, y=7)
+
+# ---------------------------------------------------------------------------------
 
     # zablokuj zamknięcie okna za pomocą "X"
     def disable_close():

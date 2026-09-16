@@ -6,16 +6,15 @@ from Fresenius_Kabi_Quality_Check.AllClasses.Button_Standard import Button_Stand
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Window import AppWindow
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Frame import AppFrame
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Label_Title import App_Label_Title
-from Fresenius_Kabi_Quality_Check.Windows.Window_Quality_check_main import run_quality_check_menu
 
 
-def run_window_administraton(main_page):
+def run_window_administraton(menu_page):
     # Zamknij / ukryj główne okno
-    main_page.withdraw()   # albo destroy()
+    menu_page.withdraw()   # albo destroy()
     # ctk.deactivate_automatic_dpi_awareness()
 
     # Utwórz nowe okno menu
-    menu_page = AppWindow(banner_text = "Administration", width=1100, height=600, x= 110, y = 30, fg_color="#F6F7F9")
+    adm_page = AppWindow(banner_text = "Administration", width=1100, height=600, x= 110, y = 30, fg_color="#F6F7F9")
     # Gdyby była potrzeba zmiany tytułu w kolejnych oknach:
     # menu_page = AppWindow(title="Inny tytuł okna")
 
@@ -27,29 +26,56 @@ def run_window_administraton(main_page):
     power_off_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(35, 35))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
     power_btn = ctk.CTkButton(
-        menu_page.banner_frame,
+        adm_page.banner_frame,
         image=power_off_icon,
         text="",
         width=35, height=35,
         fg_color="transparent",
         hover_color="#755a44",
-        command= lambda: menu_page.close_the_app(main_page)
+        command= lambda: adm_page.close_the_app(main_page)
     )
     power_btn.image = power_off_icon  # trzymaj referencję!
     power_btn.place(x=900, y=5)
-    menu_page.bind("<Escape>", lambda event: menu_page.close_the_app(main_page))
+    adm_page.bind("<Escape>", lambda event: adm_page.close_the_app(main_page))
 
-    logout_subtitle = ctk.CTkLabel(menu_page, text="Logout", font= ("Open Sans", 14), text_color = "white", fg_color = "#755a44")
+    logout_subtitle = ctk.CTkLabel(adm_page, text="Logout", font= ("Open Sans", 14), text_color = "white", fg_color = "#755a44")
     logout_subtitle.place(x=955, y=12)
 
+# ---------------------------------------------------------------------------------
+
+    # Dodanie przycisku zawierającego ikonę return- przycisk powracający do poprzedniego okna
+    def return_to_previous_window():
+        adm_page.withdraw()
+        menu_page.deiconify()
+        menu_page.lift()
+        menu_page.focus_force()
+
+    # 1. Wczytanie obrazu z pliku
+    image = Image.open("../Images/Return_icon.png")
+    # 2. Utworzenie CTkImage
+    power_off_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(20,30))
+    # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
+    power_btn = ctk.CTkButton(
+        adm_page.banner_frame,
+        image=power_off_icon,
+        text="",
+        width=20, height=30,
+        fg_color="transparent",
+        hover_color="#755a44",
+        command= lambda: return_to_previous_window()
+    )
+    power_btn.image = power_off_icon  # trzymaj referencję!
+    power_btn.place(x=50, y=7)
+
+# ---------------------------------------------------------------------------------
 
     # zablokuj zamknięcie okna za pomocą "X"
     def disable_close():
         pass
-    menu_page.protocol("WM_DELETE_WINDOW", disable_close)
+    adm_page.protocol("WM_DELETE_WINDOW", disable_close)
 
 
-    line_bottom = ctk.CTkFrame(menu_page, height=2, width=1100, fg_color="#DDE2E7", corner_radius=0)
+    line_bottom = ctk.CTkFrame(adm_page, height=2, width=1100, fg_color="#DDE2E7", corner_radius=0)
     line_bottom.place(x=0, y=500)
 
 
@@ -57,17 +83,17 @@ def run_window_administraton(main_page):
 # ramki i podpisy do ramek na głównej stronie
 # ---------------------------------------------------------------------------------------------------------
 
-    label_top_title = App_Label_Title(menu_page, text="Administration", font= ("Open Sans", 24, "bold"), text_color = "#755a44", fg_color="#F6F7F9")
+    label_top_title = App_Label_Title(adm_page, text="Administration", font= ("Open Sans", 24, "bold"), text_color = "#755a44", fg_color="#F6F7F9")
     label_top_title.place(x=450, y=90)
 
-    label_top_subtitle = App_Label_Title(menu_page, text="Manage users, limits and reporting settings for the system", font= ("Open Sans", 14), text_color = "#8B7A6B", fg_color="#F6F7F9")
+    label_top_subtitle = App_Label_Title(adm_page, text="Manage users, limits and reporting settings for the system", font= ("Open Sans", 14), text_color = "#8B7A6B", fg_color="#F6F7F9")
     label_top_subtitle.place(x=350, y=120)
 
 # ---------------------------------------------------------------------------------------------------------
 # ramki i podpisy do ramek na głównej stronie
 # ---------------------------------------------------------------------------------------------------------
 
-    frame_quality_check = AppFrame(menu_page, height= 250)
+    frame_quality_check = AppFrame(adm_page, height= 250)
     frame_quality_check.place(x=80, y=170)
 
     label_quality_check_title = App_Label_Title(frame_quality_check, text="People Management", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
@@ -83,7 +109,7 @@ def run_window_administraton(main_page):
 
 # ---------------------------------------------------------------------------------------------------------
 
-    frame_proposal = AppFrame(menu_page, height= 250)
+    frame_proposal = AppFrame(adm_page, height= 250)
     frame_proposal.place(x=395, y=170)
 
     label_proposal_title = App_Label_Title(frame_proposal, text="Limit management", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
@@ -94,7 +120,7 @@ def run_window_administraton(main_page):
 
 # ---------------------------------------------------------------------------------------------------------
 
-    frame_administration = AppFrame(menu_page, height= 250)
+    frame_administration = AppFrame(adm_page, height= 250)
     frame_administration.place(x=710, y=170)
 
     label_administration_title = App_Label_Title(frame_administration, text="Reporting", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
@@ -173,7 +199,7 @@ def run_window_administraton(main_page):
 
 
     # Zaprezentuj okno na ekranie komputera
-    menu_page.mainloop()
+    adm_page.mainloop()
 
 # funkcja do uruchomienia okna dla testów, później do usunięcia
 
