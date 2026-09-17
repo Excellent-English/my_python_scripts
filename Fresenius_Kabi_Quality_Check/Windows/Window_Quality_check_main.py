@@ -77,6 +77,27 @@ def run_quality_check_menu(menu_page):
             documents
         )
 
+    def load_quality_check_items():
+        country = dropdown_countries.get()
+        company_code = dropdown_company_codes.get()
+        qc_status = dropdown_qc_status.get()
+        vendor_type = dropdown_vendor_type.get()
+        vendor_number = text_input_vendor_number.get().strip()
+        order_by = dropdown_order_by.get()
+
+        first_selected_item = db.get_first_item_quality_check(
+        country = country,
+        company_code = company_code,
+        qc_status = qc_status,
+        vendor_type = vendor_type,
+        vendor_number = vendor_number,
+        order_by = order_by)
+
+        print(country)
+        print(company_code)
+        print(vendor_number)
+        run_quality_check_details(quality_check_page)
+
 
 # ---------------------------------------------------------------------------------------------------------
 # ramki i podpisy do ramki na stronie
@@ -99,6 +120,8 @@ def run_quality_check_menu(menu_page):
 
     dropdown_countries = AppComboBox(frame_quality_check, width = 300, values=countries, command=on_country_changed)
     dropdown_countries.place(x=40, y=170)
+    dropdown_countries.set("---")
+    print(countries)
 
     label_quality_check_company_code = App_Label_Title(frame_quality_check, text="Company Code", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_company_code.place(x=35, y=220)
@@ -121,16 +144,16 @@ def run_quality_check_menu(menu_page):
     label_quality_check_vendor_number = App_Label_Title(frame_quality_check, text="Vendor number", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_vendor_number.place(x=435, y=220)
 
-    text_input_vendor_number = App_Entry_Box(frame_quality_check, width = 300)
+    text_input_vendor_number = App_Entry_Box(frame_quality_check, width = 300, fg_color = "white", justify="left")
     text_input_vendor_number.place(x=440, y=250)
 
     label_quality_check_vendor_type = App_Label_Title(frame_quality_check, text="Order by:", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_vendor_type.place(x=435, y=300)
 
-    dropdown_vendor_type = AppComboBox(frame_quality_check, width = 300, values=["Posting date - oldest first", "User - A to Z", "SAP Document number - lowest to highest", "Due date - oldest first", "EUR Amount - highest to lowest"])
-    dropdown_vendor_type.place(x=440, y=330)
+    dropdown_order_by = AppComboBox(frame_quality_check, width = 300, values=["Posting date - oldest first", "User - A to Z", "SAP Document number - lowest to highest", "Due date - oldest first", "EUR Amount - highest to lowest"])
+    dropdown_order_by.place(x=440, y=330)
 
-    button_load_items = Button_Brown(frame_quality_check, text= "⟳  Load items", command= load_quality_check)
+    button_load_items = Button_Brown(frame_quality_check, text= "⟳  Load items", command= load_quality_check_items)
     button_load_items.place(x=300, y=395)
 
 
