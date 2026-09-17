@@ -9,6 +9,7 @@ from Fresenius_Kabi_Quality_Check.AllClasses.App_Frame import AppFrame
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Label_Title import App_Label_Title
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Dropdown import AppComboBox
 from Fresenius_Kabi_Quality_Check.AllClasses.Button_Brown import Button_Brown
+from Fresenius_Kabi_Quality_Check.AllClasses.App_Entry_Box import App_Entry_Box
 from Fresenius_Kabi_Quality_Check.Windows.Window_Quality_check_details import run_quality_check_details
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Database import Database
 
@@ -20,32 +21,9 @@ def run_quality_check_menu(menu_page):
     menu_page.withdraw()   # albo destroy()
 
     # Utwórz nowe okno menu
-    quality_check_page = AppWindow(banner_text = "Quality check audit", width=800, height=550, x= 310, y = 90, fg_color="#F6F7F9")
+    quality_check_page = AppWindow(banner_text = "Quality check audit", width=1020, height=600, x= 120, y = 30, fg_color="#F6F7F9")
     # Gdyby była potrzeba zmiany tytułu w kolejnych oknach:
     # menu_page = AppWindow(title="Inny tytuł okna")
-
-
-    # Dodanie przycisku zawierającego ikonę power off- przycisk zamyka aplikację
-    # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/Power_off_icon.png")
-    # 2. Utworzenie CTkImage
-    power_off_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(35, 35))
-    # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
-    power_btn = ctk.CTkButton(
-        quality_check_page.banner_frame,
-        image=power_off_icon,
-        text="",
-        width=35, height=35,
-        fg_color="transparent",
-        hover_color="#755a44",
-        command= lambda: quality_check_page.close_the_app(menu_page)
-    )
-    power_btn.image = power_off_icon  # trzymaj referencję!
-    power_btn.place(x=650, y=5)
-    quality_check_page.bind("<Escape>", lambda event: menu_page.close_the_app(main_page))
-
-    logout_subtitle = ctk.CTkLabel(quality_check_page, text="Logout", font= ("Open Sans", 14), text_color = "white", fg_color = "#755a44")
-    logout_subtitle.place(x=700, y=12)
 
 # ---------------------------------------------------------------------------------
 
@@ -99,45 +77,90 @@ def run_quality_check_menu(menu_page):
             documents
         )
 
-    line_bottom = ctk.CTkFrame(quality_check_page, height=2, width=800, fg_color="#DDE2E7", corner_radius=0)
-    line_bottom.place(x=0, y=500)
-
 
 # ---------------------------------------------------------------------------------------------------------
 # ramki i podpisy do ramki na stronie
 # ---------------------------------------------------------------------------------------------------------
 
-    frame_quality_check = AppFrame(quality_check_page, width = 600, height = 380)
-    frame_quality_check.place(x=90, y=100)
+    frame_quality_check = AppFrame(quality_check_page, width = 820, height = 470)
+    frame_quality_check.place(x=90, y=90)
 
     label_quality_check_title = App_Label_Title(frame_quality_check, text="Load Quality check items", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
     label_quality_check_title.place(x=145, y=30)
 
-    label_quality_check_subtitle = App_Label_Title(frame_quality_check, text="Select country and company code to load items for audit", font= ("Open Sans", 14), text_color = "#8B7A6B")
+    label_quality_check_subtitle = App_Label_Title(frame_quality_check, text="Select desired criteria to load items for audit", font= ("Open Sans", 14), text_color = "#8B7A6B")
     label_quality_check_subtitle.place(x=145, y=65)
 
-    line_frame_bottom = ctk.CTkFrame(frame_quality_check, height=2, width=500, fg_color="#DDE2E7", corner_radius=0)
+    line_frame_bottom = ctk.CTkFrame(frame_quality_check, height=2, width=700, fg_color="#DDE2E7", corner_radius=0)
     line_frame_bottom.place(x=40, y=120)
 
     label_quality_check_country = App_Label_Title(frame_quality_check, text="Country", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_country.place(x=35, y=140)
 
-    dropdown_countries = AppComboBox(frame_quality_check, values=countries, command=on_country_changed)
+    dropdown_countries = AppComboBox(frame_quality_check, width = 300, values=countries, command=on_country_changed)
     dropdown_countries.place(x=40, y=170)
 
     label_quality_check_company_code = App_Label_Title(frame_quality_check, text="Company Code", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_company_code.place(x=35, y=220)
 
-    dropdown_company_codes = AppComboBox(frame_quality_check, values=["---"])
+    dropdown_company_codes = AppComboBox(frame_quality_check, width = 300, values=["---"])
     dropdown_company_codes.place(x=40, y=250)
 
+    label_quality_check_qc_status = App_Label_Title(frame_quality_check, text="QC status", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
+    label_quality_check_qc_status.place(x=35, y=300)
+
+    dropdown_qc_status = AppComboBox(frame_quality_check, width = 300, values=["All","Pending Verification","Verification Failed"])
+    dropdown_qc_status.place(x=40, y=330)
+
+    label_quality_check_vendor_type = App_Label_Title(frame_quality_check, text="Vendor type", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
+    label_quality_check_vendor_type.place(x=435, y=140)
+
+    dropdown_vendor_type = AppComboBox(frame_quality_check, width = 300, values=["All","Internal","External"])
+    dropdown_vendor_type.place(x=440, y=170)
+
+    label_quality_check_vendor_number = App_Label_Title(frame_quality_check, text="Vendor number", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
+    label_quality_check_vendor_number.place(x=435, y=220)
+
+    text_input_vendor_number = App_Entry_Box(frame_quality_check, width = 300)
+    text_input_vendor_number.place(x=440, y=250)
+
+    label_quality_check_vendor_type = App_Label_Title(frame_quality_check, text="Order by:", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
+    label_quality_check_vendor_type.place(x=435, y=300)
+
+    dropdown_vendor_type = AppComboBox(frame_quality_check, width = 300, values=["Posting date - oldest first", "User - A to Z", "SAP Document number - lowest to highest", "Due date - oldest first", "EUR Amount - highest to lowest"])
+    dropdown_vendor_type.place(x=440, y=330)
+
     button_load_items = Button_Brown(frame_quality_check, text= "⟳  Load items", command= load_quality_check)
-    button_load_items.place(x=200, y=310)
+    button_load_items.place(x=300, y=395)
 
 
 # ---------------------------------------------------------------------------------------------------------
 # grafiki umieszczone w ramkach na głównej stronie
 # ---------------------------------------------------------------------------------------------------------
+
+    # Dodanie przycisku zawierającego ikonę power off- przycisk zamyka aplikację
+    # 1. Wczytanie obrazu z pliku
+    image = Image.open("../Images/Power_off_icon.png")
+    # 2. Utworzenie CTkImage
+    power_off_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(35, 35))
+    # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
+    power_btn = ctk.CTkButton(
+        quality_check_page.banner_frame,
+        image=power_off_icon,
+        text="",
+        width=35, height=35,
+        fg_color="transparent",
+        hover_color="#755a44",
+        command= lambda: quality_check_page.close_the_app(menu_page)
+    )
+    power_btn.image = power_off_icon  # trzymaj referencję!
+    power_btn.place(x=880, y=5)
+    quality_check_page.bind("<Escape>", lambda event: menu_page.close_the_app(main_page))
+
+    # napis Logout
+    logout_subtitle = ctk.CTkLabel(quality_check_page, text="Logout", font= ("Open Sans", 14), text_color = "white", fg_color = "#755a44")
+    logout_subtitle.place(x=935, y=12)
+
 
     # Dodanie przycisku zawierającego ikonę quality check
     # 1. Wczytanie obrazu z pliku
@@ -158,8 +181,6 @@ def run_quality_check_menu(menu_page):
     )
     quality_check_btn.image = quality_check_icon  # trzymaj referencję!
     quality_check_btn.place(x=20, y=10)
-
-
 
 
 
