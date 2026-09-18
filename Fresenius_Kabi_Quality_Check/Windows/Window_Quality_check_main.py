@@ -15,6 +15,7 @@ from Fresenius_Kabi_Quality_Check.AllClasses.App_Database import Database
 
 db = Database()
 countries = db.get_countries()
+global first_selected_item
 
 def run_quality_check_menu(menu_page):
     # Zamknij / ukryj główne okno
@@ -96,7 +97,7 @@ def run_quality_check_menu(menu_page):
         print(country)
         print(company_code)
         print(vendor_number)
-        run_quality_check_details(quality_check_page)
+        run_quality_check_details(quality_check_page, first_selected_item)
 
 
 # ---------------------------------------------------------------------------------------------------------
