@@ -16,6 +16,7 @@ from Fresenius_Kabi_Quality_Check.AllClasses.App_Database import Database
 db = Database()
 countries = db.get_countries()
 global first_selected_item
+global number_of_items_selected_all
 
 def run_quality_check_menu(menu_page):
     # Zamknij / ukryj główne okno
@@ -65,6 +66,7 @@ def run_quality_check_menu(menu_page):
 
         dropdown_company_codes.set_values(company_codes)
         dropdown_company_codes.set("")
+        when_selection_changes()
 
     def load_quality_check():
         selected_country = dropdown_countries.get()
@@ -77,6 +79,21 @@ def run_quality_check_menu(menu_page):
             selected_company_code,
             documents
         )
+
+    def when_selection_changes(*_):
+        country = dropdown_countries.get()
+        company_code = dropdown_company_codes.get()
+        qc_status = dropdown_qc_status.get()
+        vendor_type = dropdown_vendor_type.get()
+        vendor_number = text_input_vendor_number.get().strip()
+
+        db.get_number_of_items_found_all(
+        country = country,
+        company_code = company_code,
+        qc_status = qc_status,
+        vendor_type = vendor_type,
+        vendor_number = vendor_number)
+
 
     def load_quality_check_items():
         country = dropdown_countries.get()
@@ -98,6 +115,7 @@ def run_quality_check_menu(menu_page):
         print(company_code)
         print(vendor_number)
         run_quality_check_details(quality_check_page, first_selected_item)
+
 
 
 # ---------------------------------------------------------------------------------------------------------
@@ -127,19 +145,19 @@ def run_quality_check_menu(menu_page):
     label_quality_check_company_code = App_Label_Title(frame_quality_check, text="Company Code", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_company_code.place(x=35, y=220)
 
-    dropdown_company_codes = AppComboBox(frame_quality_check, width = 300, values=["---"])
+    dropdown_company_codes = AppComboBox(frame_quality_check, width = 300, values=["---"], command=when_selection_changes)
     dropdown_company_codes.place(x=40, y=250)
 
     label_quality_check_qc_status = App_Label_Title(frame_quality_check, text="QC status", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_qc_status.place(x=35, y=300)
 
-    dropdown_qc_status = AppComboBox(frame_quality_check, width = 300, values=["All","Pending Verification","Verification Failed"])
+    dropdown_qc_status = AppComboBox(frame_quality_check, width = 300, values=["All","Pending Verification","Verification Failed"], command=when_selection_changes)
     dropdown_qc_status.place(x=40, y=330)
 
     label_quality_check_vendor_type = App_Label_Title(frame_quality_check, text="Vendor type", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_vendor_type.place(x=435, y=140)
 
-    dropdown_vendor_type = AppComboBox(frame_quality_check, width = 300, values=["All","Internal","External"])
+    dropdown_vendor_type = AppComboBox(frame_quality_check, width = 300, values=["All","Internal","External"], command=when_selection_changes)
     dropdown_vendor_type.place(x=440, y=170)
 
     label_quality_check_vendor_number = App_Label_Title(frame_quality_check, text="Vendor number", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
