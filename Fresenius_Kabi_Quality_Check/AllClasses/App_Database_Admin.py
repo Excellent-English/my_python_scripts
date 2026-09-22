@@ -53,6 +53,70 @@ class Database_Admin:
         ]
 
 
+# funkcja zmieniająca limity w wyszukanym wcześniej country i company codzie + dodaje nowy wiersz w tabeli
+    def update_row_with_limits(self, logged_user, country, company_code, monthly_posted_documents, amount_limit, new_hire_percentage):
+
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+
+        script_to_deactivate_row = """
+        UPDATE quality_check_limits
+        SET
+            Line_status = 'Inactive',
+            Who_changed = ?,
+            Active_to = GETDATE()
+        WHERE Country = ? AND Company_code = ? AND Line_status = 'Active';
+        """
+
+
+        script_to_insert_new_row = """
+        INSERT INTO quality_check_limits
+        (
+            Country,
+            Company_code,
+            Monthly_posted_documents,
+            Amount_limit,
+            New_hire_percentage,
+            Line_status,
+            Who_changed,
+            Active_from,
+            Active_to
+        )
+        VALUES
+        (
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            'Active',
+            ?,
+            GETDATE(),
+            NULL
+        );
+        """
+
+        cursor.execute(
+            script_to_deactivate_row,
+            logged_user,
+            country,
+            company_code
+        )
+
+        cursor.execute(
+            script_to_insert_new_row,
+            country,
+            company_code,
+            monthly_posted_documents,
+            amount_limit,
+            new_hire_percentage,
+            logged_user
+        )
+        conn.commit()
+
+        cursor.close()
+        conn.close()
 
 
 

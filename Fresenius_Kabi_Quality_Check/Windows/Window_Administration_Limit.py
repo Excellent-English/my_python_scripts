@@ -11,6 +11,8 @@ from Fresenius_Kabi_Quality_Check.AllClasses.App_Database_Admin import Database_
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Dropdown import AppComboBox
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Entry_Box import App_Entry_Box
 
+global country, company_code, current_monthly_posted_documents, current_amount_limit, current_new_hire_percentage
+
 db = Database()
 db_admin = Database_Admin()
 countries = db.get_countries()
@@ -98,6 +100,8 @@ def run_window_administraton_limit(adm_page):
 
 
     def when_selection_changes_admin(*_):
+        global country, company_code, current_monthly_posted_documents, current_amount_limit, current_new_hire_percentage
+
         country = dropdown_countries.get()
         company_code = dropdown_company_codes.get()
 
@@ -117,6 +121,30 @@ def run_window_administraton_limit(adm_page):
             text_input_category_3.delete(0, "end")
             text_input_category_3.insert(0, str(row["new_hire_percentage"]))
 
+        current_monthly_posted_documents = str(row["monthly_posted_documents"])
+        current_amount_limit = str(int(row["amount_limit"]))
+        current_new_hire_percentage = str(row["new_hire_percentage"])
+
+        print(country)
+        print(company_code)
+        return country, company_code, current_monthly_posted_documents, current_amount_limit, current_new_hire_percentage
+
+
+# funkcja aktualizująca obecny rekord (zmieniająca go na Inactive i dodająca datę końcową) oraz dodająca zupełnie nowy rekord do tabeli
+    def save_changes_button():
+        print(country)
+        print(company_code)
+        print(current_monthly_posted_documents)
+        print(current_amount_limit)
+        print(current_new_hire_percentage)
+
+        new_monthly_posted_documents = text_input_category_1.get()
+        new_amount_limit = text_input_category_2.get()
+        new_new_hire_percentage = text_input_category_3.get()
+
+        print(new_monthly_posted_documents)
+        print(new_amount_limit)
+        print(new_new_hire_percentage)
 
 # ---------------------------------------------------------------------------------------------------------
 # ramki i podpisy do ramek na głównej stronie
@@ -189,7 +217,7 @@ def run_window_administraton_limit(adm_page):
     label_step_3_subtitle = App_Label_Title(frame_step_3, text="Save all the changes", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_step_3_subtitle.place(x=70, y=50)
 
-    button_load_items = Button_Brown(frame_step_3, text= "💾  Save changes")
+    button_load_items = Button_Brown(frame_step_3, text= "💾  Save changes", command=save_changes_button)
     button_load_items.place(x=63, y=127)
 
 # ---------------------------------------------------------------------------------------------------------
