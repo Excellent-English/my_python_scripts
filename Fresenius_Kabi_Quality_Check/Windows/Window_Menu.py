@@ -10,7 +10,7 @@ from Fresenius_Kabi_Quality_Check.Windows.Window_Administration import run_windo
 from Fresenius_Kabi_Quality_Check.Windows.Window_Quality_check_main import run_quality_check_menu
 
 
-def run_window_menu(main_page):
+def run_window_menu(main_page, user_email_address):
     # Zamknij / ukryj główne okno
     main_page.withdraw()   # albo destroy()
     # ctk.deactivate_automatic_dpi_awareness()
@@ -101,7 +101,7 @@ def run_window_menu(main_page):
     label_administration_title.configure(cursor="hand2")
     label_administration_title.bind(
         "<Button-1>",
-        lambda event: run_window_administraton(menu_page))
+        lambda event: run_window_administraton(menu_page, user_email_address))
 
     label_administration_subtitle = App_Label_Title(frame_administration, text="Manage users, settings\nand system configuration", font= ("Open Sans", 14), text_color = "#8B7A6B")
     label_administration_subtitle.place(x=110, y=65)

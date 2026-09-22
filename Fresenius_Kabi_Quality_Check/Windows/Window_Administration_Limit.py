@@ -17,7 +17,7 @@ db = Database()
 db_admin = Database_Admin()
 countries = db.get_countries()
 
-def run_window_administraton_limit(adm_page):
+def run_window_administraton_limit(adm_page, user_email_address):
     # Zamknij / ukryj główne okno
     adm_page.withdraw()   # albo destroy()
     # ctk.deactivate_automatic_dpi_awareness()
@@ -132,6 +132,7 @@ def run_window_administraton_limit(adm_page):
 
 # funkcja aktualizująca obecny rekord (zmieniająca go na Inactive i dodająca datę końcową) oraz dodająca zupełnie nowy rekord do tabeli
     def save_changes_button():
+
         print(country)
         print(company_code)
         print(current_monthly_posted_documents)
@@ -139,12 +140,21 @@ def run_window_administraton_limit(adm_page):
         print(current_new_hire_percentage)
 
         new_monthly_posted_documents = text_input_category_1.get()
-        new_amount_limit = text_input_category_2.get()
+        new_amount_limit = float(text_input_category_2.get())
         new_new_hire_percentage = text_input_category_3.get()
 
         print(new_monthly_posted_documents)
         print(new_amount_limit)
         print(new_new_hire_percentage)
+
+        db_admin.update_row_with_limits(user_email_address, country, company_code, new_monthly_posted_documents, new_amount_limit, new_new_hire_percentage)
+
+        dropdown_countries.set("---")
+        dropdown_company_codes.set("---")
+        text_input_category_1.delete(0, "end")
+        text_input_category_2.delete(0, "end")
+        text_input_category_3.delete(0, "end")
+
 
 # ---------------------------------------------------------------------------------------------------------
 # ramki i podpisy do ramek na głównej stronie
@@ -226,5 +236,5 @@ if __name__ == "__main__":
     adm_page = ctk.CTk()
     adm_page.withdraw()
 
-    run_window_administraton_limit(adm_page)
+    run_window_administraton_limit(adm_page, user_email_address)
     adm_page.mainloop()

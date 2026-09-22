@@ -54,7 +54,8 @@ class Database_Admin:
 
 
 # funkcja zmieniająca limity w wyszukanym wcześniej country i company codzie + dodaje nowy wiersz w tabeli
-    def update_row_with_limits(self, logged_user, country, company_code, monthly_posted_documents, amount_limit, new_hire_percentage):
+    def update_row_with_limits(self, logged_user, country, company_code,
+                               new_monthly_posted_documents, new_amount_limit, new_new_hire_percentage):
 
         conn = self.get_connection()
         cursor = conn.cursor()
@@ -108,9 +109,9 @@ class Database_Admin:
             script_to_insert_new_row,
             country,
             company_code,
-            monthly_posted_documents,
-            amount_limit,
-            new_hire_percentage,
+            new_monthly_posted_documents,
+            new_amount_limit,
+            new_new_hire_percentage,
             logged_user
         )
         conn.commit()

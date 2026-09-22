@@ -9,7 +9,7 @@ from Fresenius_Kabi_Quality_Check.AllClasses.App_Label_Title import App_Label_Ti
 from Fresenius_Kabi_Quality_Check.Windows.Window_Administration_Limit import run_window_administraton_limit
 
 
-def run_window_administraton(menu_page):
+def run_window_administraton(menu_page, user_email_address):
     # Zamknij / ukryj główne okno
     menu_page.withdraw()   # albo destroy()
     # ctk.deactivate_automatic_dpi_awareness()
@@ -119,7 +119,7 @@ def run_window_administraton(menu_page):
     label_proposal_title.configure(cursor="hand2")
     label_proposal_title.bind(
         "<Button-1>",
-        lambda event: run_window_administraton_limit(adm_page))
+        lambda event: run_window_administraton_limit(adm_page, user_email_address))
 
     label_proposal_subtitle = App_Label_Title(frame_proposal, text="View and configure\nall thresholds and limits", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_proposal_subtitle.place(x=75, y=180)
