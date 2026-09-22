@@ -6,7 +6,14 @@ from Fresenius_Kabi_Quality_Check.AllClasses.Button_Standard import Button_Stand
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Window import AppWindow
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Frame import AppFrame
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Label_Title import App_Label_Title
+from Fresenius_Kabi_Quality_Check.AllClasses.App_Database import Database
+from Fresenius_Kabi_Quality_Check.AllClasses.App_Database_Admin import Database_Admin
+from Fresenius_Kabi_Quality_Check.AllClasses.App_Dropdown import AppComboBox
+from Fresenius_Kabi_Quality_Check.AllClasses.App_Entry_Box import App_Entry_Box
 
+db = Database()
+db_admin = Database_Admin()
+countries = db.get_countries()
 
 def run_window_administraton_limit(adm_page):
     # Zamknij / ukryj główne okno
@@ -79,121 +86,116 @@ def run_window_administraton_limit(adm_page):
     line_bottom.place(x=0, y=500)
 
 
+    def on_country_changed(selected_country):
+        company_codes = db.get_company_codes(selected_country)
+
+        dropdown_company_codes.set_values(company_codes)
+        dropdown_company_codes.set("")
+
+        text_input_category_1.delete(0, "end")
+        text_input_category_2.delete(0, "end")
+        text_input_category_3.delete(0, "end")
+
+
+    def when_selection_changes_admin(*_):
+        country = dropdown_countries.get()
+        company_code = dropdown_company_codes.get()
+
+        results = db_admin.get_limits_based_on_selected_country_and_company_code(
+        country = country,
+        company_code = company_code)
+
+        print(country)
+        print(company_code)
+
+        if results:
+            row = results[0]
+
+            text_input_category_1.delete(0, "end")
+            text_input_category_1.insert(0, str(row["monthly_posted_documents"]))
+
+            text_input_category_2.delete(0, "end")
+            text_input_category_2.insert(0, str(int(row["amount_limit"])))
+
+            text_input_category_3.delete(0, "end")
+            text_input_category_3.insert(0, str(row["new_hire_percentage"]))
+
+
 # ---------------------------------------------------------------------------------------------------------
 # ramki i podpisy do ramek na głównej stronie
 # ---------------------------------------------------------------------------------------------------------
 
-    label_top_title = App_Label_Title(limit_page, text="Administration", font= ("Open Sans", 24, "bold"), text_color = "#755a44", fg_color="#F6F7F9")
-    label_top_title.place(x=450, y=90)
+    label_top_title = App_Label_Title(limit_page, text="Limit Management", font= ("Open Sans", 24, "bold"), text_color = "#755a44", fg_color="#F6F7F9")
+    label_top_title.place(x=435, y=90)
 
-    label_top_subtitle = App_Label_Title(limit_page, text="Manage users, limits and reporting settings for the system", font= ("Open Sans", 14), text_color = "#8B7A6B", fg_color="#F6F7F9")
-    label_top_subtitle.place(x=350, y=120)
+    label_top_subtitle = App_Label_Title(limit_page, text="View and configure all thresholds and limits", font= ("Open Sans", 14), text_color = "#8B7A6B", fg_color="#F6F7F9")
+    label_top_subtitle.place(x=400, y=120)
 
 # ---------------------------------------------------------------------------------------------------------
 # ramki i podpisy do ramek na głównej stronie
 # ---------------------------------------------------------------------------------------------------------
 
-    frame_quality_check = AppFrame(limit_page, height= 250)
-    frame_quality_check.place(x=80, y=170)
+    frame_step_1 = AppFrame(limit_page, height= 250)
+    frame_step_1.place(x=80, y=170)
 
-    label_quality_check_title = App_Label_Title(frame_quality_check, text="People Management", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
-    label_quality_check_title.place(x=40, y=130)
+    label_step_1_title = App_Label_Title(frame_step_1, text="STEP 1", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
+    label_step_1_title.place(x=100, y=20)
 
-    # label_quality_check_title.configure(cursor="hand2")
-    # label_quality_check_title.bind(
-    #     "<Button-1>",
-    #     lambda event: run_quality_check_menu(menu_page))
+    label_step_1_subtitle = App_Label_Title(frame_step_1, text="Choose country and company code", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
+    label_step_1_subtitle.place(x=30, y=50)
 
-    label_quality_check_subtitle = App_Label_Title(frame_quality_check, text="Manage users, access rights\nand organization structure", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
-    label_quality_check_subtitle.place(x=55, y=180)
+    dropdown_countries = AppComboBox(frame_step_1, width = 260, values=countries, command=on_country_changed)
+    dropdown_countries.place(x=20, y=100)
+    dropdown_countries.set("---")
 
-# ---------------------------------------------------------------------------------------------------------
-
-    frame_proposal = AppFrame(limit_page, height= 250)
-    frame_proposal.place(x=395, y=170)
-
-    label_proposal_title = App_Label_Title(frame_proposal, text="Limit management", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
-    label_proposal_title.place(x=50, y=130)
-
-    label_proposal_subtitle = App_Label_Title(frame_proposal, text="View and configure\nall tresholds and limits", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
-    label_proposal_subtitle.place(x=75, y=180)
+    dropdown_company_codes = AppComboBox(frame_step_1, width = 260, values=["---"], command=when_selection_changes_admin)
+    dropdown_company_codes.place(x=20, y=170)
 
 # ---------------------------------------------------------------------------------------------------------
 
-    frame_administration = AppFrame(limit_page, height= 250)
-    frame_administration.place(x=710, y=170)
+    frame_step_2 = AppFrame(limit_page, height= 250)
+    frame_step_2.place(x=395, y=170)
 
-    label_administration_title = App_Label_Title(frame_administration, text="Reporting", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
-    label_administration_title.place(x=90, y=130)
+    label_step_2_title = App_Label_Title(frame_step_2, text="STEP 2", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
+    label_step_2_title.place(x=100, y=20)
 
-    label_administration_subtitle = App_Label_Title(frame_administration, text="Generate and view reports,\nmetrics and audit activity", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
-    label_administration_subtitle.place(x=60, y=180)
+    label_step_2_subtitle = App_Label_Title(frame_step_2, text="Check and modify any threshold", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
+    label_step_2_subtitle.place(x=43, y=50)
+
+    line_bottom = ctk.CTkFrame(frame_step_2, height=2, width=240, fg_color="#DDE2E7", corner_radius=0)
+    line_bottom.place(x=30, y=85)
+
+    label_step_2_category_1 = App_Label_Title(frame_step_2, text="% of posted documents:", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
+    label_step_2_category_1.place(x=20, y=100)
+    text_input_category_1 = App_Entry_Box(frame_step_2, width = 80, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
+    text_input_category_1.place(x=190, y=98)
+
+    label_step_2_category_2 = App_Label_Title(frame_step_2, text="Amount limit:", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
+    label_step_2_category_2.place(x=20, y=140)
+    text_input_category_2 = App_Entry_Box(frame_step_2, width = 80, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
+    text_input_category_2.place(x=190, y=138)
+
+    label_step_2_category_3 = App_Label_Title(frame_step_2, text="New hire percentage:", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
+    label_step_2_category_3.place(x=20, y=180)
+    text_input_category_3 = App_Entry_Box(frame_step_2, width = 80, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
+    text_input_category_3.place(x=190, y=178)
 
 
 # ---------------------------------------------------------------------------------------------------------
-# grafiki umieszczone w ramkach na głównej stronie
+
+    frame_step_3 = AppFrame(limit_page, height= 250)
+    frame_step_3.place(x=710, y=170)
+
+    label_step_3_title = App_Label_Title(frame_step_3, text="STEP 3", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
+    label_step_3_title.place(x=100, y=20)
+
+    label_step_3_subtitle = App_Label_Title(frame_step_3, text="Save all the changes", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
+    label_step_3_subtitle.place(x=70, y=50)
+
+    button_load_items = Button_Brown(frame_step_3, text= "💾  Save changes")
+    button_load_items.place(x=63, y=127)
+
 # ---------------------------------------------------------------------------------------------------------
-
-    # Dodanie przycisku zawierającego ikonę quality check
-    # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/People management.png")
-    # 2. Utworzenie CTkImage
-    quality_check_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(100, 100))
-    # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
-    quality_check_btn = ctk.CTkButton(
-        frame_quality_check,
-        image=quality_check_icon,
-        text="",
-        width=100,
-        height=100,
-        fg_color="white",
-        hover=False,
-        border_width=0,
-        command=None
-    )
-    quality_check_btn.image = quality_check_icon  # trzymaj referencję!
-    quality_check_btn.place(x=90, y=15)
-
-    # Dodanie przycisku zawierającego ikonę proposal
-    # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/Limit management.png")
-    # 2. Utworzenie CTkImage
-    proposal_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(100, 100))
-    # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
-    proposal_btn = ctk.CTkButton(
-        frame_proposal,
-        image=proposal_icon,
-        text="",
-        width=100, height=100,
-        fg_color="white",
-        hover=False,
-        border_width=0,
-        command=None
-    )
-    proposal_btn.image = proposal_icon  # trzymaj referencję!
-    proposal_btn.place(x=90, y=15)
-
-    # Dodanie przycisku zawierającego ikonę administration
-    # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/Reporting.png")
-    # 2. Utworzenie CTkImage
-    administration_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(100, 100))
-    # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
-    administration_btn = ctk.CTkButton(
-        frame_administration,
-        image=administration_icon,
-        text="",
-        width=100, height=100,
-        fg_color="white",
-        hover=False,
-        border_width=0,
-        command=None
-    )
-    administration_btn.image = administration_icon  # trzymaj referencję!
-    administration_btn.place(x=90, y=15)
-
-
-    # funkcja do uruchomienia okna dla testów, później do usunięcia
 
 if __name__ == "__main__":
     adm_page = ctk.CTk()

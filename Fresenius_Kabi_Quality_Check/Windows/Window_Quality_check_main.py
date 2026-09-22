@@ -93,8 +93,6 @@ def run_quality_check_menu(menu_page):
         vendor_type = dropdown_vendor_type.get()
         vendor_number = text_input_vendor_number.get().strip()
 
-        print(f"QC Status selected: {qc_status}")
-
         total_items, items_not_mine = db.get_number_of_items_found_all(
         country = country,
         company_code = company_code,

@@ -30,6 +30,27 @@ class Database_Admin:
         return df["Country"].tolist()
 
 
+# funkcja wyciągająca Monthly_posted_documents, Amount_limit oraz New_hire_percentage z tabeli
+    def get_limits_based_on_selected_country_and_company_code(self, country, company_code):
+        conn = self.get_connection()
+
+        results = pd.read_sql_query(
+            """
+            SELECT Monthly_posted_documents, Amount_Limit, New_hire_percentage
+            FROM quality_check_limits
+            WHERE Country = ? AND Company_code = ? AND Line_status = 'Active'
+            """,
+        conn,
+            params=[country, company_code]
+        )
+        return [
+            {
+                "monthly_posted_documents": row["Monthly_posted_documents"],
+                "amount_limit": row["Amount_Limit"],
+                "new_hire_percentage": row["New_hire_percentage"]
+            }
+            for _, row in results.iterrows()
+        ]
 
 
 

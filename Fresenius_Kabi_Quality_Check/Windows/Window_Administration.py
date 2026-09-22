@@ -121,7 +121,7 @@ def run_window_administraton(menu_page):
         "<Button-1>",
         lambda event: run_window_administraton_limit(adm_page))
 
-    label_proposal_subtitle = App_Label_Title(frame_proposal, text="View and configure\nall tresholds and limits", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
+    label_proposal_subtitle = App_Label_Title(frame_proposal, text="View and configure\nall thresholds and limits", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_proposal_subtitle.place(x=75, y=180)
 
 # ---------------------------------------------------------------------------------------------------------
