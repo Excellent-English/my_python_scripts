@@ -17,6 +17,8 @@ db = Database()
 countries = db.get_countries()
 global first_selected_item
 global number_of_items_selected_all
+global total_items
+global items_not_mine
 
 def run_quality_check_menu(menu_page):
     # Zamknij / ukryj główne okno
@@ -27,6 +29,8 @@ def run_quality_check_menu(menu_page):
     # Gdyby była potrzeba zmiany tytułu w kolejnych oknach:
     # menu_page = AppWindow(title="Inny tytuł okna")
 
+    total_items = 0
+    items_not_mine = 0
 # ---------------------------------------------------------------------------------
 
     # Dodanie przycisku zawierającego ikonę return- przycisk powracający do poprzedniego okna
@@ -68,31 +72,37 @@ def run_quality_check_menu(menu_page):
         dropdown_company_codes.set("")
         when_selection_changes()
 
-    def load_quality_check():
-        selected_country = dropdown_countries.get()
-        selected_company_code = dropdown_company_codes.get()
-        documents = db.get_sap_documents_based_on_country(selected_country, selected_company_code)
-
-        run_quality_check_details(
-            quality_check_page,
-            selected_country,
-            selected_company_code,
-            documents
-        )
+    # def load_quality_check():
+    #     selected_country = dropdown_countries.get()
+    #     selected_company_code = dropdown_company_codes.get()
+    #     documents = db.get_sap_documents_based_on_country(selected_country, selected_company_code)
+    #
+    #     run_quality_check_details(
+    #         quality_check_page,
+    #         selected_country,
+    #         selected_company_code,
+    #         documents
+    #     )
 
     def when_selection_changes(*_):
+        nonlocal total_items, items_not_mine
+
         country = dropdown_countries.get()
         company_code = dropdown_company_codes.get()
         qc_status = dropdown_qc_status.get()
         vendor_type = dropdown_vendor_type.get()
         vendor_number = text_input_vendor_number.get().strip()
 
-        db.get_number_of_items_found_all(
+        print(f"QC Status selected: {qc_status}")
+
+        total_items, items_not_mine = db.get_number_of_items_found_all(
         country = country,
         company_code = company_code,
         qc_status = qc_status,
         vendor_type = vendor_type,
         vendor_number = vendor_number)
+
+        label_number_of_items_found.configure(text = f"Items to audit: {items_not_mine} ({total_items} in total)")
 
 
     def load_quality_check_items():
@@ -114,7 +124,7 @@ def run_quality_check_menu(menu_page):
         print(country)
         print(company_code)
         print(vendor_number)
-        run_quality_check_details(quality_check_page, first_selected_item)
+        run_quality_check_details(quality_check_page, first_selected_item, total_items, items_not_mine)
 
 
 
@@ -151,7 +161,7 @@ def run_quality_check_menu(menu_page):
     label_quality_check_qc_status = App_Label_Title(frame_quality_check, text="QC status", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_qc_status.place(x=35, y=300)
 
-    dropdown_qc_status = AppComboBox(frame_quality_check, width = 300, values=["All","Pending Verification","Verification Failed"], command=when_selection_changes)
+    dropdown_qc_status = AppComboBox(frame_quality_check, width = 300, values=["All","Pending Verification","Verification Failed", "Requires confirmation"], command=when_selection_changes)
     dropdown_qc_status.place(x=40, y=330)
 
     label_quality_check_vendor_type = App_Label_Title(frame_quality_check, text="Vendor type", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
@@ -174,6 +184,9 @@ def run_quality_check_menu(menu_page):
 
     button_load_items = Button_Brown(frame_quality_check, text= "⟳  Load items", command= load_quality_check_items)
     button_load_items.place(x=300, y=395)
+
+    label_number_of_items_found = App_Label_Title(frame_quality_check, text="Items to audit: 0 (0 in total)", font= ("Open Sans", 14), text_color = "#8B7A6B")
+    label_number_of_items_found.place(x=500, y=405)
 
 
 # ---------------------------------------------------------------------------------------------------------
