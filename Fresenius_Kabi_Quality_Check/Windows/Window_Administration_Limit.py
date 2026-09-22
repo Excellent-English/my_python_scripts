@@ -105,9 +105,6 @@ def run_window_administraton_limit(adm_page):
         country = country,
         company_code = company_code)
 
-        print(country)
-        print(company_code)
-
         if results:
             row = results[0]
 
