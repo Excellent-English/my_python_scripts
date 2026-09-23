@@ -88,137 +88,45 @@ def run_window_administraton_people(adm_page, user_email_address):
     line_bottom.place(x=0, y=500)
 
 
-    def on_country_changed(selected_country):
-        company_codes = db.get_company_codes(selected_country)
+# ---------------------------------------------------------------------------------------------------------
+# ramki i podpisy do ramek na głównej stronie
+# ---------------------------------------------------------------------------------------------------------
 
-        dropdown_company_codes.set_values(company_codes)
-        dropdown_company_codes.set("")
+    frame_main_top = AppFrame(people_page, height= 70, width= 550)
+    frame_main_top.place(x=250, y=75)
 
-        text_input_category_1.delete(0, "end")
-        text_input_category_2.delete(0, "end")
-        text_input_category_3.delete(0, "end")
+    text_input_top_email_address = App_Entry_Box(frame_main_top, placeholder_text="--- enter full e-mail address ---", width = 300, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
+    text_input_top_email_address.place(x=20, y=15)
 
-
-    def when_selection_changes_admin(*_):
-        global country, company_code, current_monthly_posted_documents, current_amount_limit, current_new_hire_percentage
-
-        country = dropdown_countries.get()
-        company_code = dropdown_company_codes.get()
-
-        results = db_admin.get_limits_based_on_selected_country_and_company_code(
-        country = country,
-        company_code = company_code)
-
-        if results:
-            row = results[0]
-
-            text_input_category_1.delete(0, "end")
-            text_input_category_1.insert(0, str(row["monthly_posted_documents"]))
-
-            text_input_category_2.delete(0, "end")
-            text_input_category_2.insert(0, str(int(row["amount_limit"])))
-
-            text_input_category_3.delete(0, "end")
-            text_input_category_3.insert(0, str(row["new_hire_percentage"]))
-
-        current_monthly_posted_documents = str(row["monthly_posted_documents"])
-        current_amount_limit = str(int(row["amount_limit"]))
-        current_new_hire_percentage = str(row["new_hire_percentage"])
-
-        print(country)
-        print(company_code)
-        return country, company_code, current_monthly_posted_documents, current_amount_limit, current_new_hire_percentage
-
-
-# funkcja aktualizująca obecny rekord (zmieniająca go na Inactive i dodająca datę końcową) oraz dodająca zupełnie nowy rekord do tabeli
-    def save_changes_button():
-
-        print(country)
-        print(company_code)
-        print(current_monthly_posted_documents)
-        print(current_amount_limit)
-        print(current_new_hire_percentage)
-
-        new_monthly_posted_documents = text_input_category_1.get()
-        new_amount_limit = float(text_input_category_2.get())
-        new_new_hire_percentage = text_input_category_3.get()
-
-        print(new_monthly_posted_documents)
-        print(new_amount_limit)
-        print(new_new_hire_percentage)
-
-        db_admin.update_row_with_limits(user_email_address, country, company_code, new_monthly_posted_documents, new_amount_limit, new_new_hire_percentage)
-
-        dropdown_countries.set("---")
-        dropdown_company_codes.set("---")
-        text_input_category_1.delete(0, "end")
-        text_input_category_2.delete(0, "end")
-        text_input_category_3.delete(0, "end")
-
+    button_check_user = Button_Brown(frame_main_top, text= "Check user   ✔", height= 35)
+    button_check_user.place(x=350, y=15)
 
 # ---------------------------------------------------------------------------------------------------------
 # ramki i podpisy do ramek na głównej stronie
 # ---------------------------------------------------------------------------------------------------------
 
-    frame_step_1 = AppFrame(people_page, height= 250)
-    frame_step_1.place(x=80, y=170)
+    frame_middle = AppFrame(people_page, height= 300, width= 1000)
+    frame_middle.place(x=50, y=155)
 
-    label_step_1_title = App_Label_Title(frame_step_1, text="STEP 1", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
+    label_step_1_title = App_Label_Title(frame_middle, text="STEP 1", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
     label_step_1_title.place(x=100, y=20)
 
-    label_step_1_subtitle = App_Label_Title(frame_step_1, text="Choose country and company code", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
+    label_step_1_subtitle = App_Label_Title(frame_middle, text="Choose country and company code", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_step_1_subtitle.place(x=30, y=50)
 
-    dropdown_countries = AppComboBox(frame_step_1, width = 260, values=countries, command=on_country_changed)
+    dropdown_countries = AppComboBox(frame_middle, width = 260, values=countries)
     dropdown_countries.place(x=20, y=100)
     dropdown_countries.set("---")
 
-    dropdown_company_codes = AppComboBox(frame_step_1, width = 260, values=["---"], command=when_selection_changes_admin)
+    dropdown_company_codes = AppComboBox(frame_middle, width = 260, values=["---"])
     dropdown_company_codes.place(x=20, y=170)
 
-# ---------------------------------------------------------------------------------------------------------
-
-    frame_step_2 = AppFrame(people_page, height= 250)
-    frame_step_2.place(x=395, y=170)
-
-    label_step_2_title = App_Label_Title(frame_step_2, text="STEP 2", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
-    label_step_2_title.place(x=100, y=20)
-
-    label_step_2_subtitle = App_Label_Title(frame_step_2, text="Check and modify any threshold", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
-    label_step_2_subtitle.place(x=43, y=50)
-
-    line_bottom = ctk.CTkFrame(frame_step_2, height=2, width=240, fg_color="#DDE2E7", corner_radius=0)
-    line_bottom.place(x=30, y=85)
-
-    label_step_2_category_1 = App_Label_Title(frame_step_2, text="% of posted documents:", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
-    label_step_2_category_1.place(x=20, y=100)
-    text_input_category_1 = App_Entry_Box(frame_step_2, width = 80, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
-    text_input_category_1.place(x=190, y=98)
-
-    label_step_2_category_2 = App_Label_Title(frame_step_2, text="Amount limit:", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
+    label_step_2_category_2 = App_Label_Title(frame_middle, text="Amount limit:", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_step_2_category_2.place(x=20, y=140)
-    text_input_category_2 = App_Entry_Box(frame_step_2, width = 80, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
+    text_input_category_2 = App_Entry_Box(frame_middle, width = 80, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
     text_input_category_2.place(x=190, y=138)
 
-    label_step_2_category_3 = App_Label_Title(frame_step_2, text="New hire percentage:", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
-    label_step_2_category_3.place(x=20, y=180)
-    text_input_category_3 = App_Entry_Box(frame_step_2, width = 80, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
-    text_input_category_3.place(x=190, y=178)
 
-
-# ---------------------------------------------------------------------------------------------------------
-
-    frame_step_3 = AppFrame(people_page, height= 250)
-    frame_step_3.place(x=710, y=170)
-
-    label_step_3_title = App_Label_Title(frame_step_3, text="STEP 3", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
-    label_step_3_title.place(x=100, y=20)
-
-    label_step_3_subtitle = App_Label_Title(frame_step_3, text="Save all the changes", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
-    label_step_3_subtitle.place(x=70, y=50)
-
-    button_load_items = Button_Brown(frame_step_3, text= "💾  Save changes", command=save_changes_button)
-    button_load_items.place(x=63, y=127)
 
 # ---------------------------------------------------------------------------------------------------------
 
@@ -226,5 +134,5 @@ if __name__ == "__main__":
     adm_page = ctk.CTk()
     adm_page.withdraw()
 
-    run_window_administraton_people(adm_page, user_email_address)
+    run_window_administraton_people(adm_page, user_email_address=None)
     adm_page.mainloop()

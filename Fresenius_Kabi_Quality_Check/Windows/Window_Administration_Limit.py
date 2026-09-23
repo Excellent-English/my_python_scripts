@@ -234,11 +234,11 @@ def run_window_administraton_limit(adm_page, user_email_address):
 
 # ---------------------------------------------------------------------------------------------------------
 
-    text_input_bottom_country = App_Entry_Box(frame_bottom, width = 80, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
-    text_input_bottom_country.place(x=505, y=58)
+    text_input_bottom_country = App_Entry_Box(frame_bottom, placeholder_text="--- enter country ---", width = 260, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
+    text_input_bottom_country.place(x=20, y=78)
 
-    text_input_bottom_company_code = App_Entry_Box(frame_bottom, width = 80, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
-    text_input_bottom_company_code.place(x=505, y=58)
+    text_input_bottom_company_code = App_Entry_Box(frame_bottom, placeholder_text="--- enter company code ---", width = 260, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
+    text_input_bottom_company_code.place(x=20, y=118)
 
 # ---------------------------------------------------------------------------------------------------------
 
@@ -257,6 +257,9 @@ def run_window_administraton_limit(adm_page, user_email_address):
     text_input_bottom_category_3 = App_Entry_Box(frame_bottom, width = 80, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
     text_input_bottom_category_3.place(x=505, y=138)
 
+
+    button_load_items = Button_Brown(frame_bottom, text= "➕  Create item")
+    button_load_items.place(x=693, y=98)
 
 
 if __name__ == "__main__":
