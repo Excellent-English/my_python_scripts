@@ -7,6 +7,8 @@ from Fresenius_Kabi_Quality_Check.AllClasses.App_Window import AppWindow
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Frame import AppFrame
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Label_Title import App_Label_Title
 from Fresenius_Kabi_Quality_Check.Windows.Window_Administration_Limit import run_window_administraton_limit
+from Fresenius_Kabi_Quality_Check.Windows.Window_Administration_People import run_window_administraton_people
+from Fresenius_Kabi_Quality_Check.Windows.Window_Administration_Reporting import run_window_administraton_reporting
 
 
 def run_window_administraton(menu_page, user_email_address):
@@ -100,10 +102,10 @@ def run_window_administraton(menu_page, user_email_address):
     label_quality_check_title = App_Label_Title(frame_quality_check, text="People Management", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
     label_quality_check_title.place(x=40, y=130)
 
-    # label_quality_check_title.configure(cursor="hand2")
-    # label_quality_check_title.bind(
-    #     "<Button-1>",
-    #     lambda event: run_quality_check_menu(menu_page))
+    label_quality_check_title.configure(cursor="hand2")
+    label_quality_check_title.bind(
+        "<Button-1>",
+        lambda event: run_window_administraton_people(adm_page, user_email_address))
 
     label_quality_check_subtitle = App_Label_Title(frame_quality_check, text="Manage users, access rights\nand organization structure", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_quality_check_subtitle.place(x=55, y=180)
@@ -131,6 +133,11 @@ def run_window_administraton(menu_page, user_email_address):
 
     label_administration_title = App_Label_Title(frame_administration, text="Reporting", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
     label_administration_title.place(x=90, y=130)
+
+    label_administration_title.configure(cursor="hand2")
+    label_administration_title.bind(
+        "<Button-1>",
+        lambda event: run_window_administraton_reporting(adm_page, user_email_address))
 
     label_administration_subtitle = App_Label_Title(frame_administration, text="Generate and view reports,\nmetrics and audit activity", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_administration_subtitle.place(x=60, y=180)

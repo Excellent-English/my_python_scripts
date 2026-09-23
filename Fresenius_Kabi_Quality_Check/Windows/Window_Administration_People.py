@@ -17,13 +17,13 @@ db = Database()
 db_admin = Database_Admin()
 countries = db.get_countries()
 
-def run_window_administraton_limit(adm_page, user_email_address):
+def run_window_administraton_people(adm_page, user_email_address):
     # Zamknij / ukryj główne okno
     adm_page.withdraw()   # albo destroy()
     # ctk.deactivate_automatic_dpi_awareness()
 
     # Utwórz nowe okno menu
-    limit_page = AppWindow(banner_text = "Limit Management", width=1100, height=600, x= 110, y = 30, fg_color="#F6F7F9")
+    people_page = AppWindow(banner_text = "People Management", width=1100, height=600, x= 110, y = 30, fg_color="#F6F7F9")
     # Gdyby była potrzeba zmiany tytułu w kolejnych oknach:
     # menu_page = AppWindow(title="Inny tytuł okna")
 
@@ -35,26 +35,26 @@ def run_window_administraton_limit(adm_page, user_email_address):
     power_off_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(35, 35))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
     power_btn = ctk.CTkButton(
-        limit_page.banner_frame,
+        people_page.banner_frame,
         image=power_off_icon,
         text="",
         width=35, height=35,
         fg_color="transparent",
         hover_color="#755a44",
-        command= lambda: limit_page.close_the_app(adm_page)
+        command= lambda: people_page.close_the_app(adm_page)
     )
     power_btn.image = power_off_icon  # trzymaj referencję!
     power_btn.place(x=900, y=5)
-    limit_page.bind("<Escape>", lambda event: limit_page.close_the_app(adm_page))
+    people_page.bind("<Escape>", lambda event: people_page.close_the_app(adm_page))
 
-    logout_subtitle = ctk.CTkLabel(limit_page, text="Logout", font= ("Open Sans", 14), text_color = "white", fg_color = "#755a44")
+    logout_subtitle = ctk.CTkLabel(people_page, text="Logout", font= ("Open Sans", 14), text_color = "white", fg_color = "#755a44")
     logout_subtitle.place(x=955, y=12)
 
 # ---------------------------------------------------------------------------------
 
     # Dodanie przycisku zawierającego ikonę return- przycisk powracający do poprzedniego okna
     def return_to_previous_window():
-        limit_page.withdraw()
+        people_page.withdraw()
         adm_page.deiconify()
         adm_page.lift()
         adm_page.focus_force()
@@ -65,7 +65,7 @@ def run_window_administraton_limit(adm_page, user_email_address):
     power_off_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(20,30))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
     power_btn = ctk.CTkButton(
-        limit_page.banner_frame,
+        people_page.banner_frame,
         image=power_off_icon,
         text="",
         width=20, height=30,
@@ -81,11 +81,11 @@ def run_window_administraton_limit(adm_page, user_email_address):
     # zablokuj zamknięcie okna za pomocą "X"
     def disable_close():
         pass
-    limit_page.protocol("WM_DELETE_WINDOW", disable_close)
+    people_page.protocol("WM_DELETE_WINDOW", disable_close)
 
 
-    line_bottom = ctk.CTkFrame(limit_page, height=2, width=1100, fg_color="#DDE2E7", corner_radius=0)
-    line_bottom.place(x=0, y=570)
+    line_bottom = ctk.CTkFrame(people_page, height=2, width=1100, fg_color="#DDE2E7", corner_radius=0)
+    line_bottom.place(x=0, y=500)
 
 
     def on_country_changed(selected_country):
@@ -156,13 +156,12 @@ def run_window_administraton_limit(adm_page, user_email_address):
         text_input_category_3.delete(0, "end")
 
 
-
 # ---------------------------------------------------------------------------------------------------------
 # ramki i podpisy do ramek na głównej stronie
 # ---------------------------------------------------------------------------------------------------------
 
-    frame_step_1 = AppFrame(limit_page, height= 250)
-    frame_step_1.place(x=80, y=90)
+    frame_step_1 = AppFrame(people_page, height= 250)
+    frame_step_1.place(x=80, y=170)
 
     label_step_1_title = App_Label_Title(frame_step_1, text="STEP 1", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
     label_step_1_title.place(x=100, y=20)
@@ -179,8 +178,8 @@ def run_window_administraton_limit(adm_page, user_email_address):
 
 # ---------------------------------------------------------------------------------------------------------
 
-    frame_step_2 = AppFrame(limit_page, height= 250)
-    frame_step_2.place(x=395, y=90)
+    frame_step_2 = AppFrame(people_page, height= 250)
+    frame_step_2.place(x=395, y=170)
 
     label_step_2_title = App_Label_Title(frame_step_2, text="STEP 2", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
     label_step_2_title.place(x=100, y=20)
@@ -209,8 +208,8 @@ def run_window_administraton_limit(adm_page, user_email_address):
 
 # ---------------------------------------------------------------------------------------------------------
 
-    frame_step_3 = AppFrame(limit_page, height= 250)
-    frame_step_3.place(x=710, y=90)
+    frame_step_3 = AppFrame(people_page, height= 250)
+    frame_step_3.place(x=710, y=170)
 
     label_step_3_title = App_Label_Title(frame_step_3, text="STEP 3", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
     label_step_3_title.place(x=100, y=20)
@@ -221,47 +220,11 @@ def run_window_administraton_limit(adm_page, user_email_address):
     button_load_items = Button_Brown(frame_step_3, text= "💾  Save changes", command=save_changes_button)
     button_load_items.place(x=63, y=127)
 
-
 # ---------------------------------------------------------------------------------------------------------
-# ramka na dole ekranu służąca do dodawania kraju i company codu
-# ---------------------------------------------------------------------------------------------------------
-
-    frame_bottom = AppFrame(limit_page, height= 195, width= 930)
-    frame_bottom.place(x=80, y=350)
-
-    label_bottom_title = App_Label_Title(frame_bottom, text="▼  Country or company code does not exist? Create it.  ▼", font= ("Open Sans", 16, "bold"), text_color = "#755a44")
-    label_bottom_title.place(x=235, y=15)
-
-# ---------------------------------------------------------------------------------------------------------
-
-    text_input_bottom_country = App_Entry_Box(frame_bottom, width = 80, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
-    text_input_bottom_country.place(x=505, y=58)
-
-    text_input_bottom_company_code = App_Entry_Box(frame_bottom, width = 80, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
-    text_input_bottom_company_code.place(x=505, y=58)
-
-# ---------------------------------------------------------------------------------------------------------
-
-    label_bottom_category_1 = App_Label_Title(frame_bottom, text="% of posted documents:", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
-    label_bottom_category_1.place(x=335, y=60)
-    text_input_bottom_category_1 = App_Entry_Box(frame_bottom, width = 80, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
-    text_input_bottom_category_1.place(x=505, y=58)
-
-    label_bottom_category_2 = App_Label_Title(frame_bottom, text="Amount limit:", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
-    label_bottom_category_2.place(x=335, y=100)
-    text_input_bottom_category_2 = App_Entry_Box(frame_bottom, width = 80, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
-    text_input_bottom_category_2.place(x=505, y=98)
-
-    label_bottom_category_3 = App_Label_Title(frame_bottom, text="New hire percentage:", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
-    label_bottom_category_3.place(x=335, y=140)
-    text_input_bottom_category_3 = App_Entry_Box(frame_bottom, width = 80, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
-    text_input_bottom_category_3.place(x=505, y=138)
-
-
 
 if __name__ == "__main__":
     adm_page = ctk.CTk()
     adm_page.withdraw()
 
-    run_window_administraton_limit(adm_page, user_email_address=None)
+    run_window_administraton_people(adm_page, user_email_address)
     adm_page.mainloop()
