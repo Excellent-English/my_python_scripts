@@ -22,7 +22,7 @@ WebDriverWait(wd, 30).until(EC.presence_of_element_located(
 sleep(1)
 
 WebDriverWait(wd, 30).until(EC.presence_of_element_located(
-    (By.XPATH, '/html/body/div[1]/div[2]/form/fieldset/div/table[2]/tbody/tr[2]/td[2]/input'))).send_keys("Fresenius.123456")
+    (By.XPATH, '/html/body/div[1]/div[2]/form/fieldset/div/table[2]/tbody/tr[2]/td[2]/input'))).send_keys("FreSenius010101.")
 sleep(1)
 
 # click on Login button

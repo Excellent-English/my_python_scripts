@@ -23,6 +23,14 @@ def run_vocabulary_listen(menu_page):
 # funkcje i opcje używane podczas pracy z aplikacją: odsłuchiwanie słowa, zmiana słowa
 # ---------------------------------------------------------------------------------------
 
+    def go_back_to_menu():
+        vocabulary_listen_page.destroy()
+        menu_page.deiconify()
+
+    vocabulary_listen_page.return_button.configure(command=go_back_to_menu)
+    vocabulary_listen_page.bind("<Escape>", lambda event: go_back_to_menu())
+
+
 # Ustawienie Entera jako domyślnego przycisku do uruchamiania funkcji change_word() lub check_answer()
     def on_enter(event=None):
         is_enabled = str(entry_box_eng.cget("state")) == "normal"

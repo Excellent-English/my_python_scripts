@@ -1,11 +1,20 @@
-import sqlite3
+import os
+import psycopg
+from dotenv import load_dotenv
+load_dotenv()
 
 class Database:
-    def __init__(self, name="players.db"):
-        self.name = name
+    def __init__(self):
+        self.host = os.environ["AWS_PG_HOST"]
+        self.port = os.environ["AWS_PG_PORT"]
+        self.dbname = os.environ["AWS_PG_DB"]
+        self.user = os.environ["AWS_PG_USER"]
+        self.password = os.environ["AWS_PG_PASSWORD"]
+        self.sslmode = os.environ["AWS_PG_SSLMODE"]
+
 
     def connect(self):
-        return sqlite3.connect(self.name)
+        return psycopg.connect(host = self.host, port = self.port, dbname = self.dbname,  user = self.user,  password = self.password, sslmode = self.sslmode)
 
     def create_table(self):
         with self.connect() as conn:

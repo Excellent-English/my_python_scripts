@@ -23,6 +23,15 @@ def run_vocabulary_review(menu_page):
 # funkcje i opcje używane podczas pracy z aplikacją: odsłuchiwanie słowa, zmiana słowa
 # ---------------------------------------------------------------------------------------
 
+
+    def go_back_to_menu():
+        vocabulary_review_page.destroy()
+        menu_page.deiconify()
+
+    vocabulary_review_page.return_button.configure(command=go_back_to_menu)
+    vocabulary_review_page.bind("<Escape>", lambda event: go_back_to_menu())
+
+
 # Ustawienie Entera jako domyślnego przycisku do uruchamiania funkcji click_to_check
     vocabulary_review_page.bind('<Return>', lambda event: change_word())
 # ustawienie jedynki (zarówno u góry jak i z klawiatury numerycznej) na odsłuchanie zdania angielskiego

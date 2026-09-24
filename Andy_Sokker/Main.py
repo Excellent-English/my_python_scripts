@@ -4,9 +4,10 @@ from Sokker import Sokker
 
 def main():
     my_database = PlayerDatabase()
-    my_database.create_table()
+    # my_database.create_table()
 
-    my_player = Player(374,Age=27, Salary=2400, Name="Marek", Country=22)
+    my_player = Player(75, 19, 39998251, "Costel3 Velcu", 29771, 17, 9, 268000, 3900, 1, "2025-12-02 08:13", 0, 0, 0, 2,
+                        1, 0, 2, 1, 8, 5, 8)
 
     print(f"Database before: {my_database.get_players()}")
 
@@ -29,7 +30,7 @@ def add_player_from_transfer_list_to_database():
     # Utwórz obiekt bazy danych i tabelę
 
     my_database = PlayerDatabase()
-    my_database.create_table()
+    # my_database.create_table()
 
     sokker_object = Sokker("asciutto", "harrypotter", 1, 1, "PL")
 

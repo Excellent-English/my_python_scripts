@@ -68,79 +68,55 @@ for index, player_id in enumerate(all_player_ids):
     except:
         pass
 
-    # Zbierz informację o poszczególnych polach, zaczynając od imienia, nazwiska i ID:
-    try:
-        skill_player_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/main/div/div[2]/nav/div/div[1]/span')))
-        skill_player = skill_player_element.text
-        player_list.append(skill_player)
-    except TimeoutException:
-        print("Timeout error occurred. Skipping this category: skill_player")
-
-    try:
-        skill_age_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/main/div/div[2]/div[2]/div[1]/div[1]/div[1]/div/strong')))
-        skill_age = skill_age_element.text
-        player_list.append(skill_age)
-    except TimeoutException:
-        print("Timeout error occurred. Skipping this category: skill_age")
-
-    # Zbierz informacje o 8 skillach zawodników
+# Sprawdź, czy dany zawodnik istnieje
     try:
         skill_kond_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#body-player > main > div > div.l-main__inner > div.row > div:nth-child(1) > div:nth-child(1) > div.panel-body.hidden-xs > table > tbody > tr:nth-child(1) > td:nth-child(1) > strong > span')))
-        skill_kond = skill_kond_element.text
-        player_list.append(skill_kond)
-    except TimeoutException:
-        print("Timeout error occurred. Skipping this category: skill_kond")
 
-    try:
-        skill_szyb_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#body-player > main > div > div.l-main__inner > div.row > div:nth-child(1) > div:nth-child(1) > div.panel-body.hidden-xs > table > tbody > tr:nth-child(2) > td:nth-child(1) > strong > span')))
-        skill_szyb = skill_szyb_element.text
-        player_list.append(skill_szyb)
     except TimeoutException:
-        print("Timeout error occurred. Skipping this category: skill_szyb")
+        print(f"Brak skilli dla zawodnika {player_id}")
+        continue
 
-    try:
-        skill_tech_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#body-player > main > div > div.l-main__inner > div.row > div:nth-child(1) > div:nth-child(1) > div.panel-body.hidden-xs > table > tbody > tr:nth-child(3) > td:nth-child(1) > strong > span')))
-        skill_tech = skill_tech_element.text
-        player_list.append(skill_tech)
-    except TimeoutException:
-        print("Timeout error occurred. Skipping this category: skill_tech")
+# Zbierz informację o poszczególnych polach
+    skill_player_element = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, '/html/body/main/div/div[2]/nav/div/div[1]/span')))
+    skill_player = skill_player_element.text
+    player_list.append(skill_player)
 
-    try:
-        skill_pod_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#body-player > main > div > div.l-main__inner > div.row > div:nth-child(1) > div:nth-child(1) > div.panel-body.hidden-xs > table > tbody > tr:nth-child(4) > td:nth-child(1) > strong > span')))
-        skill_pod = skill_pod_element.text
-        player_list.append(skill_pod)
-    except TimeoutException:
-        print("Timeout error occurred. Skipping this category: skill_pod")
+    skill_age_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '/html/body/main/div/div[2]/div[2]/div[1]/div[1]/div[1]/div/strong')))
+    skill_age = skill_age_element.text
+    player_list.append(skill_age)
 
-    try:
-        skill_gk_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#body-player > main > div > div.l-main__inner > div.row > div:nth-child(1) > div:nth-child(1) > div.panel-body.hidden-xs > table > tbody > tr:nth-child(1) > td:nth-child(2) > strong > span')))
-        skill_gk = skill_gk_element.text
-        player_list.append(skill_gk)
-    except TimeoutException:
-        print("Timeout error occurred. Skipping this category: skill_gk")
+    skill_kond_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR,'#body-player > main > div > div.l-main__inner > div.row > div:nth-child(1) > div:nth-child(1) > div.panel-body.hidden-xs > table > tbody > tr:nth-child(1) > td:nth-child(1) > strong > span')))
+    skill_kond = skill_kond_element.text
+    player_list.append(skill_kond)
 
-    try:
-        skill_def_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#body-player > main > div > div.l-main__inner > div.row > div:nth-child(1) > div:nth-child(1) > div.panel-body.hidden-xs > table > tbody > tr:nth-child(2) > td:nth-child(2) > strong > span')))
-        skill_def = skill_def_element.text
-        player_list.append(skill_def)
-    except TimeoutException:
-        print("Timeout error occurred. Skipping this category: skill_def")
+    skill_szyb_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#body-player > main > div > div.l-main__inner > div.row > div:nth-child(1) > div:nth-child(1) > div.panel-body.hidden-xs > table > tbody > tr:nth-child(2) > td:nth-child(1) > strong > span')))
+    skill_szyb = skill_szyb_element.text
+    player_list.append(skill_szyb)
 
-    try:
-        skill_mid_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#body-player > main > div > div.l-main__inner > div.row > div:nth-child(1) > div:nth-child(1) > div.panel-body.hidden-xs > table > tbody > tr:nth-child(3) > td:nth-child(2) > strong > span')))
-        skill_mid = skill_mid_element.text
-        player_list.append(skill_mid)
-    except TimeoutException:
-        print("Timeout error occurred. Skipping this category: skill_mid")
+    skill_tech_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#body-player > main > div > div.l-main__inner > div.row > div:nth-child(1) > div:nth-child(1) > div.panel-body.hidden-xs > table > tbody > tr:nth-child(3) > td:nth-child(1) > strong > span')))
+    skill_tech = skill_tech_element.text
+    player_list.append(skill_tech)
 
-    try:
-        skill_att_element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#body-player > main > div > div.l-main__inner > div.row > div:nth-child(1) > div:nth-child(1) > div.panel-body.hidden-xs > table > tbody > tr:nth-child(4) > td:nth-child(2) > strong > span')))
-        skill_att = skill_att_element.text
-        player_list.append(skill_att)
-    except TimeoutException:
-        print("Timeout error occurred. Skipping this category: skill_att")
+    skill_pod_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#body-player > main > div > div.l-main__inner > div.row > div:nth-child(1) > div:nth-child(1) > div.panel-body.hidden-xs > table > tbody > tr:nth-child(4) > td:nth-child(1) > strong > span')))
+    skill_pod = skill_pod_element.text
+    player_list.append(skill_pod)
 
-    sleep(0.3)
+    skill_gk_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#body-player > main > div > div.l-main__inner > div.row > div:nth-child(1) > div:nth-child(1) > div.panel-body.hidden-xs > table > tbody > tr:nth-child(1) > td:nth-child(2) > strong > span')))
+    skill_gk = skill_gk_element.text
+    player_list.append(skill_gk)
+
+    skill_def_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#body-player > main > div > div.l-main__inner > div.row > div:nth-child(1) > div:nth-child(1) > div.panel-body.hidden-xs > table > tbody > tr:nth-child(2) > td:nth-child(2) > strong > span')))
+    skill_def = skill_def_element.text
+    player_list.append(skill_def)
+
+    skill_mid_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#body-player > main > div > div.l-main__inner > div.row > div:nth-child(1) > div:nth-child(1) > div.panel-body.hidden-xs > table > tbody > tr:nth-child(3) > td:nth-child(2) > strong > span')))
+    skill_mid = skill_mid_element.text
+    player_list.append(skill_mid)
+
+    skill_att_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, '#body-player > main > div > div.l-main__inner > div.row > div:nth-child(1) > div:nth-child(1) > div.panel-body.hidden-xs > table > tbody > tr:nth-child(4) > td:nth-child(2) > strong > span')))
+    skill_att = skill_att_element.text
+    player_list.append(skill_att)
 
 print(player_list)
 
