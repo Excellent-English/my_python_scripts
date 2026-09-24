@@ -53,7 +53,50 @@ class Database_Admin:
         ]
 
 
+    # funkcja wyciągająca w formie listy wszystkie kraje
+    def get_countries_limits(self):
+        conn = self.get_connection()
+
+        query = """
+            SELECT DISTINCT Country
+            FROM quality_check_limits
+            WHERE Country IS NOT NULL AND Line_status = 'Active'
+            ORDER BY Country
+            """
+
+        df = pd.read_sql_query(query, conn)
+
+        return df["Country"].tolist()
+
+
+    # funkcja wyciągająca w formie listy wszystkie company cody
+    def get_company_codes_limits(self, country):
+
+        if not country:
+            return []
+
+        conn = self.get_connection()
+
+        query = """
+            SELECT DISTINCT Company_code
+            FROM quality_check_limits
+            WHERE Country = ?
+            ORDER BY Company_code
+            """
+
+        df = pd.read_sql_query(
+            query,
+            conn,
+            params=[country]
+        )
+
+        return df["Company_code"].tolist()
+
+
+
+# funkcja umieszczona w limit management
 # funkcja zmieniająca limity w wyszukanym wcześniej country i company codzie + dodaje nowy wiersz w tabeli
+
     def update_row_with_limits(self, logged_user, country, company_code,
                                new_monthly_posted_documents, new_amount_limit, new_new_hire_percentage):
 
@@ -118,6 +161,67 @@ class Database_Admin:
 
         cursor.close()
         conn.close()
+
+
+
+
+# funkcja umieszczona w limit management
+# funkcja tworząca nowy kraj z wartościami
+
+    def create_new_country_and_company_code(self, logged_user, country, company_code,
+                               new_monthly_posted_documents, new_amount_limit, new_new_hire_percentage):
+
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+        script_to_insert_new_row = """
+            INSERT INTO quality_check_limits
+            (
+                Country,
+                Company_code,
+                Monthly_posted_documents,
+                Amount_limit,
+                New_hire_percentage,
+                Line_status,
+                Who_changed,
+                Active_from,
+                Active_to
+            )
+            VALUES
+            (
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                'Active',
+                ?,
+                GETDATE(),
+                NULL
+            );
+            """
+
+        cursor.execute(
+
+
+        script_to_insert_new_row,
+        country,
+        company_code,
+        new_monthly_posted_documents,
+        new_amount_limit,
+        new_new_hire_percentage,
+        logged_user
+        )
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+
+
+
+
+
 
 
 

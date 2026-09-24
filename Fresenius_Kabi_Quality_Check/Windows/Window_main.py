@@ -25,7 +25,7 @@ label = ctk.CTkLabel(main_page, image=photo_for_main_page, text="")
 label.place(x=65, y=50)
 
 # przycisk "Let's get started!" wraz z parametrami i ułożeniem na ekranie
-button_start_app= Button_Brown(main_page, text="Let's get started!", command=lambda: run_window_menu(main_page, user_email_address))
+button_start_app= Button_Standard(main_page, text="Let's get started!", command=lambda: run_window_menu(main_page, user_email_address))
 button_start_app.place(x=120, y=190)
 
 

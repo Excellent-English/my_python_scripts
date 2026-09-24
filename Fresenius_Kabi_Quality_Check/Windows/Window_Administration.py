@@ -35,11 +35,11 @@ def run_window_administraton(menu_page, user_email_address):
         width=35, height=35,
         fg_color="transparent",
         hover_color="#755a44",
-        command= lambda: adm_page.close_the_app(main_page)
+        command= lambda: adm_page.close_the_app(menu_page)
     )
     power_btn.image = power_off_icon  # trzymaj referencję!
     power_btn.place(x=900, y=5)
-    adm_page.bind("<Escape>", lambda event: adm_page.close_the_app(main_page))
+    adm_page.bind("<Escape>", lambda event: adm_page.close_the_app(menu_page))
 
     logout_subtitle = ctk.CTkLabel(adm_page, text="Logout", font= ("Open Sans", 14), text_color = "white", fg_color = "#755a44")
     logout_subtitle.place(x=955, y=12)
@@ -220,4 +220,4 @@ if __name__ == "__main__":
     main_page = ctk.CTk()
     main_page.withdraw()
 
-    run_window_administraton(main_page)
+    run_window_administraton(main_page, user_email_address=None)

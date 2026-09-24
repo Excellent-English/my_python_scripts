@@ -15,7 +15,7 @@ global country, company_code, current_monthly_posted_documents, current_amount_l
 
 db = Database()
 db_admin = Database_Admin()
-countries = db.get_countries()
+countries = db_admin.get_countries_limits()
 
 def run_window_administraton_limit(adm_page, user_email_address):
     # Zamknij / ukryj główne okno
@@ -89,7 +89,7 @@ def run_window_administraton_limit(adm_page, user_email_address):
 
 
     def on_country_changed(selected_country):
-        company_codes = db.get_company_codes(selected_country)
+        company_codes = db_admin.get_company_codes_limits(selected_country)
 
         dropdown_company_codes.set_values(company_codes)
         dropdown_company_codes.set("")
@@ -155,6 +155,30 @@ def run_window_administraton_limit(adm_page, user_email_address):
         text_input_category_2.delete(0, "end")
         text_input_category_3.delete(0, "end")
 
+        updated_countries = db_admin.get_countries_limits()
+        dropdown_countries.set_values(updated_countries)
+
+
+# funkcja dodająca zupełnie nowy rekord do tabeli limits
+    def create_item_button():
+
+        country = text_input_bottom_country.get()
+        company_code = text_input_bottom_company_code.get()
+
+        new_monthly_posted_documents = text_input_bottom_category_1.get()
+        new_amount_limit = text_input_bottom_category_2.get()
+        new_new_hire_percentage = text_input_bottom_category_3.get()
+
+        db_admin.create_new_country_and_company_code(user_email_address, country, company_code, new_monthly_posted_documents, new_amount_limit, new_new_hire_percentage)
+
+        text_input_bottom_country.delete(0, "end")
+        text_input_bottom_company_code.delete(0, "end")
+        text_input_bottom_category_1.delete(0, "end")
+        text_input_bottom_category_2.delete(0, "end")
+        text_input_bottom_category_3.delete(0, "end")
+
+        updated_countries = db_admin.get_countries_limits()
+        dropdown_countries.set_values(updated_countries)
 
 
 # ---------------------------------------------------------------------------------------------------------
@@ -258,7 +282,7 @@ def run_window_administraton_limit(adm_page, user_email_address):
     text_input_bottom_category_3.place(x=505, y=138)
 
 
-    button_load_items = Button_Brown(frame_bottom, text= "➕  Create item")
+    button_load_items = Button_Brown(frame_bottom, command=create_item_button, text= "➕  Create item")
     button_load_items.place(x=693, y=98)
 
 
