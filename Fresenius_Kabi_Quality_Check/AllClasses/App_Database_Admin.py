@@ -257,6 +257,73 @@ class Database_Admin:
         return df["Country"].tolist()
 
 
+# funkcja umieszczona w people management - middle left
+# funkcja wyciągająca listę krajów, w których nie ma wpisanego użytkownika jako new joiner
+
+    def get_countries_not_assigned_to_user(self, sap_id):
+
+        conn = self.get_connection()
+        query = """
+        SELECT DISTINCT Country
+        FROM quality_check_new_joiners
+        WHERE Country NOT IN (
+            SELECT Country
+            FROM quality_check_new_joiners
+            WHERE New_joiner = ?
+        )
+        ORDER BY Country;
+        """
+
+        df = pd.read_sql_query(
+            query,
+            conn,
+            params=[sap_id]
+        )
+        conn.close()
+
+        print(df["Country"].tolist())
+        return df["Country"].tolist()
+
+
+
+# funkcja umieszczona w people management - middle left
+# funkcja dodająca nowy rekord do tabeli new joiners
+
+    def add_new_user_as_new_joiner(self, country, sap_id, who_changed):
+
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+        script_to_insert_new_row = """
+        INSERT INTO quality_check_new_joiners
+        (
+            Country,
+            New_joiner,
+            Line_status,
+            Who_changed,
+            Active_from
+        )
+        VALUES
+        (
+            ?,
+            ?,
+            'Active',
+            ?,
+            GETDATE()
+        );
+        """
+
+        cursor.execute(
+            script_to_insert_new_row,
+            country,
+            sap_id,
+            who_changed
+        )
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
 
 # ------------------------------------------------------------------------------------------------------------------
 
