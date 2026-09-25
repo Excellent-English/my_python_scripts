@@ -18,6 +18,8 @@ db_admin = Database_Admin()
 countries = db.get_countries()
 users_who_posted = db_admin.get_users_who_posted_but_are_not_visible()
 users_with_sap_id_without_email = db_admin.get_users_from_users_with_no_email()
+countries_where_new_joiner_is_added = []
+
 
 def run_window_administraton_people(adm_page, user_email_address):
     # Zamknij / ukryj główne okno
@@ -143,27 +145,39 @@ def run_window_administraton_people(adm_page, user_email_address):
         else:
             label_middle_left_new_joiner_yes_no.configure(text="No")
 
-        return typed_email_address_top_right
+        countries_where_new_joiner_is_added = db_admin.where_user_is_added_as_new_joiner(sap_id)
+        dropdown_middle_left_countries_added.set_values(countries_where_new_joiner_is_added)
+        dropdown_middle_left_countries_not_added.set_values(countries_where_new_joiner_is_added)
 
-
-    def grant_admin_access():
-
-        typed_email_address = check_if_user_exists_top_right()
-        db_admin.grant_admin_access(typed_email_address)
-
-        updated_admin_rights = db_admin.check_if_user_exists(typed_email_address)
-        if updated_admin_rights:
-            label_middle_left_admin_yes_no.configure(text="Yes")
-        else:
-            label_middle_left_admin_yes_no.configure(text="No")
+        return typed_email_address_top_right, sap_id, countries_where_new_joiner_is_added
 
 
 # ---------------------------------------------------------------------------------------------------------
 # funkcje middle left
 # ---------------------------------------------------------------------------------------------------------
 
+    def grant_admin_access():
+
+        typed_email_address = check_if_user_exists_top_right()
+        db_admin.grant_admin_access(typed_email_address)
+
+        updated_admin_rights = db_admin.is_selected_employee_admin(typed_email_address)
+        if updated_admin_rights:
+            label_middle_left_admin_yes_no.configure(text="Yes")
+        else:
+            label_middle_left_admin_yes_no.configure(text="No")
 
 
+    def revoke_admin_access():
+
+        typed_email_address = check_if_user_exists_top_right()
+        db_admin.revoke_admin_access(typed_email_address)
+
+        updated_admin_rights = db_admin.is_selected_employee_admin(typed_email_address)
+        if updated_admin_rights:
+            label_middle_left_admin_yes_no.configure(text="Yes")
+        else:
+            label_middle_left_admin_yes_no.configure(text="No")
 
 
 
@@ -244,7 +258,7 @@ def run_window_administraton_people(adm_page, user_email_address):
     label_middle_left_admin_yes_no.place(x=110, y=70)
     button_middle_left_grant = Button_Brown(frame_middle, text= "Grant access", command=grant_admin_access, height= 35, width=135, font= ("Open Sans", 16))
     button_middle_left_grant.place(x=180, y=68)
-    button_middle_left_remove = Button_Brown(frame_middle, text= "Remove access", height= 35, width=135, font= ("Open Sans", 16))
+    button_middle_left_remove = Button_Brown(frame_middle, text= "Revoke access", command=revoke_admin_access, height= 35, width=135, font= ("Open Sans", 16))
     button_middle_left_remove.place(x=330, y=68)
 
     label_middle_left_is_new_joiner = App_Label_Title(frame_middle, text="New joiner?", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
@@ -253,7 +267,7 @@ def run_window_administraton_people(adm_page, user_email_address):
     label_middle_left_new_joiner_yes_no.place(x=110, y=120)
     label_middle_left_countries_added = App_Label_Title(frame_middle, text="Countries added:", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_middle_left_countries_added.place(x=178, y=120)
-    dropdown_middle_left_countries_added = AppComboBox(frame_middle, width = 160, values=("Germany","France Vial"))
+    dropdown_middle_left_countries_added = AppComboBox(frame_middle, width = 160, values=countries_where_new_joiner_is_added)
     dropdown_middle_left_countries_added.place(x=302, y=116)
     dropdown_middle_left_countries_added.set("---")
 
@@ -267,7 +281,7 @@ def run_window_administraton_people(adm_page, user_email_address):
 
     label_middle_left_choose_country_to_remove = App_Label_Title(frame_middle, text="Remove new joiner from:", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_middle_left_choose_country_to_remove.place(x=10, y=220)
-    dropdown_middle_left_countries_not_added = AppComboBox(frame_middle, width = 160, values=("Germany","France Vial"))
+    dropdown_middle_left_countries_not_added = AppComboBox(frame_middle, width = 160, values=countries_where_new_joiner_is_added)
     dropdown_middle_left_countries_not_added.place(x=180, y=216)
     dropdown_middle_left_countries_not_added.set("---")
     button_middle_left_remove_nj = Button_Brown(frame_middle, text= "Remove", height= 35, width=100, font= ("Open Sans", 16))

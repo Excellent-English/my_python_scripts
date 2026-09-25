@@ -118,8 +118,12 @@ class Database_Admin:
         return not df.empty
 
 
+# ----------------------------------------------
+# middle left
+# ----------------------------------------------
+
 # funkcja umieszczona w people management - middle left
-# funkcja sprawdzająca czy wybrany użytkownik jest adminem i new joinerem
+# funkcja sprawdzająca czy wybrany użytkownik jest adminem
 
     def is_selected_employee_admin(self, typed_email_address_middle_left):
 
@@ -140,7 +144,7 @@ class Database_Admin:
 
 
 # funkcja umieszczona w people management - middle left
-# funkcja sprawdzająca czy wybrany użytkownik jest widoczny w tabeli new_joiners jako Active
+# funkcja wyciągająca SAP ID użytkownika na podstawie wpisanego w aplikacji adresu mailowego
 
 
     def sap_id_for_selected_employee(self, typed_email_address_middle_left):
@@ -163,6 +167,8 @@ class Database_Admin:
         return sap_id_of_selected_person
 
 
+# funkcja umieszczona w people management - middle left
+# funkcja sprawdzająca czy wybrany użytkownik jest widoczny w tabeli new_joiners jako Active
 
     def is_selected_employee_new_joiner(self, sap_id):
 
@@ -180,6 +186,9 @@ class Database_Admin:
 
         return df["New_joiner"].tolist()
 
+
+# funkcja umieszczona w people management - middle left
+# funkcja nadająca użytkownikowi dostęp admina
 
     def grant_admin_access(self, typed_email_address):
 
@@ -200,6 +209,52 @@ class Database_Admin:
 
         cursor.close()
         conn.close()
+
+
+# funkcja umieszczona w people management - middle left
+# funkcja zabierająca użytkownikowi dostęp admina
+
+    def revoke_admin_access(self, typed_email_address):
+
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+        script_to_update_row = """
+            UPDATE quality_check_users
+            SET Admin_role = NULL
+            WHERE Email_address = ?
+        """
+
+        cursor.execute(
+            script_to_update_row,
+            typed_email_address
+        )
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+
+# funkcja umieszczona w people management - middle left
+# funkcja wyciągająca listę krajów, w których wpisany użytkownik jest widoczny jako new joiner
+
+    def where_user_is_added_as_new_joiner(self, sap_id):
+
+        conn = self.get_connection()
+        query = """
+                SELECT Country from quality_check_new_joiners
+                WHERE New_joiner = ? AND Line_status = 'Active'
+                """
+
+        df = pd.read_sql_query(
+            query,
+            conn,
+            params=[sap_id]
+        )
+
+        print(df["Country"].tolist())
+        return df["Country"].tolist()
 
 
 
