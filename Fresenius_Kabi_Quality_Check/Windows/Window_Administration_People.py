@@ -16,6 +16,8 @@ global country, company_code, current_monthly_posted_documents, current_amount_l
 db = Database()
 db_admin = Database_Admin()
 countries = db.get_countries()
+users_who_posted = db_admin.get_users_who_posted_but_are_not_visible()
+users_with_sap_id_without_email = db_admin.get_users_from_users_with_no_email()
 
 def run_window_administraton_people(adm_page, user_email_address):
     # Zamknij / ukryj główne okno
@@ -84,6 +86,10 @@ def run_window_administraton_people(adm_page, user_email_address):
     people_page.protocol("WM_DELETE_WINDOW", disable_close)
 
 
+# ---------------------------------------------------------------------------------------------------------
+# funkcje top
+# ---------------------------------------------------------------------------------------------------------
+
 # funkcja użyta do pokazywania kontrolek w zależności od wyboru w pierwszej liście rozwijanej w top_left
     def when_first_selection_changes(choice):
 
@@ -98,7 +104,7 @@ def run_window_administraton_people(adm_page, user_email_address):
         if choice == "Modify user or create a new one":
             show_widgets(*top_right_widgets)
 
-        elif choice == "Add user who posted invoices but is not included in the tables":
+        elif choice == "Add users who posted invoices but are not included in the tables":
             show_widgets(*bottom_left_widgets)
 
         elif choice == "Update user's profile which has no e-mail address inserted":
@@ -113,6 +119,88 @@ def run_window_administraton_people(adm_page, user_email_address):
         for widget in widgets:
             widget.place_forget()
 
+
+    def check_if_user_exists_top_right():
+
+        typed_email_address_top_right = text_input_top_email_address.get()
+
+
+        if db_admin.check_if_user_exists(typed_email_address_top_right):
+            show_widgets(*middle_left_widgets)
+            hide_widgets(*[w[0] for w in middle_right_widgets])
+        else:
+            show_widgets(*middle_right_widgets)
+            hide_widgets(*[w[0] for w in middle_left_widgets])
+
+        if db_admin.is_selected_employee_admin(typed_email_address_top_right):
+            label_middle_left_admin_yes_no.configure(text="Yes")
+        else:
+            label_middle_left_admin_yes_no.configure(text="No")
+
+        sap_id = db_admin.sap_id_for_selected_employee(typed_email_address_top_right)
+        if db_admin.is_selected_employee_new_joiner(sap_id):
+            label_middle_left_new_joiner_yes_no.configure(text="Yes")
+        else:
+            label_middle_left_new_joiner_yes_no.configure(text="No")
+
+        return typed_email_address_top_right
+
+
+    def grant_admin_access():
+
+        typed_email_address = check_if_user_exists_top_right()
+        db_admin.grant_admin_access(typed_email_address)
+
+        updated_admin_rights = db_admin.check_if_user_exists(typed_email_address)
+        if updated_admin_rights:
+            label_middle_left_admin_yes_no.configure(text="Yes")
+        else:
+            label_middle_left_admin_yes_no.configure(text="No")
+
+
+# ---------------------------------------------------------------------------------------------------------
+# funkcje middle left
+# ---------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+# ---------------------------------------------------------------------------------------------------------
+# funkcje bottom left
+# ---------------------------------------------------------------------------------------------------------
+
+    def add_user_bottom_left():
+        selected_sap_id = dropdown_bottom_left_sap_ids.get()
+        typed_email_address = text_input_bottom_left_email_address.get()
+
+        db_admin.create_user_who_posted_invoices(selected_sap_id, typed_email_address)
+
+        text_input_bottom_left_email_address.delete(0, "end")
+
+        updated_sap_ids_bottom_left = db_admin.get_users_who_posted_but_are_not_visible()
+        dropdown_bottom_left_sap_ids.set_values(updated_sap_ids_bottom_left)
+        dropdown_bottom_left_sap_ids.set("choose SAP ID")
+
+
+# ---------------------------------------------------------------------------------------------------------
+# funkcje bottom right
+# ---------------------------------------------------------------------------------------------------------
+
+    def update_user_bottom_right():
+        selected_sap_id_bottom_right = dropdown_bottom_right_sap_ids.get()
+        typed_email_address_bottom_right = text_input_bottom_right_email_address.get()
+
+        db_admin.update_user_with_sap_id_but_no_email(selected_sap_id_bottom_right, typed_email_address_bottom_right)
+
+        text_input_bottom_right_email_address.delete(0, "end")
+
+        updated_sap_ids_bottom_right = db_admin.get_users_from_users_with_no_email()
+        dropdown_bottom_right_sap_ids.set_values(updated_sap_ids_bottom_right)
+        dropdown_bottom_right_sap_ids.set("choose SAP ID")
+
+
 # ---------------------------------------------------------------------------------------------------------
 # frame top_left
 # ---------------------------------------------------------------------------------------------------------
@@ -120,7 +208,7 @@ def run_window_administraton_people(adm_page, user_email_address):
     frame_top_left = AppFrame(people_page, height=70, width=495)
     frame_top_left.place(x=50, y=75)
 
-    dropdown_first_selection = AppComboBox(frame_top_left, width = 450, command=when_first_selection_changes, values=("Modify user or create a new one", "Add user who posted invoices but is not included in the tables", "Update user's profile which has no e-mail address inserted"))
+    dropdown_first_selection = AppComboBox(frame_top_left, width = 450, command=when_first_selection_changes, values=("Modify user or create a new one", "Add users who posted invoices but are not included in the tables", "Update user's profile which has no e-mail address inserted"))
     dropdown_first_selection.place(x=20, y=15)
     dropdown_first_selection.set("What would you like to do?")
 
@@ -135,7 +223,7 @@ def run_window_administraton_people(adm_page, user_email_address):
     text_input_top_email_address = App_Entry_Box(frame_top_right, placeholder_text="--- enter full e-mail address ---", width = 300, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
     text_input_top_email_address.place(x=20, y=15)
 
-    button_check_user = Button_Brown(frame_top_right, text= "Check user   ✔", height= 35, width=135, font= ("Open Sans", 16))
+    button_check_user = Button_Brown(frame_top_right, text= "Check user   ✔", command=check_if_user_exists_top_right, height= 35, width=135, font= ("Open Sans", 16))
     button_check_user.place(x=330, y=15)
 
 # ---------------------------------------------------------------------------------------------------------
@@ -154,7 +242,7 @@ def run_window_administraton_people(adm_page, user_email_address):
     label_middle_left_is_admin.place(x=10, y=70)
     label_middle_left_admin_yes_no = App_Label_Title(frame_middle, text="Yes", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_middle_left_admin_yes_no.place(x=110, y=70)
-    button_middle_left_grant = Button_Brown(frame_middle, text= "Grant access", height= 35, width=135, font= ("Open Sans", 16))
+    button_middle_left_grant = Button_Brown(frame_middle, text= "Grant access", command=grant_admin_access, height= 35, width=135, font= ("Open Sans", 16))
     button_middle_left_grant.place(x=180, y=68)
     button_middle_left_remove = Button_Brown(frame_middle, text= "Remove access", height= 35, width=135, font= ("Open Sans", 16))
     button_middle_left_remove.place(x=330, y=68)
@@ -235,14 +323,14 @@ def run_window_administraton_people(adm_page, user_email_address):
     label_bottom_left_title = App_Label_Title(frame_bottom_left, text="Users who posted invoices but are not added to the 'Users' table", font= ("Open Sans", 14), text_color = "#755a44")
     label_bottom_left_title.place(x=25, y=5)
 
-    dropdown_bottom_left_sap_ids = AppComboBox(frame_bottom_left, width = 150, height=30, values=("Yes", "No"))
+    dropdown_bottom_left_sap_ids = AppComboBox(frame_bottom_left, values=users_who_posted, width = 150, height=30)
     dropdown_bottom_left_sap_ids.place(x=90, y=35)
     dropdown_bottom_left_sap_ids.set("choose SAP ID")
 
     text_input_bottom_left_email_address = App_Entry_Box(frame_bottom_left, placeholder_text="--- enter full e-mail address ---", width = 300, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
     text_input_bottom_left_email_address.place(x=20, y=72)
 
-    button_update_user_left = Button_Brown(frame_bottom_left, text= "Add user", height= 35, width=135, font= ("Open Sans", 16))
+    button_update_user_left = Button_Brown(frame_bottom_left, text= "Add user", command=add_user_bottom_left, height= 35, width=135, font= ("Open Sans", 16))
     button_update_user_left.place(x=340, y=50)
 
 # ---------------------------------------------------------------------------------------------------------
@@ -255,14 +343,14 @@ def run_window_administraton_people(adm_page, user_email_address):
     label_bottom_right_title = App_Label_Title(frame_bottom_right, text="Users with no e-mail address in the 'Users' table", font= ("Open Sans", 14), text_color = "#755a44")
     label_bottom_right_title.place(x=80, y=5)
 
-    dropdown_bottom_right_sap_ids = AppComboBox(frame_bottom_right, width = 150, height=30, values=("Yes", "No"))
+    dropdown_bottom_right_sap_ids = AppComboBox(frame_bottom_right, width = 150, height=30, values=users_with_sap_id_without_email)
     dropdown_bottom_right_sap_ids.place(x=90, y=35)
     dropdown_bottom_right_sap_ids.set("choose SAP ID")
 
     text_input_bottom_right_email_address = App_Entry_Box(frame_bottom_right, placeholder_text="--- enter full e-mail address ---", width = 300, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
     text_input_bottom_right_email_address.place(x=20, y=72)
 
-    button_update_user_right = Button_Brown(frame_bottom_right, text= "Update user", height= 35, width=135, font= ("Open Sans", 16))
+    button_update_user_right = Button_Brown(frame_bottom_right, text= "Update user", command=update_user_bottom_right, height= 35, width=135, font= ("Open Sans", 16))
     button_update_user_right.place(x=340, y=50)
 
 
@@ -296,8 +384,6 @@ def run_window_administraton_people(adm_page, user_email_address):
         (label_middle_left_choose_country_to_remove, 10, 220),
         (dropdown_middle_left_countries_not_added, 180, 216),
         (button_middle_left_remove_nj, 360, 216),
-
-        (line_middle, 498, 30)
     ]
 
     middle_right_widgets = [

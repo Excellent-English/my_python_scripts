@@ -93,6 +93,222 @@ class Database_Admin:
         return df["Company_code"].tolist()
 
 
+# -----------------------------------------------------------------------------------------------------------------------
+# PEOPLE MANAGEMENT
+# -----------------------------------------------------------------------------------------------------------------------
+
+# funkcja umieszczona w people management - top right
+# funkcja sprawdzająca, czy wpisany w aplikacji użytkownik istnieje w tabeli users
+
+    def check_if_user_exists(self, typed_email_address_top_right):
+
+        conn = self.get_connection()
+        query = """
+            SELECT Email_address from quality_check_users
+            WHERE Email_address = ?
+            """
+
+        df = pd.read_sql_query(
+            query,
+            conn,
+            params=[typed_email_address_top_right]
+        )
+
+        conn.close()
+        return not df.empty
+
+
+# funkcja umieszczona w people management - middle left
+# funkcja sprawdzająca czy wybrany użytkownik jest adminem i new joinerem
+
+    def is_selected_employee_admin(self, typed_email_address_middle_left):
+
+        conn = self.get_connection()
+        query = """
+            SELECT Admin_role from quality_check_users
+            WHERE Email_address = ? AND Admin_role = 'Admin'
+            """
+
+        df = pd.read_sql_query(
+            query,
+            conn,
+            params=[typed_email_address_middle_left]
+        )
+
+        conn.close()
+        return not df.empty
+
+
+# funkcja umieszczona w people management - middle left
+# funkcja sprawdzająca czy wybrany użytkownik jest widoczny w tabeli new_joiners jako Active
+
+
+    def sap_id_for_selected_employee(self, typed_email_address_middle_left):
+
+        conn = self.get_connection()
+
+        query = """
+                SELECT SAP_user from quality_check_users
+                WHERE Email_address = ?
+                """
+
+        df = pd.read_sql_query(
+            query,
+            conn,
+            params=[typed_email_address_middle_left]
+        )
+
+        conn.close()
+        sap_id_of_selected_person = df.iloc[0]["SAP_user"]
+        return sap_id_of_selected_person
+
+
+
+    def is_selected_employee_new_joiner(self, sap_id):
+
+        conn = self.get_connection()
+        query = """
+            SELECT New_joiner from quality_check_new_joiners
+            WHERE New_joiner = ? AND Line_status = 'Active'
+            """
+
+        df = pd.read_sql_query(
+            query,
+            conn,
+            params=[sap_id]
+        )
+
+        return df["New_joiner"].tolist()
+
+
+    def grant_admin_access(self, typed_email_address):
+
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+        script_to_update_row = """
+                UPDATE quality_check_users
+                SET Admin_role = 'admin'
+                WHERE Email_address = ?
+                """
+
+        cursor.execute(
+            script_to_update_row,
+            typed_email_address
+        )
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+
+
+# ------------------------------------------------------------------------------------------------------------------
+
+# funkcja umieszczona w people management
+# funkcja wyciągająca w formie listy wszystkie company cody
+    def get_users_who_posted_but_are_not_visible(self):
+
+        conn = self.get_connection()
+        query = """
+            SELECT DISTINCT qcd.User_name
+            FROM dbo.quality_check_database qcd
+            LEFT JOIN dbo.quality_check_users qcu
+                ON qcd.User_name = qcu.SAP_user
+            WHERE qcu.SAP_user IS NULL AND qcd.User_name IS NOT NULL;
+            """
+
+        df = pd.read_sql_query(
+            query,
+            conn
+        )
+
+        return df["User_name"].tolist()
+
+
+# funkcja umieszczona w people management
+# funkcja wprowadzająca nowego usera do tabeli users, który wcześniej postował faktury
+
+    def create_user_who_posted_invoices(self, selected_sap_id, typed_email_address):
+
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+        script_to_insert_new_row = """
+                INSERT INTO quality_check_users
+                (
+                    SAP_user,
+                    Email_address,
+                    Active_from
+                )
+                VALUES
+                (
+                    ?,
+                    ?,
+                    GETDATE()
+                );
+                """
+
+        cursor.execute(
+            script_to_insert_new_row,
+            typed_email_address,
+            selected_sap_id
+        )
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+
+# funkcja umieszczona w people management - bottom right
+# funkcja wyciągająca w formie listy wszystkie company cody
+    def get_users_from_users_with_no_email(self):
+
+        conn = self.get_connection()
+        query = """
+            SELECT SAP_user from quality_check_users
+            WHERE Email_address IS NULL
+            """
+
+        df = pd.read_sql_query(
+            query,
+            conn
+        )
+
+        return df["SAP_user"].tolist()
+
+
+# funkcja umieszczona w people management - bottom right
+# funkcja wprowadzająca adres mailowy dla usera o podanym SAP ID
+
+    def update_user_with_sap_id_but_no_email(self, selected_sap_id, typed_email_address):
+
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+        script_to_update_row = """
+                UPDATE quality_check_users
+                SET Email_address = ?
+                WHERE SAP_user = ?
+                """
+
+        cursor.execute(
+            script_to_update_row,
+            typed_email_address,
+            selected_sap_id
+        )
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+
+
+
+
+# -----------------------------------------------------------------------------------------------------------------------
+# LIMIT MANAGEMENT
+# -----------------------------------------------------------------------------------------------------------------------
 
 # funkcja umieszczona w limit management
 # funkcja zmieniająca limity w wyszukanym wcześniej country i company codzie + dodaje nowy wiersz w tabeli
@@ -229,6 +445,12 @@ class Database_Admin:
 
 
 
+
+
+
+# -----------------------------------------------------------------------------------------------------------------------
+# stare funkcje z app_database, do usunięcia po wszystkich pracach
+# -----------------------------------------------------------------------------------------------------------------------
 
 # funkcja wyciągająca Document_number_SAP, User_name oraz Verified z tabeli
     def get_sap_documents_based_on_country(self, country, company_code):
