@@ -149,12 +149,11 @@ def run_window_administraton_people(adm_page, user_email_address):
 # utworzenie 2 list rozwijanych z krajami, do których user jest obecnie wpisany
         countries_where_new_joiner_is_added = db_admin.where_user_is_added_as_new_joiner(sap_id)
         dropdown_middle_left_countries_added.set_values(countries_where_new_joiner_is_added)
-        dropdown_middle_left_countries_not_added.set_values(countries_where_new_joiner_is_added)
+        dropdown_middle_left_countries_to_remove.set_values(countries_where_new_joiner_is_added)
 
 # utworzenie listy rozwijanej z krajami, do których user nie jest jeszcze wpisany
         countries_where_new_joiner_is_not_added = db_admin.get_countries_not_assigned_to_user(sap_id)
-        dropdown_middle_left_new_joiner_added_to.set_values(countries_where_new_joiner_is_not_added)
-        dropdown_middle_left_new_joiner_added_to.set("---")
+        dropdown_middle_left_new_joiner_countries_to_add.set_values(countries_where_new_joiner_is_not_added)
 
         return typed_email_address_top_right, sap_id, countries_where_new_joiner_is_added
 
@@ -190,7 +189,7 @@ def run_window_administraton_people(adm_page, user_email_address):
     def add_new_joiner_to_new_country():
 
         typed_email_address_top_right, sap_id, countries_where_new_joiner_is_added = check_if_user_exists_top_right()
-        country_to_add = dropdown_middle_left_new_joiner_added_to.get()
+        country_to_add = dropdown_middle_left_new_joiner_countries_to_add.get()
 
         db_admin.add_new_user_as_new_joiner(country_to_add, sap_id, user_email_address)
 
@@ -205,12 +204,44 @@ def run_window_administraton_people(adm_page, user_email_address):
         # odświeżenie 2 list rozwijanych z krajami, do których user jest obecnie wpisany
         countries_where_new_joiner_is_added = db_admin.where_user_is_added_as_new_joiner(sap_id)
         dropdown_middle_left_countries_added.set_values(countries_where_new_joiner_is_added)
-        dropdown_middle_left_countries_not_added.set_values(countries_where_new_joiner_is_added)
+        dropdown_middle_left_countries_to_remove.set_values(countries_where_new_joiner_is_added)
+        dropdown_middle_left_countries_to_remove.set("---")
 
         # odświeżenie listy rozwijanej z krajami, do których user nie jest jeszcze wpisany
         countries_where_new_joiner_is_not_added = db_admin.get_countries_not_assigned_to_user(sap_id)
-        dropdown_middle_left_new_joiner_added_to.set_values(countries_where_new_joiner_is_not_added)
-        dropdown_middle_left_new_joiner_added_to.set("---")
+        dropdown_middle_left_new_joiner_countries_to_add.set_values(countries_where_new_joiner_is_not_added)
+        dropdown_middle_left_new_joiner_countries_to_add.set("---")
+
+        dropdown_middle_left_countries_added.set("---")
+
+
+    def deactivate_country_from_new_joiners_for_user():
+
+        typed_email_address_top_right, sap_id, countries_where_new_joiner_is_added = check_if_user_exists_top_right()
+        country_to_remove = dropdown_middle_left_countries_to_remove.get()
+
+        db_admin.deactivate_new_joiner_from_certain_country(user_email_address, sap_id, country_to_remove)
+
+# po dodaniu rekordu należy odświeżyć pozostałe listy
+
+        # najnowsza informacja o tym, czy user jest new joinerem
+        if db_admin.is_selected_employee_new_joiner(sap_id):
+            label_middle_left_new_joiner_yes_no.configure(text="Yes")
+        else:
+            label_middle_left_new_joiner_yes_no.configure(text="No")
+
+        # odświeżenie 2 list rozwijanych z krajami, do których user jest obecnie wpisany
+        countries_where_new_joiner_is_added = db_admin.where_user_is_added_as_new_joiner(sap_id)
+        dropdown_middle_left_countries_added.set_values(countries_where_new_joiner_is_added)
+        dropdown_middle_left_countries_to_remove.set_values(countries_where_new_joiner_is_added)
+        dropdown_middle_left_countries_to_remove.set("---")
+
+        # odświeżenie listy rozwijanej z krajami, do których user nie jest jeszcze wpisany
+        countries_where_new_joiner_is_not_added = db_admin.get_countries_not_assigned_to_user(sap_id)
+        dropdown_middle_left_new_joiner_countries_to_add.set_values(countries_where_new_joiner_is_not_added)
+        dropdown_middle_left_new_joiner_countries_to_add.set("---")
+
+        dropdown_middle_left_countries_added.set("---")
 
 
 # ---------------------------------------------------------------------------------------------------------
@@ -305,18 +336,18 @@ def run_window_administraton_people(adm_page, user_email_address):
 
     label_middle_left_choose_country_to_add = App_Label_Title(frame_middle, text="Add as new joiner to:", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_middle_left_choose_country_to_add.place(x=10, y=170)
-    dropdown_middle_left_new_joiner_added_to = AppComboBox(frame_middle, width = 160, values=countries_where_new_joiner_is_not_added)
-    dropdown_middle_left_new_joiner_added_to.place(x=180, y=166)
-    dropdown_middle_left_new_joiner_added_to.set("---")
+    dropdown_middle_left_new_joiner_countries_to_add = AppComboBox(frame_middle, width = 160, values=countries_where_new_joiner_is_not_added)
+    dropdown_middle_left_new_joiner_countries_to_add.place(x=180, y=166)
+    dropdown_middle_left_new_joiner_countries_to_add.set("---")
     button_middle_left_add_nj = Button_Brown(frame_middle, text= "Add", command=add_new_joiner_to_new_country, height= 35, width=100, font= ("Open Sans", 16))
     button_middle_left_add_nj.place(x=360, y=166)
 
     label_middle_left_choose_country_to_remove = App_Label_Title(frame_middle, text="Remove new joiner from:", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_middle_left_choose_country_to_remove.place(x=10, y=220)
-    dropdown_middle_left_countries_not_added = AppComboBox(frame_middle, width = 160, values=countries_where_new_joiner_is_added)
-    dropdown_middle_left_countries_not_added.place(x=180, y=216)
-    dropdown_middle_left_countries_not_added.set("---")
-    button_middle_left_remove_nj = Button_Brown(frame_middle, text= "Remove", height= 35, width=100, font= ("Open Sans", 16))
+    dropdown_middle_left_countries_to_remove = AppComboBox(frame_middle, width = 160, values=countries_where_new_joiner_is_added)
+    dropdown_middle_left_countries_to_remove.place(x=180, y=216)
+    dropdown_middle_left_countries_to_remove.set("---")
+    button_middle_left_remove_nj = Button_Brown(frame_middle, text= "Remove", command=deactivate_country_from_new_joiners_for_user, height= 35, width=100, font= ("Open Sans", 16))
     button_middle_left_remove_nj.place(x=360, y=216)
 
 
@@ -424,11 +455,11 @@ def run_window_administraton_people(adm_page, user_email_address):
         (dropdown_middle_left_countries_added, 302, 116),
 
         (label_middle_left_choose_country_to_add, 10, 170),
-        (dropdown_middle_left_new_joiner_added_to, 180, 166),
+        (dropdown_middle_left_new_joiner_countries_to_add, 180, 166),
         (button_middle_left_add_nj, 360, 166),
 
         (label_middle_left_choose_country_to_remove, 10, 220),
-        (dropdown_middle_left_countries_not_added, 180, 216),
+        (dropdown_middle_left_countries_to_remove, 180, 216),
         (button_middle_left_remove_nj, 360, 216),
     ]
 

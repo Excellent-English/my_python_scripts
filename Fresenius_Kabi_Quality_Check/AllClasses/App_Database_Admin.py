@@ -269,7 +269,7 @@ class Database_Admin:
         WHERE Country NOT IN (
             SELECT Country
             FROM quality_check_new_joiners
-            WHERE New_joiner = ?
+            WHERE New_joiner = ? AND Line_status = 'Active'
         )
         ORDER BY Country;
         """
@@ -323,6 +323,33 @@ class Database_Admin:
 
         cursor.close()
         conn.close()
+
+
+# funkcja umieszczona w people management - middle left
+# funkcja wyłączająca rolę new joinera dla wybranego usera i wybranego kraju
+
+    def deactivate_new_joiner_from_certain_country(self, who_changed, sap_id, country):
+
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+        script_to_update_row = """
+                UPDATE quality_check_new_joiners
+                SET Line_status = 'Inactive', Who_changed = ?, Active_to = GETDATE()
+                WHERE New_joiner = ? AND Country = ? AND Line_status = 'Active'
+                """
+
+        cursor.execute(
+            script_to_update_row,
+            who_changed,
+            sap_id,
+            country
+        )
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
 
 
 # ------------------------------------------------------------------------------------------------------------------
