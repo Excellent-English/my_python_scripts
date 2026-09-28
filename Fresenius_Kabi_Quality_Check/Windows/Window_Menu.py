@@ -10,7 +10,7 @@ from Fresenius_Kabi_Quality_Check.Windows.Window_Administration import run_windo
 from Fresenius_Kabi_Quality_Check.Windows.Window_Quality_check_main import run_quality_check_menu
 
 
-def run_window_menu(main_page, user_email_address):
+def run_window_menu(main_page, user_email_address, sap_id):
     # Zamknij / ukryj główne okno
     main_page.withdraw()   # albo destroy()
     # ctk.deactivate_automatic_dpi_awareness()
@@ -20,6 +20,7 @@ def run_window_menu(main_page, user_email_address):
     # Gdyby była potrzeba zmiany tytułu w kolejnych oknach:
     # menu_page = AppWindow(title="Inny tytuł okna")
 
+    print(f"SAP ID used in menu: {sap_id}")
 
     # Dodanie przycisku zawierającego ikonę power off- przycisk zamyka aplikację
     # 1. Wczytanie obrazu z pliku
@@ -74,7 +75,7 @@ def run_window_menu(main_page, user_email_address):
     label_quality_check_title.configure(cursor="hand2")
     label_quality_check_title.bind(
         "<Button-1>",
-        lambda event: run_quality_check_menu(menu_page))
+        lambda event: run_quality_check_menu(menu_page, sap_id))
 
     label_quality_check_subtitle = App_Label_Title(frame_quality_check, text="Verify items from\nQuality check", font= ("Open Sans", 14), text_color = "#8B7A6B")
     label_quality_check_subtitle.place(x=110, y=65)

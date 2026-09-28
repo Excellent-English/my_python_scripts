@@ -19,10 +19,13 @@ global first_selected_item
 global number_of_items_selected_all
 global total_items
 global items_not_mine
+global country, company_code, qc_status, vendor_type, vendor_number, order_by
 
-def run_quality_check_menu(menu_page):
+def run_quality_check_menu(menu_page, sap_id):
     # Zamknij / ukryj główne okno
     menu_page.withdraw()   # albo destroy()
+
+    print(f"SAP ID used in quality_check_main: {sap_id}")
 
     # Utwórz nowe okno menu
     quality_check_page = AppWindow(banner_text = "Quality check audit", width=1020, height=600, x= 120, y = 30, fg_color="#F6F7F9")
@@ -83,6 +86,7 @@ def run_quality_check_menu(menu_page):
         vendor_number = text_input_vendor_number.get().strip()
 
         total_items, items_not_mine = db.get_number_of_items_found_all(
+        sap_id=sap_id,
         country = country,
         company_code = company_code,
         qc_status = qc_status,
@@ -101,6 +105,7 @@ def run_quality_check_menu(menu_page):
         order_by = dropdown_order_by.get()
 
         first_selected_item = db.get_first_item_quality_check(
+        sap_id=sap_id,
         country = country,
         company_code = company_code,
         qc_status = qc_status,
@@ -111,7 +116,7 @@ def run_quality_check_menu(menu_page):
         print(country)
         print(company_code)
         print(vendor_number)
-        run_quality_check_details(quality_check_page, first_selected_item, total_items, items_not_mine)
+        run_quality_check_details(quality_check_page, sap_id, first_selected_item, total_items, items_not_mine)
 
 
 

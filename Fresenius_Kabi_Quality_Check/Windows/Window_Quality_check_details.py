@@ -15,7 +15,7 @@ from Fresenius_Kabi_Quality_Check.AllClasses.App_Radio_Button import App_Radio_B
 db = Database()
 countries = db.get_countries()
 
-def run_quality_check_details(quality_check_page, first_selected_item, total_items, items_not_mine):
+def run_quality_check_details(quality_check_page, sap_id, first_selected_item, total_items, items_not_mine):
     # Zamknij / ukryj główne okno
     quality_check_page.withdraw()   # albo destroy()
 
