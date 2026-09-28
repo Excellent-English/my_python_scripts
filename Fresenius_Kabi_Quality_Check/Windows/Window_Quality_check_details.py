@@ -144,8 +144,13 @@ def run_quality_check_details(quality_check_page,
     line_frame_top.place(x=25, y=35)
 
 
+# ustawienie buttona save and next + konfiguracja normal/disable
     button_save_and_next = Button_Brown(quality_check_page_details, text= " Save and Next Item   ► ")
     button_save_and_next.place(x=380, y=540)
+
+
+
+
     button_reject = Button_Standard(
         quality_check_page_details,
         text="Reject",
@@ -154,8 +159,17 @@ def run_quality_check_details(quality_check_page,
         text_color="white"
     )
     button_reject.place(x=650, y=540)
+    if str(status_number) in ["1", "2"]:
+        button_reject.configure(state="disabled")
+    else:
+        button_reject.configure(state="normal")
+
     button_error_not_valid = Button_Standard(quality_check_page_details, text= "Error not valid")
     button_error_not_valid.place(x=820, y=540)
+    if str(status_number) in ["1", "2"]:
+        button_error_not_valid.configure(state="disabled")
+    else:
+        button_error_not_valid.configure(state="normal")
 
 
 # -------------------------------------------------------------------------------------------------------------------
@@ -333,6 +347,31 @@ def run_quality_check_details(quality_check_page,
     radio_not_ok_13 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_13, value=2)
     radio_not_ok_13.place(x=730, y=194)
 
+
+# ustawienie normal/disable dla wszystkich radio buttons
+    all_radio_buttons = [
+        radio_ok_1, radio_not_ok_1,
+        radio_ok_2, radio_not_ok_2,
+        radio_ok_3, radio_not_ok_3,
+        radio_ok_4, radio_not_ok_4,
+        radio_ok_5, radio_not_ok_5,
+        radio_ok_6, radio_not_ok_6,
+        radio_ok_7, radio_not_ok_7,
+        radio_ok_8, radio_not_ok_8,
+        radio_ok_9, radio_not_ok_9,
+        radio_ok_10, radio_not_ok_10,
+        radio_ok_11, radio_not_ok_11,
+        radio_ok_12, radio_not_ok_12,
+        radio_ok_13, radio_not_ok_13
+    ]
+
+    state = "disabled" if str(status_number) in ["2", "4"] else "normal"
+
+    for radio in all_radio_buttons:
+        radio.configure(state=state)
+
+
+# -----------------------------------------------------------------------------------
 
     text_box_comment = App_Text_Box(frame_quality_check_details_bottom, width = 270, height = 85, fg_color = "white", max_length=170)
     text_box_comment.place(x=445, y=250)
