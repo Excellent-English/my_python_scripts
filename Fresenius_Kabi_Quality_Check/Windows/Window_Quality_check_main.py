@@ -116,7 +116,7 @@ def run_quality_check_menu(menu_page, sap_id):
         print(country)
         print(company_code)
         print(vendor_number)
-        run_quality_check_details(quality_check_page, sap_id, first_selected_item, total_items, items_not_mine)
+        run_quality_check_details(quality_check_page, sap_id, first_selected_item, total_items, items_not_mine, country, company_code, qc_status, vendor_type, vendor_number, order_by)
 
 
 

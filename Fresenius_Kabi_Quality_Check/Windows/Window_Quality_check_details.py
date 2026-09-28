@@ -15,7 +15,9 @@ from Fresenius_Kabi_Quality_Check.AllClasses.App_Radio_Button import App_Radio_B
 db = Database()
 countries = db.get_countries()
 
-def run_quality_check_details(quality_check_page, sap_id, first_selected_item, total_items, items_not_mine):
+def run_quality_check_details(quality_check_page,
+                              sap_id, first_selected_item, total_items, items_not_mine,
+                              country, company_code, qc_status, vendor_type, vendor_number, order_by):
     # Zamknij / ukryj główne okno
     quality_check_page.withdraw()   # albo destroy()
 
@@ -24,8 +26,18 @@ def run_quality_check_details(quality_check_page, sap_id, first_selected_item, t
     # Gdyby była potrzeba zmiany tytułu w kolejnych oknach:
     # menu_page = AppWindow(title="Inny tytuł okna")
 
-    print("Oto przekazany słownik:")
-    print(first_selected_item)
+    print(f"SAP ID used in quality_check_details: {sap_id}")
+    print(f"Oto przekazany słownik: {first_selected_item}")
+    print(f"Oto przekazane total items: {total_items}")
+    print(f"Oto przekazane items not mine: {items_not_mine}")
+    print(f"Oto przekazane country: {country}")
+    print(f"Oto przekazane company code: {company_code}")
+    print(f"Oto przekazane qc status: {qc_status}")
+    print(f"Oto przekazane vendor type: {vendor_type}")
+    print(f"Oto przekazane vendor number: {vendor_number}")
+    print(f"Oto przekazane order by: {order_by}")
+
+
 # ---------------------------------------------------------------------------------
 
     # Dodanie przycisku zawierającego ikonę return- przycisk powracający do poprzedniego okna
