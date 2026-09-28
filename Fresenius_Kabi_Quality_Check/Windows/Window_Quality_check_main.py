@@ -113,10 +113,13 @@ def run_quality_check_menu(menu_page, sap_id):
         vendor_number = vendor_number,
         order_by = order_by)
 
-        print(country)
-        print(company_code)
-        print(vendor_number)
-        run_quality_check_details(quality_check_page, sap_id, first_selected_item, total_items, items_not_mine, country, company_code, qc_status, vendor_type, vendor_number, order_by)
+        if not first_selected_item:
+            print("No items found for selected criteria")
+            return
+
+        status_number = first_selected_item['Verified']
+
+        run_quality_check_details(quality_check_page, sap_id, first_selected_item, total_items, items_not_mine, status_number, country, company_code, qc_status, vendor_type, vendor_number, order_by)
 
 
 
