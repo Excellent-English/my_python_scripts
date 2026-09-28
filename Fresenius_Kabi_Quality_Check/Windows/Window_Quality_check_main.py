@@ -72,17 +72,6 @@ def run_quality_check_menu(menu_page):
         dropdown_company_codes.set("")
         when_selection_changes()
 
-    # def load_quality_check():
-    #     selected_country = dropdown_countries.get()
-    #     selected_company_code = dropdown_company_codes.get()
-    #     documents = db.get_sap_documents_based_on_country(selected_country, selected_company_code)
-    #
-    #     run_quality_check_details(
-    #         quality_check_page,
-    #         selected_country,
-    #         selected_company_code,
-    #         documents
-    #     )
 
     def when_selection_changes(*_):
         nonlocal total_items, items_not_mine
@@ -171,8 +160,10 @@ def run_quality_check_menu(menu_page):
     label_quality_check_vendor_number = App_Label_Title(frame_quality_check, text="Vendor number", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_vendor_number.place(x=435, y=220)
 
-    text_input_vendor_number = App_Entry_Box(frame_quality_check, width = 300, fg_color = "white", justify="left")
+    text_input_vendor_number = App_Entry_Box(frame_quality_check, width = 260, fg_color = "white", justify="left")
     text_input_vendor_number.place(x=440, y=250)
+    button_load_vendor_number = Button_Standard(frame_quality_check, height=36, width=30, font=("Open Sans", 16), text= "⟳", command= when_selection_changes)
+    button_load_vendor_number.place(x=705, y=252)
 
     label_quality_check_vendor_type = App_Label_Title(frame_quality_check, text="Order by:", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_vendor_type.place(x=435, y=300)

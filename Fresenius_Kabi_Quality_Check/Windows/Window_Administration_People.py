@@ -207,6 +207,10 @@ def run_window_administraton_people(adm_page, user_email_address):
         dropdown_middle_left_countries_to_remove.set_values(countries_where_new_joiner_is_added)
         dropdown_middle_left_countries_to_remove.set("---")
 
+        # odświeżenie list rozwijanych z middle right
+        dropdown_middle_right_new_joiner.set("---")
+        dropdown_middle_right_admin_rights.set("---")
+
         # odświeżenie listy rozwijanej z krajami, do których user nie jest jeszcze wpisany
         countries_where_new_joiner_is_not_added = db_admin.get_countries_not_assigned_to_user(sap_id)
         dropdown_middle_left_new_joiner_countries_to_add.set_values(countries_where_new_joiner_is_not_added)
@@ -236,12 +240,43 @@ def run_window_administraton_people(adm_page, user_email_address):
         dropdown_middle_left_countries_to_remove.set_values(countries_where_new_joiner_is_added)
         dropdown_middle_left_countries_to_remove.set("---")
 
+        # odświeżenie list rozwijanych z middle right
+        dropdown_middle_right_new_joiner.set("---")
+        dropdown_middle_right_admin_rights.set("---")
+
         # odświeżenie listy rozwijanej z krajami, do których user nie jest jeszcze wpisany
         countries_where_new_joiner_is_not_added = db_admin.get_countries_not_assigned_to_user(sap_id)
         dropdown_middle_left_new_joiner_countries_to_add.set_values(countries_where_new_joiner_is_not_added)
         dropdown_middle_left_new_joiner_countries_to_add.set("---")
 
         dropdown_middle_left_countries_added.set("---")
+
+
+# ---------------------------------------------------------------------------------------------------------
+# funkcje middle right
+# ---------------------------------------------------------------------------------------------------------
+
+    def create_user_button():
+
+        typed_email_address_top_right, sap_id, countries_where_new_joiner_is_added = check_if_user_exists_top_right()
+        new_sap_id = text_input_middle_right_sap_id.get()
+        selected_country = dropdown_middle_right_new_joiner_country.get()
+
+        if dropdown_middle_right_admin_rights.get() == "Yes":
+            should_be_admin = "admin"
+        else:
+            should_be_admin = ""
+
+        db_admin.create_user_if_does_not_exist_new_line(new_sap_id, typed_email_address_top_right, should_be_admin, user_email_address)
+
+        if dropdown_middle_right_new_joiner.get() == "Yes":
+            db_admin.create_user_if_does_not_exist_as_new_joiner(selected_country, new_sap_id, user_email_address)
+
+        # odświeżenie list rozwijanych z middle right
+        dropdown_middle_right_new_joiner.set("---")
+        dropdown_middle_right_admin_rights.set("---")
+        dropdown_middle_right_new_joiner_country.set("---")
+        text_input_middle_right_sap_id.delete(0, "end")
 
 
 # ---------------------------------------------------------------------------------------------------------
@@ -382,11 +417,11 @@ def run_window_administraton_people(adm_page, user_email_address):
     dropdown_middle_right_new_joiner.place(x=675, y=166)
     dropdown_middle_right_new_joiner.set("---")
 
-    dropdown_middle_right_new_joiner_country = AppComboBox(frame_middle, width = 160, values=("Germany","France Vial"))
+    dropdown_middle_right_new_joiner_country = AppComboBox(frame_middle, width = 160, values=countries)
     dropdown_middle_right_new_joiner_country.place(x=810, y=166)
     dropdown_middle_right_new_joiner_country.set("Choose country")
 
-    button_create_user = Button_Brown(frame_middle, text= "Create user", height= 35, width=135, font= ("Open Sans", 16))
+    button_create_user = Button_Brown(frame_middle, text= "Create user", command=create_user_button, height= 35, width=135, font= ("Open Sans", 16))
     button_create_user.place(x=675, y=225)
 
 

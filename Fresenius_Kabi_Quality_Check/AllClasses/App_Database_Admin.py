@@ -163,6 +163,9 @@ class Database_Admin:
         )
 
         conn.close()
+
+        if df.empty:
+            return None
         sap_id_of_selected_person = df.iloc[0]["SAP_user"]
         return sap_id_of_selected_person
 
@@ -352,6 +355,86 @@ class Database_Admin:
 
 
 
+# funkcja umieszczona w people management - middle right
+# funkcja dodająca nowego użytkownika do tabeli users
+
+    def create_user_if_does_not_exist_new_line(self, sap_user, email_address, admin_role, who_changed):
+
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+        script_to_insert_new_row = """
+        INSERT INTO quality_check_users
+        (
+            SAP_user,
+            Email_address,
+            Admin_role,
+            Active_from,
+            Who_changed
+        )
+        VALUES
+        (
+            ?,
+            ?,
+            ?,
+            GETDATE(),
+            ?
+        );
+        """
+
+        cursor.execute(
+            script_to_insert_new_row,
+            sap_user,
+            email_address,
+            admin_role,
+            who_changed
+        )
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+
+# funkcja umieszczona w people management - middle right
+# gdy user jest dodawany do tabeli users, z automatu puszczana jest funkcja dodająca go do tabeli new joiners (kiedy w aplikacji wybrane jest "Yes" przy "New joiner?"
+
+    def create_user_if_does_not_exist_as_new_joiner(self, country, sap_id, who_changed):
+
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+        script_to_insert_new_row = """
+            INSERT INTO quality_check_new_joiners
+            (
+                Country,
+                New_joiner,
+                Line_status,
+                Who_changed,
+                Active_from
+            )
+            VALUES
+            (
+                ?,
+                ?,
+                'Active',
+                ?,
+                GETDATE()
+            );
+            """
+
+        cursor.execute(
+            script_to_insert_new_row,
+            country,
+            sap_id,
+            who_changed
+        )
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+
+# ------------------------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------------------------
 
 # funkcja umieszczona w people management
@@ -375,7 +458,7 @@ class Database_Admin:
         return df["User_name"].tolist()
 
 
-# funkcja umieszczona w people management
+# funkcja umieszczona w people management - bottom left
 # funkcja wprowadzająca nowego usera do tabeli users, który wcześniej postował faktury
 
     def create_user_who_posted_invoices(self, selected_sap_id, typed_email_address):

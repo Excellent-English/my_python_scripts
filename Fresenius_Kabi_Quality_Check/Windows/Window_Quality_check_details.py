@@ -131,8 +131,18 @@ def run_quality_check_details(quality_check_page, first_selected_item, total_ite
     line_frame_top.place(x=25, y=35)
 
 
-    button_load_items = Button_Brown(quality_check_page_details, text= " Save and Next Item   ► ")
-    button_load_items.place(x=450, y=540)
+    button_save_and_next = Button_Brown(quality_check_page_details, text= " Save and Next Item   ► ")
+    button_save_and_next.place(x=380, y=540)
+    button_reject = Button_Standard(
+        quality_check_page_details,
+        text="Reject",
+        fg_color="#A94442",
+        hover_color="#8B3837",
+        text_color="white"
+    )
+    button_reject.place(x=650, y=540)
+    button_error_not_valid = Button_Standard(quality_check_page_details, text= "Error not valid")
+    button_error_not_valid.place(x=820, y=540)
 
 
 # -------------------------------------------------------------------------------------------------------------------
@@ -389,4 +399,22 @@ if __name__ == "__main__":
     main_page = ctk.CTk()
     main_page.withdraw()
 
-    run_quality_check_details(main_page)
+    test_first_selected_item = {
+        "Key_value_for_database": 1,
+        "Document_number_SAP": "5100001234",
+        "Company_code": "1000",
+        "Document_date": "2026-09-28",
+        "Due_date": "2026-10-28",
+        "Amount_local": 100000,
+        "Currency": "PLN",
+        "Amount_EUR": 23500,
+        "Vendor_number": "0000123456",
+        "Internal_external_vendor": "External"
+    }
+
+    run_quality_check_details(
+        quality_check_page=main_page,
+        first_selected_item=test_first_selected_item,
+        total_items=10,
+        items_not_mine=4
+    )
