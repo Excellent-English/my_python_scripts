@@ -9,6 +9,7 @@ from Fresenius_Kabi_Quality_Check.AllClasses.App_Label_Title import App_Label_Ti
 from Fresenius_Kabi_Quality_Check.Windows.Window_Administration_Limit import run_window_administraton_limit
 from Fresenius_Kabi_Quality_Check.Windows.Window_Administration_People import run_window_administraton_people
 from Fresenius_Kabi_Quality_Check.Windows.Window_Administration_Reporting import run_window_administraton_reporting
+from Fresenius_Kabi_Quality_Check.AllClasses.Resource_Path import resource_path
 
 
 def run_window_administraton(menu_page, user_email_address):
@@ -24,7 +25,7 @@ def run_window_administraton(menu_page, user_email_address):
 
     # Dodanie przycisku zawierającego ikonę power off- przycisk zamyka aplikację
     # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/Power_off_icon.png")
+    image = Image.open(resource_path("Images/Power_off_icon.png"))
     # 2. Utworzenie CTkImage
     power_off_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(35, 35))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
@@ -54,7 +55,7 @@ def run_window_administraton(menu_page, user_email_address):
         menu_page.focus_force()
 
     # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/Return_icon.png")
+    image = Image.open(resource_path("Images/Return_icon.png"))
     # 2. Utworzenie CTkImage
     power_off_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(20,30))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
@@ -149,7 +150,7 @@ def run_window_administraton(menu_page, user_email_address):
 
     # Dodanie przycisku zawierającego ikonę quality check
     # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/People management.png")
+    image = Image.open(resource_path("Images/People management.png"))
     # 2. Utworzenie CTkImage
     quality_check_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(100, 100))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
@@ -169,7 +170,7 @@ def run_window_administraton(menu_page, user_email_address):
 
     # Dodanie przycisku zawierającego ikonę proposal
     # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/Limit management.png")
+    image = Image.open(resource_path("Images/Limit management.png"))
     # 2. Utworzenie CTkImage
     proposal_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(100, 100))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
@@ -188,7 +189,7 @@ def run_window_administraton(menu_page, user_email_address):
 
     # Dodanie przycisku zawierającego ikonę administration
     # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/Reporting.png")
+    image = Image.open(resource_path("Images/Reporting.png"))
     # 2. Utworzenie CTkImage
     administration_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(100, 100))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze

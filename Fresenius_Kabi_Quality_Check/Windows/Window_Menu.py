@@ -8,6 +8,7 @@ from Fresenius_Kabi_Quality_Check.AllClasses.App_Frame import AppFrame
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Label_Title import App_Label_Title
 from Fresenius_Kabi_Quality_Check.Windows.Window_Administration import run_window_administraton
 from Fresenius_Kabi_Quality_Check.Windows.Window_Quality_check_main import run_quality_check_menu
+from Fresenius_Kabi_Quality_Check.AllClasses.Resource_Path import resource_path
 
 
 def run_window_menu(main_page, user_email_address, sap_id):
@@ -24,7 +25,7 @@ def run_window_menu(main_page, user_email_address, sap_id):
 
     # Dodanie przycisku zawierającego ikonę power off- przycisk zamyka aplikację
     # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/Power_off_icon.png")
+    image = Image.open(resource_path("Images/Power_off_icon.png"))
     # 2. Utworzenie CTkImage
     power_off_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(35, 35))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
@@ -114,7 +115,7 @@ def run_window_menu(main_page, user_email_address, sap_id):
 
     # Dodanie przycisku zawierającego ikonę quality check
     # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/quality_check.png")
+    image = Image.open(resource_path("Images/quality_check.png"))
     # 2. Utworzenie CTkImage
     quality_check_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(80, 80))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
@@ -134,7 +135,7 @@ def run_window_menu(main_page, user_email_address, sap_id):
 
     # Dodanie przycisku zawierającego ikonę proposal
     # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/proposal.png")
+    image = Image.open(resource_path("Images/proposal.png"))
     # 2. Utworzenie CTkImage
     proposal_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(80, 80))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
@@ -153,7 +154,7 @@ def run_window_menu(main_page, user_email_address, sap_id):
 
     # Dodanie przycisku zawierającego ikonę administration
     # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/administration.png")
+    image = Image.open(resource_path("Images/administration.png"))
     # 2. Utworzenie CTkImage
     administration_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(80, 80))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze

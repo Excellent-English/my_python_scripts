@@ -12,6 +12,7 @@ from Fresenius_Kabi_Quality_Check.AllClasses.Button_Brown import Button_Brown
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Entry_Box import App_Entry_Box
 from Fresenius_Kabi_Quality_Check.Windows.Window_Quality_check_details import run_quality_check_details
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Database import Database
+from Fresenius_Kabi_Quality_Check.AllClasses.Resource_Path import resource_path
 
 db = Database()
 countries = db.get_countries()
@@ -44,7 +45,7 @@ def run_quality_check_menu(menu_page, sap_id):
         menu_page.focus_force()
 
     # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/Return_icon.png")
+    image = Image.open(resource_path("Images/Return_icon.png"))
     # 2. Utworzenie CTkImage
     power_off_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(20, 30))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
@@ -192,7 +193,7 @@ def run_quality_check_menu(menu_page, sap_id):
 
     # Dodanie przycisku zawierającego ikonę power off- przycisk zamyka aplikację
     # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/Power_off_icon.png")
+    image = Image.open(resource_path("Images/Power_off_icon.png"))
     # 2. Utworzenie CTkImage
     power_off_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(35, 35))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
@@ -216,7 +217,7 @@ def run_quality_check_menu(menu_page, sap_id):
 
     # Dodanie przycisku zawierającego ikonę quality check
     # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/quality_check.png")
+    image = Image.open(resource_path("Images/quality_check.png"))
     # 2. Utworzenie CTkImage
     quality_check_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(100, 100))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze

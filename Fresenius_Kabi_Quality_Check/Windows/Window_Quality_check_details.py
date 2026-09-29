@@ -11,6 +11,7 @@ from Fresenius_Kabi_Quality_Check.AllClasses.App_Entry_Box import App_Entry_Box
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Text_Box import  App_Text_Box
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Database import Database
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Radio_Button import App_Radio_Button
+from Fresenius_Kabi_Quality_Check.AllClasses.Resource_Path import resource_path
 
 db = Database()
 countries = db.get_countries()
@@ -49,7 +50,7 @@ def run_quality_check_details(quality_check_page,
         quality_check_page.focus_force()
 
     # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/Return_icon.png")
+    image = Image.open(resource_path("Images/Return_icon.png"))
     # 2. Utworzenie CTkImage
     power_off_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(20, 30))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
@@ -71,6 +72,55 @@ def run_quality_check_details(quality_check_page,
     def disable_close():
         pass
     quality_check_page_details.protocol("WM_DELETE_WINDOW", disable_close)
+
+
+# ---------------------------------------------------------------------------------
+
+
+# funkcja sprawdzająca dostępność przycisku Save & next
+
+    def check_save_button(event=None):
+
+        if str(status_number) == "1":
+            all_completed = all(
+                result.get() in [1, 2]
+                for result in [
+                    radio_result_1,
+                    radio_result_2,
+                    radio_result_3,
+                    radio_result_4,
+                    radio_result_5,
+                    radio_result_6,
+                    radio_result_7,
+                    radio_result_8,
+                    radio_result_9,
+                    radio_result_10,
+                    radio_result_11,
+                    radio_result_12,
+                    radio_result_13
+                ]
+            )
+
+            if all_completed:
+                button_save_and_next.configure(state="normal")
+            else:
+                button_save_and_next.configure(state="disabled")
+
+        elif str(status_number) == "2":
+            follow_up_text = text_box_follow_up.get("1.0","end-1c").strip()
+
+            if len(follow_up_text) > 0:
+                button_save_and_next.configure(state="normal")
+            else:
+                button_save_and_next.configure(state="disabled")
+
+        elif str(status_number) == "4":
+            button_save_and_next.configure(state="normal")
+        else:
+            button_save_and_next.configure(state="disabled")
+
+
+
 
 
 # ---------------------------------------------------------------------------------------------------------
@@ -192,9 +242,9 @@ def run_quality_check_details(quality_check_page,
     number_1_description = App_Label_Title(frame_quality_check_details_bottom, text="Doc. Legal Requirements", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     number_1_description.place(x=65, y=52)
     radio_result_1 = ctk.IntVar(value=-1)
-    radio_ok_1 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_1, value=1)
+    radio_ok_1 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_1, value=1, command=check_save_button)
     radio_ok_1.place(x=240, y=54)
-    radio_not_ok_1 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_1, value=2)
+    radio_not_ok_1 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_1, value=2, command=check_save_button)
     radio_not_ok_1.place(x=310, y=54)
 
     frame_2 = AppFrame(frame_quality_check_details_bottom, width=32, height=32, fg_color = "#E4DFDB", corner_radius=5)
@@ -204,9 +254,9 @@ def run_quality_check_details(quality_check_page,
     number_2_description = App_Label_Title(frame_quality_check_details_bottom, text="Document Type", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     number_2_description.place(x=65, y=87)
     radio_result_2 = ctk.IntVar(value=-1)
-    radio_ok_2 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_2, value=1)
+    radio_ok_2 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_2, value=1, command=check_save_button)
     radio_ok_2.place(x=240, y=89)
-    radio_not_ok_2 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_2, value=2)
+    radio_not_ok_2 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_2, value=2, command=check_save_button)
     radio_not_ok_2.place(x=310, y=89)
 
     frame_3 = AppFrame(frame_quality_check_details_bottom, width=32, height=32, fg_color = "#E4DFDB", corner_radius=5)
@@ -216,9 +266,9 @@ def run_quality_check_details(quality_check_page,
     number_3_description = App_Label_Title(frame_quality_check_details_bottom, text="Vendor", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     number_3_description.place(x=65, y=122)
     radio_result_3 = ctk.IntVar(value=-1)
-    radio_ok_3 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_3, value=1)
+    radio_ok_3 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_3, value=1, command=check_save_button)
     radio_ok_3.place(x=240, y=124)
-    radio_not_ok_3 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_3, value=2)
+    radio_not_ok_3 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_3, value=2, command=check_save_button)
     radio_not_ok_3.place(x=310, y=124)
 
     frame_4 = AppFrame(frame_quality_check_details_bottom, width=32, height=32, fg_color = "#E4DFDB", corner_radius=5)
@@ -228,9 +278,9 @@ def run_quality_check_details(quality_check_page,
     number_4_description = App_Label_Title(frame_quality_check_details_bottom, text="Document Date", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     number_4_description.place(x=65, y=157)
     radio_result_4 = ctk.IntVar(value=-1)
-    radio_ok_4 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_4, value=1)
+    radio_ok_4 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_4, value=1, command=check_save_button)
     radio_ok_4.place(x=240, y=159)
-    radio_not_ok_4 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_4, value=2)
+    radio_not_ok_4 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_4, value=2, command=check_save_button)
     radio_not_ok_4.place(x=310, y=159)
 
     frame_5 = AppFrame(frame_quality_check_details_bottom, width=32, height=32, fg_color = "#E4DFDB", corner_radius=5)
@@ -240,9 +290,9 @@ def run_quality_check_details(quality_check_page,
     number_5_description = App_Label_Title(frame_quality_check_details_bottom, text="Reference", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     number_5_description.place(x=65, y=192)
     radio_result_5 = ctk.IntVar(value=-1)
-    radio_ok_5 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_5, value=1)
+    radio_ok_5 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_5, value=1, command=check_save_button)
     radio_ok_5.place(x=240, y=194)
-    radio_not_ok_5 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_5, value=2)
+    radio_not_ok_5 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_5, value=2, command=check_save_button)
     radio_not_ok_5.place(x=310, y=194)
 
     frame_6 = AppFrame(frame_quality_check_details_bottom, width=32, height=32, fg_color = "#E4DFDB", corner_radius=5)
@@ -252,9 +302,9 @@ def run_quality_check_details(quality_check_page,
     number_6_description = App_Label_Title(frame_quality_check_details_bottom, text="Amounts", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     number_6_description.place(x=65, y=227)
     radio_result_6 = ctk.IntVar(value=-1)
-    radio_ok_6 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_6, value=1)
+    radio_ok_6 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_6, value=1, command=check_save_button)
     radio_ok_6.place(x=240, y=229)
-    radio_not_ok_6 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_6, value=2)
+    radio_not_ok_6 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_6, value=2, command=check_save_button)
     radio_not_ok_6.place(x=310, y=229)
 
     frame_7 = AppFrame(frame_quality_check_details_bottom, width=32, height=32, fg_color = "#E4DFDB", corner_radius=5)
@@ -264,9 +314,9 @@ def run_quality_check_details(quality_check_page,
     number_7_description = App_Label_Title(frame_quality_check_details_bottom, text="Currency", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     number_7_description.place(x=65, y=262)
     radio_result_7 = ctk.IntVar(value=-1)
-    radio_ok_7 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_7, value=1)
+    radio_ok_7 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_7, value=1, command=check_save_button)
     radio_ok_7.place(x=240, y=264)
-    radio_not_ok_7 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_7, value=2)
+    radio_not_ok_7 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_7, value=2, command=check_save_button)
     radio_not_ok_7.place(x=310, y=264)
 
     frame_8 = AppFrame(frame_quality_check_details_bottom, width=32, height=32, fg_color = "#E4DFDB", corner_radius=5)
@@ -276,9 +326,9 @@ def run_quality_check_details(quality_check_page,
     number_8_description = App_Label_Title(frame_quality_check_details_bottom, text="Payment details", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     number_8_description.place(x=65, y=297)
     radio_result_8 = ctk.IntVar(value=-1)
-    radio_ok_8 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_8, value=1)
+    radio_ok_8 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_8, value=1, command=check_save_button)
     radio_ok_8.place(x=240, y=299)
-    radio_not_ok_8 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_8, value=2)
+    radio_not_ok_8 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_8, value=2, command=check_save_button)
     radio_not_ok_8.place(x=310, y=299)
 
 
@@ -294,9 +344,9 @@ def run_quality_check_details(quality_check_page,
     number_9_description = App_Label_Title(frame_quality_check_details_bottom, text="Payment Terms", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     number_9_description.place(x=485, y=52)
     radio_result_9 = ctk.IntVar(value=-1)
-    radio_ok_9 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_9, value=1)
+    radio_ok_9 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_9, value=1, command=check_save_button)
     radio_ok_9.place(x=660, y=54)
-    radio_not_ok_9 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_9, value=2)
+    radio_not_ok_9 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_9, value=2, command=check_save_button)
     radio_not_ok_9.place(x=730, y=54)
 
     frame_10 = AppFrame(frame_quality_check_details_bottom, width=32, height=32, fg_color = "#E4DFDB", corner_radius=5)
@@ -306,9 +356,9 @@ def run_quality_check_details(quality_check_page,
     number_10_description = App_Label_Title(frame_quality_check_details_bottom, text="Text fields", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     number_10_description.place(x=485, y=87)
     radio_result_10 = ctk.IntVar(value=-1)
-    radio_ok_10 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_10, value=1)
+    radio_ok_10 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_10, value=1, command=check_save_button)
     radio_ok_10.place(x=660, y=89)
-    radio_not_ok_10 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_10, value=2)
+    radio_not_ok_10 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_10, value=2, command=check_save_button)
     radio_not_ok_10.place(x=730, y=89)
 
     frame_11 = AppFrame(frame_quality_check_details_bottom, width=32, height=32, fg_color = "#E4DFDB", corner_radius=5)
@@ -318,9 +368,9 @@ def run_quality_check_details(quality_check_page,
     number_11_description = App_Label_Title(frame_quality_check_details_bottom, text="PO/NonPO Coding", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     number_11_description.place(x=485, y=122)
     radio_result_11 = ctk.IntVar(value=-1)
-    radio_ok_11 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_11, value=1)
+    radio_ok_11 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_11, value=1, command=check_save_button)
     radio_ok_11.place(x=660, y=124)
-    radio_not_ok_11 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_11, value=2)
+    radio_not_ok_11 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_11, value=2, command=check_save_button)
     radio_not_ok_11.place(x=730, y=124)
 
     frame_12 = AppFrame(frame_quality_check_details_bottom, width=32, height=32, fg_color = "#E4DFDB", corner_radius=5)
@@ -330,9 +380,9 @@ def run_quality_check_details(quality_check_page,
     number_12_description = App_Label_Title(frame_quality_check_details_bottom, text="Tax Data", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     number_12_description.place(x=485, y=157)
     radio_result_12 = ctk.IntVar(value=-1)
-    radio_ok_12 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_12, value=1)
+    radio_ok_12 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_12, value=1, command=check_save_button)
     radio_ok_12.place(x=660, y=159)
-    radio_not_ok_12 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_12, value=2)
+    radio_not_ok_12 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_12, value=2, command=check_save_button)
     radio_not_ok_12.place(x=730, y=159)
 
     frame_13 = AppFrame(frame_quality_check_details_bottom, width=32, height=32, fg_color = "#E4DFDB", corner_radius=5)
@@ -342,9 +392,9 @@ def run_quality_check_details(quality_check_page,
     number_13_description = App_Label_Title(frame_quality_check_details_bottom, text="Documentation", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     number_13_description.place(x=485, y=192)
     radio_result_13 = ctk.IntVar(value=-1)
-    radio_ok_13 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_13, value=1)
+    radio_ok_13 = App_Radio_Button(frame_quality_check_details_bottom, text="OK", variable=radio_result_13, value=1, command=check_save_button)
     radio_ok_13.place(x=660, y=194)
-    radio_not_ok_13 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_13, value=2)
+    radio_not_ok_13 = App_Radio_Button(frame_quality_check_details_bottom, text="NOT OK", variable=radio_result_13, value=2, command=check_save_button)
     radio_not_ok_13.place(x=730, y=194)
 
 
@@ -391,6 +441,8 @@ def run_quality_check_details(quality_check_page,
         text_box_follow_up.configure(state="disabled",fg_color="#E5E5E5", text_color="#808080")
     else:
         text_box_follow_up.configure(state="normal")
+    text_box_follow_up.bind("<KeyRelease>", check_save_button)
+    check_save_button()
 
     label_follow_up = App_Label_Title(frame_quality_check_details_bottom, text="Follow up:", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     label_follow_up.place(x=765, y=235)
@@ -430,7 +482,7 @@ def run_quality_check_details(quality_check_page,
 
     # Dodanie przycisku zawierającego ikonę power off- przycisk zamyka aplikację
     # 1. Wczytanie obrazu z pliku
-    image = Image.open("../Images/Power_off_icon.png")
+    image = Image.open(resource_path("Images/Power_off_icon.png"))
     # 2. Utworzenie CTkImage
     power_off_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(35, 35))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze

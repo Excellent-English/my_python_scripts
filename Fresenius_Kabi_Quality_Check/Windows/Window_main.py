@@ -1,10 +1,10 @@
 import customtkinter as ctk
 from PIL import Image
 import win32api
-from Fresenius_Kabi_Quality_Check.AllClasses.Button_Brown import Button_Brown
 from Fresenius_Kabi_Quality_Check.Windows.Window_Menu import run_window_menu
 from Fresenius_Kabi_Quality_Check.AllClasses.Button_Standard import Button_Standard
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Database import Database
+from Fresenius_Kabi_Quality_Check.AllClasses.Resource_Path import resource_path
 
 # Pobranie adresu e-mail zalogowanego użytkownika
 user_email_address = win32api.GetUserNameEx(8)
@@ -21,7 +21,8 @@ main_page.resizable(False,False)
 
 # Photo for main page
 # 1. Wczytanie obrazu z pliku.
-image = Image.open("../Images/kabi_logo.png")
+image = Image.open(resource_path("Images/kabi_logo.png"))
+# image = Image.open("../Images/kabi_logo.png")
 # 2. Utworzenie obiektu CTkImage.
 photo_for_main_page = ctk.CTkImage(light_image=image, dark_image=image, size=(280,90))
 # 3. Utworzenie Labela, który TEN obraz wyświetla.
