@@ -75,16 +75,16 @@ def run_window_menu(main_page, user_email_address, sap_id, admin_role):
     label_quality_check_title = App_Label_Title(frame_quality_check, text="Quality check", font= ("Open Sans", 24, "bold"), text_color = "#755a44")
     label_quality_check_title.place(x=160, y=35)
 
-    label_quality_check_title = App_Label_Title(frame_quality_check, text="Verify items from\nthe Quality check part", font= ("Open Sans", 14), text_color = "#8B7A6B")
+    label_quality_check_title = App_Label_Title(frame_quality_check, text="Verify items from\nthe Quality check area", font= ("Open Sans", 14), text_color = "#8B7A6B")
     label_quality_check_title.place(x=160, y=80)
-
-    frame_beige_quality_check = AppFrame(frame_quality_check, width=377.5, height=25, fg_color="#F5F0E8", corner_radius=0, border_width=0)
-    frame_beige_quality_check.place(x=1, y=144.5)
 
     label_quality_check_title.configure(cursor="hand2")
     label_quality_check_title.bind(
         "<Button-1>",
         lambda event: run_quality_check_menu(menu_page, sap_id))
+
+    frame_beige_quality_check = AppFrame(frame_quality_check, width=377.5, height=26, fg_color="#F5F0E8", corner_radius=0, border_width=0)
+    frame_beige_quality_check.place(x=1, y=144.5)
 
     label_beige_proposal_subtitle = App_Label_Title(frame_beige_quality_check, text="REVIEW   •   VALIDATE   •   COMPLETE", font= ("Open Sans", 10), text_color = "#808080", fg_color="#F5F0E8")
     label_beige_proposal_subtitle.place(x=85, y=0)
@@ -97,10 +97,10 @@ def run_window_menu(main_page, user_email_address, sap_id, admin_role):
     label_proposal_title = App_Label_Title(frame_proposal, text="Proposal", font= ("Open Sans", 24, "bold"), text_color = "#755a44")
     label_proposal_title.place(x=160, y=35)
 
-    label_proposal_subtitle = App_Label_Title(frame_proposal, text="Verify items from\nthe Proposal part", font= ("Open Sans", 14), text_color = "#8B7A6B")
+    label_proposal_subtitle = App_Label_Title(frame_proposal, text="Verify items from\nthe Proposal area", font= ("Open Sans", 14), text_color = "#8B7A6B")
     label_proposal_subtitle.place(x=160, y=80)
 
-    frame_beige_proposal = AppFrame(frame_proposal, width=377.5, height=25, fg_color="#F5F0E8", corner_radius=0, border_width=0)
+    frame_beige_proposal = AppFrame(frame_proposal, width=377.5, height=26, fg_color="#F5F0E8", corner_radius=0, border_width=0)
     frame_beige_proposal.place(x=1, y=144.5)
     label_beige_proposal_subtitle = App_Label_Title(frame_beige_proposal, text="REVIEW   •   VALIDATE   •   COMPLETE", font= ("Open Sans", 10), text_color = "#808080", fg_color="#F5F0E8")
     label_beige_proposal_subtitle.place(x=85, y=0)
@@ -124,7 +124,7 @@ def run_window_menu(main_page, user_email_address, sap_id, admin_role):
     label_administration_subtitle = App_Label_Title(frame_administration, text="Manage users, settings\nand system configuration", font= ("Open Sans", 14), text_color = "#8B7A6B")
     label_administration_subtitle.place(x=160, y=80)
 
-    frame_beige_administration = AppFrame(frame_administration, width=377.5, height=25, fg_color="#F5F0E8", corner_radius=0, border_width=0)
+    frame_beige_administration = AppFrame(frame_administration, width=377.5, height=26, fg_color="#F5F0E8", corner_radius=0, border_width=0)
     frame_beige_administration.place(x=1, y=144.5)
     label_beige_administration_subtitle = App_Label_Title(frame_beige_administration, text="REVIEW   •   GRANT   •   REVOKE", font= ("Open Sans", 10), text_color = "#808080", fg_color="#F5F0E8")
     label_beige_administration_subtitle.place(x=100, y=0)
