@@ -33,7 +33,6 @@ def run_window_administraton_people(adm_page, user_email_address):
     # Gdyby była potrzeba zmiany tytułu w kolejnych oknach:
     # menu_page = AppWindow(title="Inny tytuł okna")
 
-
     # Dodanie przycisku zawierającego ikonę power off- przycisk zamyka aplikację
     # 1. Wczytanie obrazu z pliku
     image = Image.open(resource_path("Images/Power_off_icon.png"))

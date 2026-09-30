@@ -11,7 +11,7 @@ from Fresenius_Kabi_Quality_Check.Windows.Window_Quality_check_main import run_q
 from Fresenius_Kabi_Quality_Check.AllClasses.Resource_Path import resource_path
 
 
-def run_window_menu(main_page, user_email_address, sap_id):
+def run_window_menu(main_page, user_email_address, sap_id, admin_role):
     # Zamknij / ukryj główne okno
     main_page.withdraw()   # albo destroy()
     # ctk.deactivate_automatic_dpi_awareness()
@@ -22,6 +22,7 @@ def run_window_menu(main_page, user_email_address, sap_id):
     # menu_page = AppWindow(title="Inny tytuł okna")
 
     print(f"SAP ID used in menu: {sap_id}")
+    print(f"Admin role: {admin_role}")
 
     # Dodanie przycisku zawierającego ikonę power off- przycisk zamyka aplikację
     # 1. Wczytanie obrazu z pliku
@@ -39,9 +40,11 @@ def run_window_menu(main_page, user_email_address, sap_id):
         command= lambda: menu_page.close_the_app(main_page)
     )
     power_btn.image = power_off_icon  # trzymaj referencję!
-    power_btn.place(x=700, y=5)
+    power_btn.place(x=650, y=5)
     menu_page.bind("<Escape>", lambda event: menu_page.close_the_app(main_page))
 
+    logout_subtitle = ctk.CTkLabel(menu_page, text="Logout", font= ("Open Sans", 14), text_color = "white", fg_color = "#755a44")
+    logout_subtitle.place(x=705, y=12)
 
     # zablokuj zamknięcie okna za pomocą "X"
     def disable_close():
@@ -100,10 +103,13 @@ def run_window_menu(main_page, user_email_address, sap_id):
     label_administration_title = App_Label_Title(frame_administration, text="Administration", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
     label_administration_title.place(x=110, y=30)
 
-    label_administration_title.configure(cursor="hand2")
-    label_administration_title.bind(
-        "<Button-1>",
-        lambda event: run_window_administraton(menu_page, user_email_address))
+    # wyłączenie przycisku w przypadku braku admin rights
+    if not admin_role:
+        label_administration_title.configure(text_color="#BDBDBD", cursor="arrow")
+    else:
+        label_administration_title.configure(cursor="hand2")
+        label_administration_title.bind("<Button-1>", lambda event: run_window_administraton(menu_page,user_email_address))
+
 
     label_administration_subtitle = App_Label_Title(frame_administration, text="Manage users, settings\nand system configuration", font= ("Open Sans", 14), text_color = "#8B7A6B")
     label_administration_subtitle.place(x=110, y=65)

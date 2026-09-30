@@ -24,8 +24,6 @@ def run_quality_check_details(quality_check_page,
 
     # Utwórz nowe okno
     quality_check_page_details = AppWindow(banner_text = "Quality check audit", width=1100, height=610, x= 120, y = 25, fg_color="#F6F7F9")
-    # Gdyby była potrzeba zmiany tytułu w kolejnych oknach:
-    # menu_page = AppWindow(title="Inny tytuł okna")
 
     print(f"SAP ID used in quality_check_details: {sap_id}")
     print(f"Oto przekazany słownik: {first_selected_item}")
@@ -72,6 +70,18 @@ def run_quality_check_details(quality_check_page,
     def disable_close():
         pass
     quality_check_page_details.protocol("WM_DELETE_WINDOW", disable_close)
+
+
+# Funkcja kopiująca bieżący SAP Document number
+    def copy_to_clipboard(text):
+        quality_check_page_details.clipboard_clear()
+        quality_check_page_details.clipboard_append(str(text))
+        quality_check_page_details.update_idletasks()
+
+        original_text = label_quality_check_element_1.cget("text")
+        label_quality_check_element_1.configure(text="✓ Copied")
+
+        quality_check_page_details.after(1000,lambda: label_quality_check_element_1.configure(text=original_text))
 
 
 # ---------------------------------------------------------------------------------
@@ -141,6 +151,7 @@ def run_quality_check_details(quality_check_page,
 
     label_quality_check_element_1 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
     label_quality_check_element_1.place(x=34, y=60)
+    label_quality_check_element_1.configure(cursor="hand2")
 
     label_quality_check_subtitle_2 = App_Label_Title(frame_quality_check_details_top, text="Company code", font= ("Open Sans", 10), text_color = "#8B7A6B")
     label_quality_check_subtitle_2.place(x=150, y=40)
@@ -465,6 +476,8 @@ def run_quality_check_details(quality_check_page,
     vendor_type = first_selected_item["Internal_external_vendor"]
 
     label_quality_check_element_1.configure(text=sap_document_number)
+    label_quality_check_element_1.bind("<Button-1>",lambda event: copy_to_clipboard(sap_document_number))
+
     label_quality_check_element_2.configure(text=company_code)
     label_quality_check_element_3.configure(text=document_date)
     label_quality_check_element_4.configure(text=due_date)
@@ -528,7 +541,15 @@ if __name__ == "__main__":
 
     run_quality_check_details(
         quality_check_page=main_page,
+        sap_id="TEST_USER",
         first_selected_item=test_first_selected_item,
         total_items=10,
-        items_not_mine=4
+        items_not_mine=4,
+        status_number=1,
+        country="Poland",
+        company_code="1000",
+        qc_status="Open",
+        vendor_type="External",
+        vendor_number="0000123456",
+        order_by="Document_number_SAP"
     )

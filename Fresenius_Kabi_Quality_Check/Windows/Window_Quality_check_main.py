@@ -33,6 +33,7 @@ def run_quality_check_menu(menu_page, sap_id):
     # Gdyby była potrzeba zmiany tytułu w kolejnych oknach:
     # menu_page = AppWindow(title="Inny tytuł okna")
 
+
     total_items = 0
     items_not_mine = 0
 # ---------------------------------------------------------------------------------
@@ -246,4 +247,4 @@ if __name__ == "__main__":
     main_page = ctk.CTk()
     main_page.withdraw()
 
-    run_quality_check_menu(main_page)
+    run_quality_check_menu(main_page, sap_id=None)
