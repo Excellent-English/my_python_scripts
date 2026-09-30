@@ -17,7 +17,7 @@ def run_window_menu(main_page, user_email_address, sap_id, admin_role):
     # ctk.deactivate_automatic_dpi_awareness()
 
     # Utwórz nowe okno menu
-    menu_page = AppWindow(banner_text = "Main menu", width=800, height=550, x= 310, y = 90, fg_color="#F6F7F9")
+    menu_page = AppWindow(banner_text = "", width=1000, height=600, x= 130, y = 30, fg_color="#F6F7F9")
     # Gdyby była potrzeba zmiany tytułu w kolejnych oknach:
     # menu_page = AppWindow(title="Inny tytuł okna")
 
@@ -40,11 +40,11 @@ def run_window_menu(main_page, user_email_address, sap_id, admin_role):
         command= lambda: menu_page.close_the_app(main_page)
     )
     power_btn.image = power_off_icon  # trzymaj referencję!
-    power_btn.place(x=650, y=5)
+    power_btn.place(x=830, y=5)
     menu_page.bind("<Escape>", lambda event: menu_page.close_the_app(main_page))
 
     logout_subtitle = ctk.CTkLabel(menu_page, text="Logout", font= ("Open Sans", 14), text_color = "white", fg_color = "#755a44")
-    logout_subtitle.place(x=705, y=12)
+    logout_subtitle.place(x=885, y=12)
 
     # zablokuj zamknięcie okna za pomocą "X"
     def disable_close():
@@ -52,56 +52,66 @@ def run_window_menu(main_page, user_email_address, sap_id, admin_role):
     menu_page.protocol("WM_DELETE_WINDOW", disable_close)
 
 
-    line_bottom = ctk.CTkFrame(menu_page, height=2, width=800, fg_color="#DDE2E7", corner_radius=0)
-    line_bottom.place(x=0, y=500)
+# ---------------------------------------------------------------------------------------------------------
+# ramki i podpisy do ramek na głównej stronie
+# ---------------------------------------------------------------------------------------------------------
 
+    label_top_welcome = App_Label_Title(menu_page, text="WELCOME", font= ("Open Sans", 14), text_color = "#A0A0A0", fg_color="#F6F7F9")
+    label_top_welcome.place(x=455, y=65)
+
+    label_top_title = App_Label_Title(menu_page, text="What would you like to do today?", font= ("Open Sans", 28, "bold"), text_color = "#755a44", fg_color="#F6F7F9")
+    label_top_title.place(x=285, y=100)
+
+    label_top_subtitle = App_Label_Title(menu_page, text="Select a module to continue", font= ("Open Sans", 16), text_color = "#A0A0A0", fg_color="#F6F7F9")
+    label_top_subtitle.place(x=390, y=140)
 
 # ---------------------------------------------------------------------------------------------------------
 # ramki i podpisy do ramek na głównej stronie
 # ---------------------------------------------------------------------------------------------------------
 
-    label_top_title = App_Label_Title(menu_page, text="What would you like to do?", font= ("Open Sans", 24, "bold"), text_color = "#755a44", fg_color="#F6F7F9")
-    label_top_title.place(x=240, y=90)
+    frame_quality_check = AppFrame(menu_page, width=380, height=180)
+    frame_quality_check.place(x=105, y=190)
 
-    label_top_subtitle = App_Label_Title(menu_page, text="Select an action to continue", font= ("Open Sans", 14), text_color = "#8B7A6B", fg_color="#F6F7F9")
-    label_top_subtitle.place(x=300, y=120)
+    label_quality_check_title = App_Label_Title(frame_quality_check, text="Quality check", font= ("Open Sans", 24, "bold"), text_color = "#755a44")
+    label_quality_check_title.place(x=160, y=35)
 
-# ---------------------------------------------------------------------------------------------------------
-# ramki i podpisy do ramek na głównej stronie
-# ---------------------------------------------------------------------------------------------------------
+    label_quality_check_title = App_Label_Title(frame_quality_check, text="Verify items from\nthe Quality check part", font= ("Open Sans", 14), text_color = "#8B7A6B")
+    label_quality_check_title.place(x=160, y=80)
 
-    frame_quality_check = AppFrame(menu_page)
-    frame_quality_check.place(x=100, y=170)
-
-    label_quality_check_title = App_Label_Title(frame_quality_check, text="Quality check", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
-    label_quality_check_title.place(x=110, y=30)
+    frame_beige_quality_check = AppFrame(frame_quality_check, width=377.5, height=25, fg_color="#F5F0E8", corner_radius=0, border_width=0)
+    frame_beige_quality_check.place(x=1, y=144.5)
 
     label_quality_check_title.configure(cursor="hand2")
     label_quality_check_title.bind(
         "<Button-1>",
         lambda event: run_quality_check_menu(menu_page, sap_id))
 
-    label_quality_check_subtitle = App_Label_Title(frame_quality_check, text="Verify items from\nQuality check", font= ("Open Sans", 14), text_color = "#8B7A6B")
-    label_quality_check_subtitle.place(x=110, y=65)
+    label_beige_proposal_subtitle = App_Label_Title(frame_beige_quality_check, text="REVIEW   •   VALIDATE   •   COMPLETE", font= ("Open Sans", 10), text_color = "#808080", fg_color="#F5F0E8")
+    label_beige_proposal_subtitle.place(x=85, y=0)
 
 # ---------------------------------------------------------------------------------------------------------
 
-    frame_proposal = AppFrame(menu_page)
-    frame_proposal.place(x=415, y=170)
+    frame_proposal = AppFrame(menu_page, width=380, height=180)
+    frame_proposal.place(x=505, y=190)
 
-    label_proposal_title = App_Label_Title(frame_proposal, text="Proposal", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
-    label_proposal_title.place(x=110, y=30)
+    label_proposal_title = App_Label_Title(frame_proposal, text="Proposal", font= ("Open Sans", 24, "bold"), text_color = "#755a44")
+    label_proposal_title.place(x=160, y=35)
 
-    label_proposal_subtitle = App_Label_Title(frame_proposal, text="Verify items from\nthe Proposal", font= ("Open Sans", 14), text_color = "#8B7A6B")
-    label_proposal_subtitle.place(x=110, y=65)
+    label_proposal_subtitle = App_Label_Title(frame_proposal, text="Verify items from\nthe Proposal part", font= ("Open Sans", 14), text_color = "#8B7A6B")
+    label_proposal_subtitle.place(x=160, y=80)
+
+    frame_beige_proposal = AppFrame(frame_proposal, width=377.5, height=25, fg_color="#F5F0E8", corner_radius=0, border_width=0)
+    frame_beige_proposal.place(x=1, y=144.5)
+    label_beige_proposal_subtitle = App_Label_Title(frame_beige_proposal, text="REVIEW   •   VALIDATE   •   COMPLETE", font= ("Open Sans", 10), text_color = "#808080", fg_color="#F5F0E8")
+    label_beige_proposal_subtitle.place(x=85, y=0)
 
 # ---------------------------------------------------------------------------------------------------------
 
-    frame_administration = AppFrame(menu_page)
-    frame_administration.place(x=250, y=320)
+    frame_administration = AppFrame(menu_page, width=380, height=180)
+    frame_administration.place(x=300, y=385)
 
-    label_administration_title = App_Label_Title(frame_administration, text="Administration", font= ("Open Sans", 22, "bold"), text_color = "#755a44")
-    label_administration_title.place(x=110, y=30)
+    label_administration_title = App_Label_Title(frame_administration, text="Administration", font= ("Open Sans", 24, "bold"), text_color = "#755a44")
+    label_administration_title.place(x=160, y=35)
 
     # wyłączenie przycisku w przypadku braku admin rights
     if not admin_role:
@@ -112,7 +122,12 @@ def run_window_menu(main_page, user_email_address, sap_id, admin_role):
 
 
     label_administration_subtitle = App_Label_Title(frame_administration, text="Manage users, settings\nand system configuration", font= ("Open Sans", 14), text_color = "#8B7A6B")
-    label_administration_subtitle.place(x=110, y=65)
+    label_administration_subtitle.place(x=160, y=80)
+
+    frame_beige_administration = AppFrame(frame_administration, width=377.5, height=25, fg_color="#F5F0E8", corner_radius=0, border_width=0)
+    frame_beige_administration.place(x=1, y=144.5)
+    label_beige_administration_subtitle = App_Label_Title(frame_beige_administration, text="REVIEW   •   GRANT   •   REVOKE", font= ("Open Sans", 10), text_color = "#808080", fg_color="#F5F0E8")
+    label_beige_administration_subtitle.place(x=100, y=0)
 
 
 # ---------------------------------------------------------------------------------------------------------
@@ -123,59 +138,59 @@ def run_window_menu(main_page, user_email_address, sap_id, admin_role):
     # 1. Wczytanie obrazu z pliku
     image = Image.open(resource_path("Images/quality_check.png"))
     # 2. Utworzenie CTkImage
-    quality_check_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(80, 80))
+    quality_check_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(120, 120))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
     quality_check_btn = ctk.CTkButton(
         frame_quality_check,
         image=quality_check_icon,
         text="",
-        width=80,
-        height=80,
+        width=120,
+        height=120,
         fg_color="white",
         hover=False,
         border_width=0,
         command=None
     )
     quality_check_btn.image = quality_check_icon  # trzymaj referencję!
-    quality_check_btn.place(x=10, y=20)
+    quality_check_btn.place(x=10, y=10)
 
     # Dodanie przycisku zawierającego ikonę proposal
     # 1. Wczytanie obrazu z pliku
     image = Image.open(resource_path("Images/proposal.png"))
     # 2. Utworzenie CTkImage
-    proposal_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(80, 80))
+    proposal_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(120, 120))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
     proposal_btn = ctk.CTkButton(
         frame_proposal,
         image=proposal_icon,
         text="",
-        width=80, height=80,
+        width=120, height=120,
         fg_color="white",
         hover=False,
         border_width=0,
         command=None
     )
     proposal_btn.image = proposal_icon  # trzymaj referencję!
-    proposal_btn.place(x=10, y=20)
+    proposal_btn.place(x=10, y=10)
 
     # Dodanie przycisku zawierającego ikonę administration
     # 1. Wczytanie obrazu z pliku
     image = Image.open(resource_path("Images/administration.png"))
     # 2. Utworzenie CTkImage
-    administration_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(80, 80))
+    administration_icon = ctk.CTkImage(light_image=image, dark_image=image, size=(120, 120))
     # 3. Przycisk z ikoną (bez tekstu) osadzony na banerze
     administration_btn = ctk.CTkButton(
         frame_administration,
         image=administration_icon,
         text="",
-        width=80, height=80,
+        width=120, height=120,
         fg_color="white",
         hover=False,
         border_width=0,
         command=None
     )
     administration_btn.image = administration_icon  # trzymaj referencję!
-    administration_btn.place(x=10, y=20)
+    administration_btn.place(x=10, y=10)
 
 
 
@@ -192,4 +207,4 @@ if __name__ == "__main__":
     main_page = ctk.CTk()
     main_page.withdraw()
 
-    run_window_menu(main_page)
+    run_window_menu(main_page, "ppp@ggg.com", "SAP1", "admin")
