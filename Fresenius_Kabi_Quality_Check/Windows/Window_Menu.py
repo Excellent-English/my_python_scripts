@@ -57,10 +57,10 @@ def run_window_menu(main_page, user_email_address, sap_id, admin_role):
 # ---------------------------------------------------------------------------------------------------------
 
     label_top_welcome = App_Label_Title(menu_page, text="WELCOME", font= ("Open Sans", 14), text_color = "#A0A0A0", fg_color="#F6F7F9")
-    label_top_welcome.place(x=455, y=65)
+    label_top_welcome.place(x=453, y=65)
 
     label_top_title = App_Label_Title(menu_page, text="What would you like to do today?", font= ("Open Sans", 28, "bold"), text_color = "#755a44", fg_color="#F6F7F9")
-    label_top_title.place(x=285, y=100)
+    label_top_title.place(x=275, y=100)
 
     label_top_subtitle = App_Label_Title(menu_page, text="Select a module to continue", font= ("Open Sans", 16), text_color = "#A0A0A0", fg_color="#F6F7F9")
     label_top_subtitle.place(x=390, y=140)
@@ -75,13 +75,11 @@ def run_window_menu(main_page, user_email_address, sap_id, admin_role):
     label_quality_check_title = App_Label_Title(frame_quality_check, text="Quality check", font= ("Open Sans", 24, "bold"), text_color = "#755a44")
     label_quality_check_title.place(x=160, y=35)
 
-    label_quality_check_title = App_Label_Title(frame_quality_check, text="Verify items from\nthe Quality check area", font= ("Open Sans", 14), text_color = "#8B7A6B")
-    label_quality_check_title.place(x=160, y=80)
+    label_quality_check_subtitle = App_Label_Title(frame_quality_check, text="Verify items from\nthe Quality check area", font= ("Open Sans", 14), text_color = "#8B7A6B")
+    label_quality_check_subtitle.place(x=160, y=80)
 
     label_quality_check_title.configure(cursor="hand2")
-    label_quality_check_title.bind(
-        "<Button-1>",
-        lambda event: run_quality_check_menu(menu_page, sap_id))
+    label_quality_check_title.bind("<Button-1>", lambda event: run_quality_check_menu(menu_page, sap_id))
 
     frame_beige_quality_check = AppFrame(frame_quality_check, width=377.5, height=26, fg_color="#F5F0E8", corner_radius=0, border_width=0)
     frame_beige_quality_check.place(x=1, y=144.5)

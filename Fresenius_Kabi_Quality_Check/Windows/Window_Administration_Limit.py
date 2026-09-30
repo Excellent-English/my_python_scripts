@@ -98,6 +98,8 @@ def run_window_administraton_limit(adm_page, user_email_address):
         text_input_category_2.delete(0, "end")
         text_input_category_3.delete(0, "end")
 
+        check_save_changes_button()
+
 
     def when_selection_changes_admin(*_):
         global country, company_code, current_monthly_posted_documents, current_amount_limit, current_new_hire_percentage
@@ -127,6 +129,7 @@ def run_window_administraton_limit(adm_page, user_email_address):
 
         print(country)
         print(company_code)
+        check_save_changes_button()
         return country, company_code, current_monthly_posted_documents, current_amount_limit, current_new_hire_percentage
 
 
@@ -242,9 +245,27 @@ def run_window_administraton_limit(adm_page, user_email_address):
     label_step_3_subtitle = App_Label_Title(frame_step_3, text="Save all the changes", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_step_3_subtitle.place(x=70, y=50)
 
-    button_load_items = Button_Brown(frame_step_3, text= "💾  Save changes", command=save_changes_button)
+    button_load_items = Button_Brown(frame_step_3, text= "💾  Save changes", command=save_changes_button, state="disabled")
     button_load_items.place(x=63, y=127)
 
+
+    def check_save_changes_button(event=None):
+        selected_country = dropdown_countries.get()
+        selected_company_code = dropdown_company_codes.get()
+        value_1 = text_input_category_1.get().strip()
+        value_2 = text_input_category_2.get().strip()
+        value_3 = text_input_category_3.get().strip()
+
+        if (selected_country != "---" and selected_company_code != "---"
+                and value_1 != "" and value_2 != "" and value_3 != ""):
+            button_load_items.configure(state="normal")
+        else:
+            button_load_items.configure(state="disabled")
+
+    text_input_category_1.bind("<KeyRelease>", check_save_changes_button)
+    text_input_category_2.bind("<KeyRelease>", check_save_changes_button)
+    text_input_category_3.bind("<KeyRelease>", check_save_changes_button)
+    check_save_changes_button()
 
 # ---------------------------------------------------------------------------------------------------------
 # ramka na dole ekranu służąca do dodawania kraju i company codu
@@ -282,8 +303,8 @@ def run_window_administraton_limit(adm_page, user_email_address):
     text_input_bottom_category_3.place(x=505, y=138)
 
 
-    button_load_items = Button_Brown(frame_bottom, command=create_item_button, text= "➕  Create item")
-    button_load_items.place(x=693, y=98)
+    button_create_items = Button_Brown(frame_bottom, command=create_item_button, text= "➕  Create item")
+    button_create_items.place(x=693, y=98)
 
 
 if __name__ == "__main__":

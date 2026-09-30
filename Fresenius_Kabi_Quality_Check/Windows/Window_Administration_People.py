@@ -139,6 +139,7 @@ def run_window_administraton_people(adm_page, user_email_address):
             label_middle_left_admin_yes_no.configure(text="Yes")
         else:
             label_middle_left_admin_yes_no.configure(text="No")
+        check_admin_buttons()
 
         sap_id = db_admin.sap_id_for_selected_employee(typed_email_address_top_right)
         if db_admin.is_selected_employee_new_joiner(sap_id):
@@ -173,6 +174,8 @@ def run_window_administraton_people(adm_page, user_email_address):
         else:
             label_middle_left_admin_yes_no.configure(text="No")
 
+        check_admin_buttons()
+
 
     def revoke_admin_access():
 
@@ -184,6 +187,8 @@ def run_window_administraton_people(adm_page, user_email_address):
             label_middle_left_admin_yes_no.configure(text="Yes")
         else:
             label_middle_left_admin_yes_no.configure(text="No")
+
+        check_admin_buttons()
 
 
     def add_new_joiner_to_new_country():
@@ -206,6 +211,7 @@ def run_window_administraton_people(adm_page, user_email_address):
         dropdown_middle_left_countries_added.set_values(countries_where_new_joiner_is_added)
         dropdown_middle_left_countries_to_remove.set_values(countries_where_new_joiner_is_added)
         dropdown_middle_left_countries_to_remove.set("---")
+        check_remove_new_joiner_button()
 
         # odświeżenie list rozwijanych z middle right
         dropdown_middle_right_new_joiner.set("---")
@@ -215,6 +221,7 @@ def run_window_administraton_people(adm_page, user_email_address):
         countries_where_new_joiner_is_not_added = db_admin.get_countries_not_assigned_to_user(sap_id)
         dropdown_middle_left_new_joiner_countries_to_add.set_values(countries_where_new_joiner_is_not_added)
         dropdown_middle_left_new_joiner_countries_to_add.set("---")
+        check_add_new_joiner_button()
 
         dropdown_middle_left_countries_added.set("---")
 
@@ -239,6 +246,7 @@ def run_window_administraton_people(adm_page, user_email_address):
         dropdown_middle_left_countries_added.set_values(countries_where_new_joiner_is_added)
         dropdown_middle_left_countries_to_remove.set_values(countries_where_new_joiner_is_added)
         dropdown_middle_left_countries_to_remove.set("---")
+        check_remove_new_joiner_button()
 
         # odświeżenie list rozwijanych z middle right
         dropdown_middle_right_new_joiner.set("---")
@@ -248,6 +256,7 @@ def run_window_administraton_people(adm_page, user_email_address):
         countries_where_new_joiner_is_not_added = db_admin.get_countries_not_assigned_to_user(sap_id)
         dropdown_middle_left_new_joiner_countries_to_add.set_values(countries_where_new_joiner_is_not_added)
         dropdown_middle_left_new_joiner_countries_to_add.set("---")
+        check_add_new_joiner_button()
 
         dropdown_middle_left_countries_added.set("---")
 
@@ -278,6 +287,8 @@ def run_window_administraton_people(adm_page, user_email_address):
         dropdown_middle_right_new_joiner_country.set("---")
         text_input_middle_right_sap_id.delete(0, "end")
 
+        check_create_user_button()
+
 
 # ---------------------------------------------------------------------------------------------------------
 # funkcje bottom left
@@ -294,6 +305,7 @@ def run_window_administraton_people(adm_page, user_email_address):
         updated_sap_ids_bottom_left = db_admin.get_users_who_posted_but_are_not_visible()
         dropdown_bottom_left_sap_ids.set_values(updated_sap_ids_bottom_left)
         dropdown_bottom_left_sap_ids.set("choose SAP ID")
+        check_add_user_button()
 
 
 # ---------------------------------------------------------------------------------------------------------
@@ -311,6 +323,7 @@ def run_window_administraton_people(adm_page, user_email_address):
         updated_sap_ids_bottom_right = db_admin.get_users_from_users_with_no_email()
         dropdown_bottom_right_sap_ids.set_values(updated_sap_ids_bottom_right)
         dropdown_bottom_right_sap_ids.set("choose SAP ID")
+        check_update_user_button()
 
 
 # ---------------------------------------------------------------------------------------------------------
@@ -335,8 +348,17 @@ def run_window_administraton_people(adm_page, user_email_address):
     text_input_top_email_address = App_Entry_Box(frame_top_right, placeholder_text="--- enter full e-mail address ---", width = 300, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
     text_input_top_email_address.place(x=20, y=15)
 
-    button_check_user = Button_Brown(frame_top_right, text= "Check user   ✔", command=check_if_user_exists_top_right, height= 35, width=135, font= ("Open Sans", 16))
+    button_check_user = Button_Brown(frame_top_right, text= "Check user   ✔", command=check_if_user_exists_top_right, state="disabled", height= 35, width=135, font= ("Open Sans", 16))
     button_check_user.place(x=330, y=15)
+
+    def check_email_entry(event=None):
+        if text_input_top_email_address.get().strip():
+            button_check_user.configure(state="normal")
+        else:
+            button_check_user.configure(state="disabled")
+
+    text_input_top_email_address.bind("<KeyRelease>", check_email_entry)
+
 
 # ---------------------------------------------------------------------------------------------------------
 # frame middle left part
@@ -352,12 +374,26 @@ def run_window_administraton_people(adm_page, user_email_address):
 
     label_middle_left_is_admin = App_Label_Title(frame_middle, text="Admin?", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_middle_left_is_admin.place(x=10, y=70)
-    label_middle_left_admin_yes_no = App_Label_Title(frame_middle, text="Yes", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
+    label_middle_left_admin_yes_no = App_Label_Title(frame_middle, text="", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_middle_left_admin_yes_no.place(x=110, y=70)
-    button_middle_left_grant = Button_Brown(frame_middle, text= "Grant access", command=grant_admin_access, height= 35, width=135, font= ("Open Sans", 16))
+    button_middle_left_grant = Button_Brown(frame_middle, text= "Grant access", command=grant_admin_access, state="disabled", height= 35, width=135, font= ("Open Sans", 16))
     button_middle_left_grant.place(x=180, y=68)
-    button_middle_left_remove = Button_Brown(frame_middle, text= "Revoke access", command=revoke_admin_access, height= 35, width=135, font= ("Open Sans", 16))
+    button_middle_left_remove = Button_Brown(frame_middle, text= "Revoke access", command=revoke_admin_access, state="disabled", height= 35, width=135, font= ("Open Sans", 16))
     button_middle_left_remove.place(x=330, y=68)
+
+    def check_admin_buttons():
+        admin_status = label_middle_left_admin_yes_no.cget("text")
+        if admin_status == "Yes":
+            button_middle_left_grant.configure(state="disabled")
+            button_middle_left_remove.configure(state="normal")
+        elif admin_status == "No":
+            button_middle_left_grant.configure(state="normal")
+            button_middle_left_remove.configure(state="disabled")
+        else:
+            button_middle_left_grant.configure(state="disabled")
+            button_middle_left_remove.configure(state="disabled")
+
+    check_admin_buttons()
 
     label_middle_left_is_new_joiner = App_Label_Title(frame_middle, text="New joiner?", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_middle_left_is_new_joiner.place(x=10, y=120)
@@ -371,19 +407,38 @@ def run_window_administraton_people(adm_page, user_email_address):
 
     label_middle_left_choose_country_to_add = App_Label_Title(frame_middle, text="Add as new joiner to:", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_middle_left_choose_country_to_add.place(x=10, y=170)
-    dropdown_middle_left_new_joiner_countries_to_add = AppComboBox(frame_middle, width = 160, values=countries_where_new_joiner_is_not_added)
+    dropdown_middle_left_new_joiner_countries_to_add = AppComboBox(frame_middle, width = 160, values=countries_where_new_joiner_is_not_added, command=lambda value: check_add_new_joiner_button())
     dropdown_middle_left_new_joiner_countries_to_add.place(x=180, y=166)
     dropdown_middle_left_new_joiner_countries_to_add.set("---")
-    button_middle_left_add_nj = Button_Brown(frame_middle, text= "Add", command=add_new_joiner_to_new_country, height= 35, width=100, font= ("Open Sans", 16))
+    button_middle_left_add_nj = Button_Brown(frame_middle, text= "Add", command=add_new_joiner_to_new_country, state="disabled", height= 35, width=100, font= ("Open Sans", 16))
     button_middle_left_add_nj.place(x=360, y=166)
+
+    def check_add_new_joiner_button(event=None):
+        selected_country = dropdown_middle_left_new_joiner_countries_to_add.get()
+        if selected_country != "---":
+            button_middle_left_add_nj.configure(state="normal")
+        else:
+            button_middle_left_add_nj.configure(state="disabled")
+
+    check_add_new_joiner_button()
+
 
     label_middle_left_choose_country_to_remove = App_Label_Title(frame_middle, text="Remove new joiner from:", font= ("Open Sans", 14), text_color = "#8B7A6B", justify="center")
     label_middle_left_choose_country_to_remove.place(x=10, y=220)
-    dropdown_middle_left_countries_to_remove = AppComboBox(frame_middle, width = 160, values=countries_where_new_joiner_is_added)
+    dropdown_middle_left_countries_to_remove = AppComboBox(frame_middle, width = 160, values=countries_where_new_joiner_is_added, command=lambda value: check_remove_new_joiner_button())
     dropdown_middle_left_countries_to_remove.place(x=180, y=216)
     dropdown_middle_left_countries_to_remove.set("---")
-    button_middle_left_remove_nj = Button_Brown(frame_middle, text= "Remove", command=deactivate_country_from_new_joiners_for_user, height= 35, width=100, font= ("Open Sans", 16))
+    button_middle_left_remove_nj = Button_Brown(frame_middle, text= "Remove", command=deactivate_country_from_new_joiners_for_user, state="disabled", height= 35, width=100, font= ("Open Sans", 16))
     button_middle_left_remove_nj.place(x=360, y=216)
+
+    def check_remove_new_joiner_button(event=None):
+        selected_country = dropdown_middle_left_countries_to_remove.get()
+        if selected_country != "---":
+            button_middle_left_remove_nj.configure(state="normal")
+        else:
+            button_middle_left_remove_nj.configure(state="disabled")
+
+    check_remove_new_joiner_button()
 
 
 # linia pomiędzy 2 opcjami
@@ -421,8 +476,45 @@ def run_window_administraton_people(adm_page, user_email_address):
     dropdown_middle_right_new_joiner_country.place(x=810, y=166)
     dropdown_middle_right_new_joiner_country.set("Choose country")
 
-    button_create_user = Button_Brown(frame_middle, text= "Create user", command=create_user_button, height= 35, width=135, font= ("Open Sans", 16))
+    button_create_user = Button_Brown(frame_middle, text= "Create user", command=create_user_button, state="disabled", height= 35, width=135, font= ("Open Sans", 16))
     button_create_user.place(x=675, y=225)
+
+    def check_create_user_button(event=None):
+
+        sap_id = text_input_middle_right_sap_id.get().strip()
+        admin_rights = dropdown_middle_right_admin_rights.get()
+        new_joiner = dropdown_middle_right_new_joiner.get()
+        country = dropdown_middle_right_new_joiner_country.get()
+
+        enable_button = True
+
+        # SAP ID wymagane
+        if sap_id == "":
+            enable_button = False
+
+        # Admin Rights wymagane
+        if admin_rights == "---":
+            enable_button = False
+
+        # New Joiner wymagane
+        if new_joiner == "---":
+            enable_button = False
+
+        # Jeśli New Joiner = Yes, kraj jest wymagany
+        if new_joiner == "Yes" and country == "Choose country":
+            enable_button = False
+
+        if enable_button:
+            button_create_user.configure(state="normal")
+        else:
+            button_create_user.configure(state="disabled")
+
+    text_input_middle_right_sap_id.bind("<KeyRelease>", check_create_user_button)
+    dropdown_middle_right_admin_rights.configure(command=lambda value: check_create_user_button())
+    dropdown_middle_right_new_joiner.configure(command=lambda value: check_create_user_button())
+    dropdown_middle_right_new_joiner_country.configure(command=lambda value: check_create_user_button())
+    check_create_user_button()
+
 
 
 # ---------------------------------------------------------------------------------------------------------
@@ -435,15 +527,26 @@ def run_window_administraton_people(adm_page, user_email_address):
     label_bottom_left_title = App_Label_Title(frame_bottom_left, text="Users who posted invoices but are not added to the 'Users' table", font= ("Open Sans", 14), text_color = "#755a44")
     label_bottom_left_title.place(x=25, y=5)
 
-    dropdown_bottom_left_sap_ids = AppComboBox(frame_bottom_left, values=users_who_posted, width = 150, height=30)
+    dropdown_bottom_left_sap_ids = AppComboBox(frame_bottom_left, values=users_who_posted, command=lambda value: check_add_user_button(), width = 150, height=30)
     dropdown_bottom_left_sap_ids.place(x=90, y=35)
     dropdown_bottom_left_sap_ids.set("choose SAP ID")
 
     text_input_bottom_left_email_address = App_Entry_Box(frame_bottom_left, placeholder_text="--- enter full e-mail address ---", width = 300, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
     text_input_bottom_left_email_address.place(x=20, y=72)
 
-    button_update_user_left = Button_Brown(frame_bottom_left, text= "Add user", command=add_user_bottom_left, height= 35, width=135, font= ("Open Sans", 16))
+    button_update_user_left = Button_Brown(frame_bottom_left, text= "Add user", command=add_user_bottom_left, state="disabled", height= 35, width=135, font= ("Open Sans", 16))
     button_update_user_left.place(x=340, y=50)
+
+    def check_add_user_button(event=None):
+        selected_sap_id = dropdown_bottom_left_sap_ids.get()
+        email_address = text_input_bottom_left_email_address.get().strip()
+        if (selected_sap_id != "choose SAP ID" and email_address != ""):
+            button_update_user_left.configure(state="normal")
+        else:
+            button_update_user_left.configure(state="disabled")
+
+    text_input_bottom_left_email_address.bind("<KeyRelease>",check_add_user_button)
+    check_add_user_button()
 
 # ---------------------------------------------------------------------------------------------------------
 # frame bottom_right
@@ -455,16 +558,26 @@ def run_window_administraton_people(adm_page, user_email_address):
     label_bottom_right_title = App_Label_Title(frame_bottom_right, text="Users with no e-mail address in the 'Users' table", font= ("Open Sans", 14), text_color = "#755a44")
     label_bottom_right_title.place(x=80, y=5)
 
-    dropdown_bottom_right_sap_ids = AppComboBox(frame_bottom_right, width = 150, height=30, values=users_with_sap_id_without_email)
+    dropdown_bottom_right_sap_ids = AppComboBox(frame_bottom_right, width = 150, height=30, values=users_with_sap_id_without_email, command=lambda value: check_update_user_button())
     dropdown_bottom_right_sap_ids.place(x=90, y=35)
     dropdown_bottom_right_sap_ids.set("choose SAP ID")
 
     text_input_bottom_right_email_address = App_Entry_Box(frame_bottom_right, placeholder_text="--- enter full e-mail address ---", width = 300, height= 35, fg_color = "white", justify="left", font= ("Open Sans", 14))
     text_input_bottom_right_email_address.place(x=20, y=72)
 
-    button_update_user_right = Button_Brown(frame_bottom_right, text= "Update user", command=update_user_bottom_right, height= 35, width=135, font= ("Open Sans", 16))
+    button_update_user_right = Button_Brown(frame_bottom_right, text= "Update user", command=update_user_bottom_right, state="disabled", height= 35, width=135, font= ("Open Sans", 16))
     button_update_user_right.place(x=340, y=50)
 
+    def check_update_user_button(event=None):
+        selected_sap_id = dropdown_bottom_right_sap_ids.get()
+        email_address = text_input_bottom_right_email_address.get().strip()
+        if (selected_sap_id != "choose SAP ID" and email_address != ""):
+            button_update_user_right.configure(state="normal")
+        else:
+            button_update_user_right.configure(state="disabled")
+
+    text_input_bottom_right_email_address.bind("<KeyRelease>", check_update_user_button)
+    check_update_user_button()
 
 # ---------------------------------------------------------------------------------------------------------
 # konfiguracja widoczności kontrolek z poszczególnych obszarów
