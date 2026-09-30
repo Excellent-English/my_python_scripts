@@ -180,6 +180,8 @@ def run_window_administraton_limit(adm_page, user_email_address):
         text_input_bottom_category_2.delete(0, "end")
         text_input_bottom_category_3.delete(0, "end")
 
+        check_create_item_button()
+
         updated_countries = db_admin.get_countries_limits()
         dropdown_countries.set_values(updated_countries)
 
@@ -303,8 +305,28 @@ def run_window_administraton_limit(adm_page, user_email_address):
     text_input_bottom_category_3.place(x=505, y=138)
 
 
-    button_create_items = Button_Brown(frame_bottom, command=create_item_button, text= "➕  Create item")
+    button_create_items = Button_Brown(frame_bottom, command=create_item_button, text= "➕  Create item", state="disabled")
     button_create_items.place(x=693, y=98)
+
+    def check_create_item_button(event=None):
+        country = text_input_bottom_country.get().strip()
+        company_code = text_input_bottom_company_code.get().strip()
+        category_1 = text_input_bottom_category_1.get().strip()
+        category_2 = text_input_bottom_category_2.get().strip()
+        category_3 = text_input_bottom_category_3.get().strip()
+
+        if (country != "" and company_code != ""
+                and category_1 != "" and category_2 != "" and category_3 != ""):
+            button_create_items.configure(state="normal")
+        else:
+            button_create_items.configure(state="disabled")
+
+    text_input_bottom_country.bind("<KeyRelease>",check_create_item_button)
+    text_input_bottom_company_code.bind("<KeyRelease>",check_create_item_button)
+    text_input_bottom_category_1.bind("<KeyRelease>",check_create_item_button)
+    text_input_bottom_category_2.bind("<KeyRelease>",check_create_item_button)
+    text_input_bottom_category_3.bind("<KeyRelease>",check_create_item_button)
+    check_create_item_button()
 
 
 if __name__ == "__main__":
