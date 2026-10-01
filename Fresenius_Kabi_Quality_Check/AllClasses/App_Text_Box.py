@@ -30,12 +30,16 @@ class App_Text_Box(ctk.CTkTextbox):
         if len(text) > self.max_length:
             self.delete(f"1.0 + {self.max_length} chars", "end")
 
+    def set_text(self, text):
+        self.delete("1.0", "end")
+        self.insert("1.0", "" if text is None else str(text))
+
     def get_text(self):
         return self.get("1.0", "end-1c")
 
-    def set_text(self, text):
-        self.delete("1.0", "end")
-        self.insert("1.0", text)
+    # def set_text(self, text):
+    #     self.delete("1.0", "end")
+    #     self.insert("1.0", text)
 
     def clear(self):
         self.delete("1.0", "end")

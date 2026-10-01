@@ -37,6 +37,12 @@ def run_quality_check_details(quality_check_page,
     print(f"Oto przekazane vendor number: {vendor_number}")
     print(f"Oto przekazane order by: {order_by}")
 
+    comment_dedicated_to_selected_item = first_selected_item['First_comment']
+    follow_up_dedicated_to_selected_item = first_selected_item['Second_comment']
+
+    control_statuses = first_selected_item['Controls']
+    control_statuses_list = control_statuses.split(",")
+    print(control_statuses_list)
 
 # ---------------------------------------------------------------------------------
 
@@ -433,31 +439,46 @@ def run_quality_check_details(quality_check_page,
 
 
 # -----------------------------------------------------------------------------------
+# pola na dole okna aplikacji: comment i follow up
+# -----------------------------------------------------------------------------------
 
     text_box_comment = App_Text_Box(frame_quality_check_details_bottom, width = 270, height = 85, fg_color = "white", max_length=170)
     text_box_comment.place(x=445, y=250)
-    text_box_comment._textbox.configure(pady = 5)
-    if str(status_number) in ["2", "4"]:
-        text_box_comment.configure(state="disabled",fg_color="#E5E5E5", text_color="#808080")
-    else:
-        text_box_comment.configure(state="normal")
+    text_box_comment._textbox.configure(pady = 12)
+
+    text_box_comment.set_text(comment_dedicated_to_selected_item)
 
     label_comment = App_Label_Title(frame_quality_check_details_bottom, text="Comment:", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     label_comment.place(x=485, y=235)
 
+    if str(status_number) in ["2", "4"]:
+        text_box_comment.configure(state="disabled",fg_color="#E5E5E5", text_color="#808080")
+        label_comment.configure(text_color="#9AA3AD")
+    else:
+        text_box_comment.configure(state="normal")
+
     text_box_follow_up = App_Text_Box(frame_quality_check_details_bottom, width = 270, height = 85, fg_color = "white", max_length=170)
     text_box_follow_up.place(x=720, y=250)
-    text_box_follow_up._textbox.configure(pady = 5)
-    if str(status_number) in ["1"]:
-        text_box_follow_up.configure(state="disabled",fg_color="#E5E5E5", text_color="#808080")
-    else:
-        text_box_follow_up.configure(state="normal")
-    text_box_follow_up.bind("<KeyRelease>", check_save_button)
-    check_save_button()
+    text_box_follow_up._textbox.configure(pady = 12)
+
+    text_box_follow_up.set_text(follow_up_dedicated_to_selected_item)
 
     label_follow_up = App_Label_Title(frame_quality_check_details_bottom, text="Follow up:", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     label_follow_up.place(x=765, y=235)
 
+    if str(status_number) in ["1"]:
+        text_box_follow_up.configure(state="disabled",fg_color="#E5E5E5", text_color="#808080")
+        label_follow_up.configure(text_color="#9AA3AD")
+    else:
+        text_box_follow_up.configure(state="normal")
+
+    text_box_follow_up.bind("<KeyRelease>", check_save_button)
+    check_save_button()
+
+
+
+    print(repr(comment_dedicated_to_selected_item))
+    print(repr(follow_up_dedicated_to_selected_item))
 
 
 # ---------------------------------------------------------------------------------------------------------
