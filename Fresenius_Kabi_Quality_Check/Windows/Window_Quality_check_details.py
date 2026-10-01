@@ -159,47 +159,45 @@ def run_quality_check_details(quality_check_page,
         else:
             button_save_and_next.configure(state="disabled")
 
-    # def check_save_button(event=None):
-    #
-    #     if str(status_number) == "1":
-    #         all_completed = all(
-    #             result.get() in [1, 2]
-    #             for result in [
-    #                 radio_result_1,
-    #                 radio_result_2,
-    #                 radio_result_3,
-    #                 radio_result_4,
-    #                 radio_result_5,
-    #                 radio_result_6,
-    #                 radio_result_7,
-    #                 radio_result_8,
-    #                 radio_result_9,
-    #                 radio_result_10,
-    #                 radio_result_11,
-    #                 radio_result_12,
-    #                 radio_result_13
-    #             ]
-    #         )
-    #
-    #         if all_completed:
-    #             button_save_and_next.configure(state="normal")
-    #         else:
-    #             button_save_and_next.configure(state="disabled")
-    #
-    #     elif str(status_number) == "2":
-    #         follow_up_text = text_box_follow_up.get("1.0","end-1c").strip()
-    #
-    #         if len(follow_up_text) > 0:
-    #             button_save_and_next.configure(state="normal")
-    #         else:
-    #             button_save_and_next.configure(state="disabled")
-    #
-    #     elif str(status_number) == "4":
-    #         button_save_and_next.configure(state="normal")
-    #     else:
-    #         button_save_and_next.configure(state="disabled")
+
+# ---------------------------------------------------------------------------------------------------------
+# funkcje uruchamiające przyciski "Save & next", "Reject" oraz "Error not valid"
+# ---------------------------------------------------------------------------------------------------------
+
+    def proceed_save_and_next_button():
+
+        any_error = any(
+            result.get() == 2
+            for result in [
+                radio_result_1,
+                radio_result_2,
+                radio_result_3,
+                radio_result_4,
+                radio_result_5,
+                radio_result_6,
+                radio_result_7,
+                radio_result_8,
+                radio_result_9,
+                radio_result_10,
+                radio_result_11,
+                radio_result_12,
+                radio_result_13
+            ]
+        )
+
+        if status_number == "1" and not any_error:
+            db_qc.change_1_to_2(user_email_address, first_selected_item['Key_value_for_database'])
+        if status_number == "1" and any_error:
+            db_qc.change_1_to_3(user_email_address, first_selected_item['Key_value_for_database'])
+        if status_number == "4":
+            db_qc.change_4_to_5(user_email_address, first_selected_item['Key_value_for_database'])
 
 
+    def proceed_reject_button():
+        db_qc.change_4_to_2(user_email_address, first_selected_item['Key_value_for_database'])
+
+    def proceed_error_not_valid_button():
+        db_qc.change_4_to_3(user_email_address, first_selected_item['Key_value_for_database'])
 
 
 
@@ -276,19 +274,13 @@ def run_quality_check_details(quality_check_page,
 
 
 # ustawienie buttona save and next + konfiguracja normal/disable
-    button_save_and_next = Button_Brown(quality_check_page_details, text= " Save and Next Item   ► ")
+    button_save_and_next = Button_Brown(quality_check_page_details, text= " Save and Next Item   ► ", command=proceed_save_and_next_button)
     button_save_and_next.place(x=380, y=540)
 
 
 
 
-    button_reject = Button_Standard(
-        quality_check_page_details,
-        text="Reject",
-        fg_color="#A94442",
-        hover_color="#8B3837",
-        text_color="white"
-    )
+    button_reject = Button_Standard(quality_check_page_details, text="Reject", command=proceed_reject_button, fg_color="#A94442", hover_color="#8B3837", text_color="white")
     button_reject.place(x=650, y=540)
 
 # domyślna opcja związana z klikalnością przycisku Reject
@@ -298,7 +290,7 @@ def run_quality_check_details(quality_check_page,
         button_reject.configure(state="normal")
 
 
-    button_error_not_valid = Button_Standard(quality_check_page_details, text= "Error not valid")
+    button_error_not_valid = Button_Standard(quality_check_page_details, text= "Error not valid", command=proceed_error_not_valid_button)
     button_error_not_valid.place(x=820, y=540)
 
 # domyślna opcja związana z klikalnością przycisku Error not valid
