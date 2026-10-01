@@ -193,43 +193,77 @@ class Database_Admin:
 # funkcja umieszczona w people management - middle left
 # funkcja nadająca użytkownikowi dostęp admina
 
-    def grant_admin_access(self, typed_email_address):
+    def grant_admin_access(self, sap_id, who_changed, typed_email_address):
 
         conn = self.get_connection()
         cursor = conn.cursor()
 
-        script_to_update_row = """
-                UPDATE quality_check_users
-                SET Admin_role = 'admin'
-                WHERE Email_address = ?
+        try:
+
+            script_to_deactivate_row = """
+                    UPDATE quality_check_users
+                    SET Active_to = GETDATE(), Who_changed = ?
+                    WHERE Email_address = ? AND Active_to IS NULL
+                    """
+
+            script_to_insert_row = """
+                INSERT INTO quality_check_users
+                (
+                    SAP_user,
+                    Email_address,
+                    Admin_role,
+                    Who_changed,
+                    Active_from
+                )
+                VALUES
+                (
+                    ?,
+                    ?,
+                    'admin',
+                    ?,
+                    GETDATE()
+                );
                 """
 
-        cursor.execute(
-            script_to_update_row,
-            typed_email_address
-        )
-        conn.commit()
+            cursor.execute(
+                script_to_deactivate_row,
+                who_changed,
+                typed_email_address
+            )
 
-        cursor.close()
-        conn.close()
+            cursor.execute(
+                script_to_insert_row,
+                sap_id,
+                typed_email_address,
+                who_changed
+            )
 
+            conn.commit()
+
+        except Exception:
+            conn.rollback()
+            raise
+        finally:
+            cursor.close()
+            conn.close()
 
 # funkcja umieszczona w people management - middle left
 # funkcja zabierająca użytkownikowi dostęp admina
 
-    def revoke_admin_access(self, typed_email_address):
+    def revoke_admin_access(self, who_changed, typed_email_address):
 
         conn = self.get_connection()
         cursor = conn.cursor()
 
         script_to_update_row = """
             UPDATE quality_check_users
-            SET Admin_role = NULL
-            WHERE Email_address = ?
+            SET Admin_role = NULL, Active_to = GETDATE(), Who_changed = ?
+            WHERE Email_address = ? AND Active_to IS NULL
         """
 
         cursor.execute(
             script_to_update_row,
+            who_changed,
             typed_email_address
         )
 
@@ -499,7 +533,7 @@ class Database_Admin:
         conn = self.get_connection()
         query = """
             SELECT SAP_user from quality_check_users
-            WHERE Email_address IS NULL
+            WHERE Email_address IS NULL AND Active_to IS NULL
             """
 
         df = pd.read_sql_query(
