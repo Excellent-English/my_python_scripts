@@ -44,6 +44,7 @@ def run_quality_check_details(quality_check_page,
     control_statuses_list = control_statuses.split(",")
     print(control_statuses_list)
 
+
 # ---------------------------------------------------------------------------------
 
     # Dodanie przycisku zawierającego ikonę return- przycisk powracający do poprzedniego okna
@@ -437,6 +438,26 @@ def run_quality_check_details(quality_check_page,
     for radio in all_radio_buttons:
         radio.configure(state=state)
 
+
+# ustawienie wartości odpowiadających first_selected_item na początku, kiedy wyświetla się okno aplikacji
+    radio_variables = [
+        radio_result_1,
+        radio_result_2,
+        radio_result_3,
+        radio_result_4,
+        radio_result_5,
+        radio_result_6,
+        radio_result_7,
+        radio_result_8,
+        radio_result_9,
+        radio_result_10,
+        radio_result_11,
+        radio_result_12,
+        radio_result_13
+    ]
+
+    for i, status in enumerate(control_statuses_list):
+        radio_variables[i].set(int(status))
 
 # -----------------------------------------------------------------------------------
 # pola na dole okna aplikacji: comment i follow up
