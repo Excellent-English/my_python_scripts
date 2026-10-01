@@ -79,7 +79,7 @@ def run_window_menu(main_page, user_email_address, sap_id, admin_role):
     label_quality_check_subtitle.place(x=160, y=80)
 
     label_quality_check_title.configure(cursor="hand2")
-    label_quality_check_title.bind("<Button-1>", lambda event: run_quality_check_menu(menu_page, sap_id))
+    label_quality_check_title.bind("<Button-1>", lambda event: run_quality_check_menu(menu_page, sap_id, admin_role, user_email_address))
 
     frame_beige_quality_check = AppFrame(frame_quality_check, width=377.5, height=26, fg_color="#F5F0E8", corner_radius=0, border_width=0)
     frame_beige_quality_check.place(x=1, y=144.5)

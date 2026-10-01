@@ -17,7 +17,7 @@ db = Database()
 countries = db.get_countries()
 
 def run_quality_check_details(quality_check_page,
-                              sap_id, first_selected_item, total_items, items_not_mine, status_number,
+                              sap_id, admin_role, user_email_address, first_selected_item, total_items, items_not_mine, status_number,
                               country, company_code, qc_status, vendor_type, vendor_number, order_by):
     # Zamknij / ukryj główne okno
     quality_check_page.withdraw()   # albo destroy()
@@ -26,6 +26,12 @@ def run_quality_check_details(quality_check_page,
     quality_check_page_details = AppWindow(banner_text = "Quality check audit", width=1100, height=610, x= 120, y = 25, fg_color="#F6F7F9")
 
     print(f"SAP ID used in quality_check_details: {sap_id}")
+    print(f"Logged user admin rights: {admin_role}")
+    print(f"Logged user email address: {user_email_address}")
+
+    sap_id_who_posted_invoice = first_selected_item['User_name']
+    print(f"SAP ID who posted invoice: {sap_id_who_posted_invoice}")
+
     print(f"Oto przekazany słownik: {first_selected_item}")
     print(f"Oto przekazane total items: {total_items}")
     print(f"Oto przekazane items not mine: {items_not_mine}")
@@ -43,6 +49,7 @@ def run_quality_check_details(quality_check_page,
     control_statuses = first_selected_item['Controls']
     control_statuses_list = control_statuses.split(",")
     print(control_statuses_list)
+
 
 
 # ---------------------------------------------------------------------------------
@@ -97,8 +104,20 @@ def run_quality_check_details(quality_check_page,
 # funkcja sprawdzająca dostępność przycisku Save & next
 
     def check_save_button(event=None):
+        can_save = False
+
+        if str(status_number) in ["1", "2"]:
+            can_save = (sap_id != sap_id_who_posted_invoice)
+
+        elif str(status_number) == "4":
+            can_save = (admin_role == "admin")
+
+        if not can_save:
+            button_save_and_next.configure(state="disabled")
+            return
 
         if str(status_number) == "1":
+
             all_completed = all(
                 result.get() in [1, 2]
                 for result in [
@@ -124,7 +143,8 @@ def run_quality_check_details(quality_check_page,
                 button_save_and_next.configure(state="disabled")
 
         elif str(status_number) == "2":
-            follow_up_text = text_box_follow_up.get("1.0","end-1c").strip()
+
+            follow_up_text = text_box_follow_up.get("1.0", "end-1c").strip()
 
             if len(follow_up_text) > 0:
                 button_save_and_next.configure(state="normal")
@@ -133,8 +153,49 @@ def run_quality_check_details(quality_check_page,
 
         elif str(status_number) == "4":
             button_save_and_next.configure(state="normal")
+
         else:
             button_save_and_next.configure(state="disabled")
+
+    # def check_save_button(event=None):
+    #
+    #     if str(status_number) == "1":
+    #         all_completed = all(
+    #             result.get() in [1, 2]
+    #             for result in [
+    #                 radio_result_1,
+    #                 radio_result_2,
+    #                 radio_result_3,
+    #                 radio_result_4,
+    #                 radio_result_5,
+    #                 radio_result_6,
+    #                 radio_result_7,
+    #                 radio_result_8,
+    #                 radio_result_9,
+    #                 radio_result_10,
+    #                 radio_result_11,
+    #                 radio_result_12,
+    #                 radio_result_13
+    #             ]
+    #         )
+    #
+    #         if all_completed:
+    #             button_save_and_next.configure(state="normal")
+    #         else:
+    #             button_save_and_next.configure(state="disabled")
+    #
+    #     elif str(status_number) == "2":
+    #         follow_up_text = text_box_follow_up.get("1.0","end-1c").strip()
+    #
+    #         if len(follow_up_text) > 0:
+    #             button_save_and_next.configure(state="normal")
+    #         else:
+    #             button_save_and_next.configure(state="disabled")
+    #
+    #     elif str(status_number) == "4":
+    #         button_save_and_next.configure(state="normal")
+    #     else:
+    #         button_save_and_next.configure(state="disabled")
 
 
 
@@ -227,14 +288,19 @@ def run_quality_check_details(quality_check_page,
         text_color="white"
     )
     button_reject.place(x=650, y=540)
-    if str(status_number) in ["1", "2"]:
+
+# domyślna opcja związana z klikalnością przycisku Reject
+    if (str(status_number) in ["1", "2"] or (str(status_number) == "4" and admin_role != "admin")):
         button_reject.configure(state="disabled")
     else:
         button_reject.configure(state="normal")
 
+
     button_error_not_valid = Button_Standard(quality_check_page_details, text= "Error not valid")
     button_error_not_valid.place(x=820, y=540)
-    if str(status_number) in ["1", "2"]:
+
+# domyślna opcja związana z klikalnością przycisku Error not valid
+    if (str(status_number) in ["1", "2"] or (str(status_number) == "4" and admin_role != "admin")):
         button_error_not_valid.configure(state="disabled")
     else:
         button_error_not_valid.configure(state="normal")

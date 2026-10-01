@@ -22,7 +22,7 @@ global total_items
 global items_not_mine
 global country, company_code, qc_status, vendor_type, vendor_number, order_by
 
-def run_quality_check_menu(menu_page, sap_id):
+def run_quality_check_menu(menu_page, sap_id, admin_role, user_email_address):
     # Zamknij / ukryj główne okno
     menu_page.withdraw()   # albo destroy()
 
@@ -121,7 +121,7 @@ def run_quality_check_menu(menu_page, sap_id):
 
         status_number = first_selected_item['Verified']
 
-        run_quality_check_details(quality_check_page, sap_id, first_selected_item, total_items, items_not_mine, status_number, country, company_code, qc_status, vendor_type, vendor_number, order_by)
+        run_quality_check_details(quality_check_page, sap_id, admin_role, user_email_address, first_selected_item, total_items, items_not_mine, status_number, country, company_code, qc_status, vendor_type, vendor_number, order_by)
 
 
 
@@ -247,4 +247,4 @@ if __name__ == "__main__":
     main_page = ctk.CTk()
     main_page.withdraw()
 
-    run_quality_check_menu(main_page, sap_id=None)
+    run_quality_check_menu(main_page, sap_id=None, admin_role=None, user_email_address=None)
