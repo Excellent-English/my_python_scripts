@@ -10,6 +10,7 @@ from Fresenius_Kabi_Quality_Check.AllClasses.App_Label_Title import App_Label_Ti
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Dropdown import AppComboBox
 from Fresenius_Kabi_Quality_Check.AllClasses.Button_Brown import Button_Brown
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Entry_Box import App_Entry_Box
+from Fresenius_Kabi_Quality_Check.Windows.Window_Administration_People import users_who_posted
 from Fresenius_Kabi_Quality_Check.Windows.Window_Quality_check_details import run_quality_check_details
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Database import Database
 from Fresenius_Kabi_Quality_Check.AllClasses.Resource_Path import resource_path
@@ -89,6 +90,7 @@ def run_quality_check_menu(menu_page, sap_id, admin_role, user_email_address):
 
         total_items, items_not_mine = db.get_number_of_items_found_all(
         sap_id=sap_id,
+        admin_role=admin_role,
         country = country,
         company_code = company_code,
         qc_status = qc_status,
@@ -158,7 +160,7 @@ def run_quality_check_menu(menu_page, sap_id, admin_role, user_email_address):
     label_quality_check_qc_status = App_Label_Title(frame_quality_check, text="QC status", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_qc_status.place(x=35, y=300)
 
-    dropdown_qc_status = AppComboBox(frame_quality_check, width = 300, values=["All","Pending Verification","Verification Failed", "Requires confirmation"], command=when_selection_changes)
+    dropdown_qc_status = AppComboBox(frame_quality_check, width = 300, values=["All","Pending Verification (1)","Verification Failed (2)", "Requires confirmation (4)"], command=when_selection_changes)
     dropdown_qc_status.place(x=40, y=330)
 
     label_quality_check_vendor_type = App_Label_Title(frame_quality_check, text="Vendor type", font= ("Open Sans", 14, "bold"), text_color = "#755a44")

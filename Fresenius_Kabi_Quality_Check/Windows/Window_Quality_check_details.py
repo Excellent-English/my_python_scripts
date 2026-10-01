@@ -10,10 +10,12 @@ from Fresenius_Kabi_Quality_Check.AllClasses.Button_Brown import Button_Brown
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Entry_Box import App_Entry_Box
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Text_Box import  App_Text_Box
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Database import Database
+from Fresenius_Kabi_Quality_Check.AllClasses.App_Database_QC import Database_QC
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Radio_Button import App_Radio_Button
 from Fresenius_Kabi_Quality_Check.AllClasses.Resource_Path import resource_path
 
 db = Database()
+db_qc = Database_QC()
 countries = db.get_countries()
 
 def run_quality_check_details(quality_check_page,
@@ -538,11 +540,20 @@ def run_quality_check_details(quality_check_page,
     label_comment = App_Label_Title(frame_quality_check_details_bottom, text="Comment:", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     label_comment.place(x=485, y=235)
 
-    if str(status_number) in ["2", "4"]:
-        text_box_comment.configure(state="disabled",fg_color="#E5E5E5", text_color="#808080")
+    if ((str(status_number) == "1" and sap_id == sap_id_who_posted_invoice)
+            or (str(status_number) == "2")
+            or (str(status_number) == "4" and admin_role != "admin")):
+        text_box_comment.configure(state="disabled", fg_color="#E5E5E5", text_color="#808080")
         label_comment.configure(text_color="#9AA3AD")
     else:
-        text_box_comment.configure(state="normal")
+        text_box_comment.configure(state="normal", fg_color="white", text_color="black")
+        label_comment.configure(text_color="#755A44")
+
+    # if str(status_number) in ["2", "4"]:
+    #     text_box_comment.configure(state="disabled",fg_color="#E5E5E5", text_color="#808080")
+    #     label_comment.configure(text_color="#9AA3AD")
+    # else:
+    #     text_box_comment.configure(state="normal")
 
     text_box_follow_up = App_Text_Box(frame_quality_check_details_bottom, width = 270, height = 85, fg_color = "white", max_length=170)
     text_box_follow_up.place(x=720, y=250)
@@ -553,11 +564,22 @@ def run_quality_check_details(quality_check_page,
     label_follow_up = App_Label_Title(frame_quality_check_details_bottom, text="Follow up:", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     label_follow_up.place(x=765, y=235)
 
-    if str(status_number) in ["1"]:
-        text_box_follow_up.configure(state="disabled",fg_color="#E5E5E5", text_color="#808080")
+    if (str(status_number) == "1"
+            or
+            (str(status_number) == "2" and sap_id == sap_id_who_posted_invoice)
+            or
+            (str(status_number) == "4" and admin_role != "admin")):
+        text_box_follow_up.configure(state="disabled", fg_color="#E5E5E5", text_color="#808080")
         label_follow_up.configure(text_color="#9AA3AD")
     else:
-        text_box_follow_up.configure(state="normal")
+        text_box_follow_up.configure(state="normal", fg_color="white", text_color="black")
+        label_follow_up.configure(text_color="#755A44")
+
+    # if str(status_number) in ["1"]:
+    #     text_box_follow_up.configure(state="disabled",fg_color="#E5E5E5", text_color="#808080")
+    #     label_follow_up.configure(text_color="#9AA3AD")
+    # else:
+    #     text_box_follow_up.configure(state="normal")
 
     text_box_follow_up.bind("<KeyRelease>", check_save_button)
     check_save_button()
