@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from PIL import Image
+from time import sleep
 
 from Fresenius_Kabi_Quality_Check.AllClasses.Button_Standard import Button_Standard
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Window import AppWindow
@@ -21,7 +22,9 @@ countries = db.get_countries()
 
 def run_quality_check_details(quality_check_page,
                               sap_id, admin_role, user_email_address, first_selected_item, total_items, items_not_mine, status_number,
-                              country, company_code, qc_status, vendor_type, vendor_number, order_by):
+                              country, company_code, qc_status, vendor_type, vendor_number, order_by, refresh_main_window):
+    print("OPENING NEW DETAILS WINDOW")
+
     # Zamknij / ukryj główne okno
     quality_check_page.withdraw()   # albo destroy()
 
@@ -59,15 +62,16 @@ def run_quality_check_details(quality_check_page,
 
     # Dodanie przycisku zawierającego ikonę return- przycisk powracający do poprzedniego okna
     def return_to_previous_window():
-        quality_check_page_details.withdraw()
+        quality_check_page_details.destroy()
 
-        db.get_number_of_items_found_all(
-            sap_id=sap_id,
-            country=country,
-            company_code=company_code,
-            qc_status=qc_status,
-            vendor_type=vendor_type,
-            vendor_number=vendor_number)
+        refresh_main_window()
+        # db.get_number_of_items_found_all(
+        #     sap_id=sap_id,
+        #     country=country,
+        #     company_code=company_code,
+        #     qc_status=qc_status,
+        #     vendor_type=vendor_type,
+        #     vendor_number=vendor_number)
 
         quality_check_page.deiconify()
         quality_check_page.lift()
@@ -120,7 +124,6 @@ def run_quality_check_details(quality_check_page,
 
         if str(status_number) in ["1", "2"]:
             can_save = (sap_id != sap_id_who_posted_invoice)
-
         elif str(status_number) == "4":
             can_save = (admin_role == "admin")
 
@@ -129,7 +132,6 @@ def run_quality_check_details(quality_check_page,
             return
 
         if str(status_number) == "1":
-
             all_completed = all(
                 result.get() in [1, 2]
                 for result in [
@@ -170,6 +172,65 @@ def run_quality_check_details(quality_check_page,
             button_save_and_next.configure(state="disabled")
 
 
+# -------------------------------------------------------------------------------------------------------------------
+# funkcja uruchamiana po kliknięciu na jeden z 3 przycisków, sprawia, że okno ponownie otwiera się z nowym rekordem
+# -------------------------------------------------------------------------------------------------------------------
+
+    def reload_quality_check_items():
+
+        new_first_selected_item = db.get_first_item_quality_check(
+            sap_id=sap_id,
+            country=country,
+            company_code=company_code,
+            qc_status=qc_status,
+            vendor_type=vendor_type,
+            vendor_number=vendor_number,
+            order_by=order_by
+        )
+
+        print("NEW ITEM:")
+        print(new_first_selected_item)
+
+        if not new_first_selected_item:
+            print("No items found for selected criteria")
+            quality_check_page_details.destroy()
+            quality_check_page.deiconify()
+            quality_check_page.lift()
+            quality_check_page.focus_force()
+            return
+
+        new_status_number = new_first_selected_item["Verified"]
+
+        new_total_items, new_items_not_mine = db.get_number_of_items_found_all(
+            sap_id=sap_id,
+            country=country,
+            company_code=company_code,
+            qc_status=qc_status,
+            vendor_type=vendor_type,
+            vendor_number=vendor_number
+        )
+
+        quality_check_page_details.destroy()
+
+        run_quality_check_details(
+            quality_check_page=quality_check_page,
+            sap_id=sap_id,
+            admin_role=admin_role,
+            user_email_address=user_email_address,
+            first_selected_item=new_first_selected_item,
+            total_items=new_total_items,
+            items_not_mine=new_items_not_mine,
+            status_number=new_status_number,
+            country=country,
+            company_code=company_code,
+            qc_status=qc_status,
+            vendor_type=vendor_type,
+            vendor_number=vendor_number,
+            order_by=order_by,
+            refresh_main_window=refresh_main_window
+        )
+
+
 # ---------------------------------------------------------------------------------------------------------
 # funkcje uruchamiające przyciski "Save & next", "Reject" oraz "Error not valid"
 # ---------------------------------------------------------------------------------------------------------
@@ -196,18 +257,24 @@ def run_quality_check_details(quality_check_page,
         )
 
         if status_number == "1" and not any_error:
-            db_qc.change_1_to_2(user_email_address, first_selected_item['Key_value_for_database'])
-        if status_number == "1" and any_error:
             db_qc.change_1_to_3(user_email_address, first_selected_item['Key_value_for_database'])
+        if status_number == "1" and any_error:
+            db_qc.change_1_to_2(user_email_address, first_selected_item['Key_value_for_database'])
+        if status_number == "2":
+            db_qc.change_2_to_4(user_email_address, first_selected_item['Key_value_for_database'])
         if status_number == "4":
             db_qc.change_4_to_5(user_email_address, first_selected_item['Key_value_for_database'])
+
+        reload_quality_check_items()
 
 
     def proceed_reject_button():
         db_qc.change_4_to_2(user_email_address, first_selected_item['Key_value_for_database'])
+        reload_quality_check_items()
 
     def proceed_error_not_valid_button():
         db_qc.change_4_to_3(user_email_address, first_selected_item['Key_value_for_database'])
+        reload_quality_check_items()
 
 
 
@@ -220,6 +287,7 @@ def run_quality_check_details(quality_check_page,
 
     label_number_of_items_found = App_Label_Title(frame_quality_check_details_top, text=f"Items to audit: {items_not_mine} ({total_items} in total)", font= ("Open Sans", 12), text_color = "#8B7A6B")
     label_number_of_items_found.place(x=750, y=8)
+    label_number_of_items_found.configure(text=f"Items to audit: {items_not_mine} ({total_items} in total)")
 
     label_quality_check_title = App_Label_Title(frame_quality_check_details_top, text="ITEM DETAILS", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
     label_quality_check_title.place(x=20, y=8)
@@ -601,26 +669,26 @@ def run_quality_check_details(quality_check_page,
 
     key_value_for_database = first_selected_item["Key_value_for_database"]
     sap_document_number = first_selected_item["Document_number_SAP"]
-    company_code = first_selected_item["Company_code"]
+    display_company_code = first_selected_item["Company_code"]
     document_date = first_selected_item["Document_date"]
     due_date = first_selected_item["Due_date"]
     amount_in_local_currency = f"{float(first_selected_item['Amount_local']):,.2f}"
     currency = first_selected_item["Currency"]
     amount_in_eur = f"{float(first_selected_item['Amount_EUR']):,.2f}"
-    vendor_number = first_selected_item["Vendor_number"]
-    vendor_type = first_selected_item["Internal_external_vendor"]
+    display_vendor_number = first_selected_item["Vendor_number"]
+    display_vendor_type = first_selected_item["Internal_external_vendor"]
 
     label_quality_check_element_1.configure(text=sap_document_number)
     label_quality_check_element_1.bind("<Button-1>",lambda event: copy_to_clipboard(sap_document_number))
 
-    label_quality_check_element_2.configure(text=company_code)
+    label_quality_check_element_2.configure(text=display_company_code)
     label_quality_check_element_3.configure(text=document_date)
     label_quality_check_element_4.configure(text=due_date)
     label_quality_check_element_5.configure(text=amount_in_local_currency)
     label_quality_check_element_6.configure(text=currency)
     label_quality_check_element_7.configure(text=amount_in_eur)
-    label_quality_check_element_8.configure(text=vendor_number)
-    label_quality_check_element_9.configure(text=vendor_type)
+    label_quality_check_element_8.configure(text=display_vendor_number)
+    label_quality_check_element_9.configure(text=display_vendor_type)
 
 
 
@@ -651,9 +719,6 @@ def run_quality_check_details(quality_check_page,
     logout_subtitle = ctk.CTkLabel(quality_check_page_details, text="Logout", font= ("Open Sans", 14), text_color = "white", fg_color = "#755a44")
     logout_subtitle.place(x=935, y=12)
 
-
-    # Zaprezentuj okno na ekranie komputera
-    quality_check_page_details.mainloop()
 
 # funkcja do uruchomienia okna dla testów, później do usunięcia
 

@@ -59,6 +59,28 @@ class Database_QC:
         conn.close()
 
 
+    def change_2_to_4(self, Who_changed_from_2_to_4, Key_value_for_database):
+
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+        query_to_update_from_2_to_4 = """
+            UPDATE quality_check_database
+            SET Verified = 4, Who_changed_from_2_to_4 = ?, When_changed_from_2_to_4 = GETDATE()
+            WHERE Key_value_for_database = ?
+            """
+
+        cursor.execute(
+            query_to_update_from_2_to_4,
+            (Who_changed_from_2_to_4, Key_value_for_database)
+        )
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+
     def change_4_to_5(self, Who_changed_from_4_to_5, Key_value_for_database):
 
         conn = self.get_connection()

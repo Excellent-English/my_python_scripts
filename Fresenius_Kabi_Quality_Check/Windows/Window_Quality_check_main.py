@@ -34,7 +34,6 @@ def run_quality_check_menu(menu_page, sap_id, admin_role, user_email_address):
     # Gdyby była potrzeba zmiany tytułu w kolejnych oknach:
     # menu_page = AppWindow(title="Inny tytuł okna")
 
-
     total_items = 0
     items_not_mine = 0
 # ---------------------------------------------------------------------------------
@@ -122,7 +121,7 @@ def run_quality_check_menu(menu_page, sap_id, admin_role, user_email_address):
 
         status_number = first_selected_item['Verified']
 
-        run_quality_check_details(quality_check_page, sap_id, admin_role, user_email_address, first_selected_item, total_items, items_not_mine, status_number, country, company_code, qc_status, vendor_type, vendor_number, order_by)
+        run_quality_check_details(quality_check_page, sap_id, admin_role, user_email_address, first_selected_item, total_items, items_not_mine, status_number, country, company_code, qc_status, vendor_type, vendor_number, order_by, when_selection_changes)
 
 
 
@@ -187,6 +186,7 @@ def run_quality_check_menu(menu_page, sap_id, admin_role, user_email_address):
 
     label_number_of_items_found = App_Label_Title(frame_quality_check, text="Items to audit: 0 (0 in total)", font= ("Open Sans", 14), text_color = "#8B7A6B")
     label_number_of_items_found.place(x=500, y=405)
+    label_number_of_items_found.configure(text=f"Items to audit: {items_not_mine} ({total_items} in total)")
 
 
 # ---------------------------------------------------------------------------------------------------------
