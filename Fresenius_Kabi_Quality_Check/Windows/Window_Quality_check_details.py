@@ -272,24 +272,39 @@ def run_quality_check_details(quality_check_page,
             str(radio_result_13.get())
         ])
 
+        comment_dedicated_to_selected_item = text_box_comment.get_text()
+        follow_up_dedicated_to_selected_item = text_box_follow_up.get_text()
+        print(comment_dedicated_to_selected_item)
+        print(follow_up_dedicated_to_selected_item)
+
         if status_number == "1" and not any_error:
-            db_qc.change_1_to_3(user_email_address, first_selected_item['Key_value_for_database'], controls_column)
+            db_qc.change_1_to_3(user_email_address, controls_column, comment_dedicated_to_selected_item, first_selected_item['Key_value_for_database'])
         if status_number == "1" and any_error:
-            db_qc.change_1_to_2(user_email_address, first_selected_item['Key_value_for_database'], controls_column)
+            db_qc.change_1_to_2(user_email_address, controls_column, comment_dedicated_to_selected_item, first_selected_item['Key_value_for_database'])
         if status_number == "2":
-            db_qc.change_2_to_4(user_email_address, first_selected_item['Key_value_for_database'])
+            db_qc.change_2_to_4(user_email_address,comment_dedicated_to_selected_item, follow_up_dedicated_to_selected_item, first_selected_item['Key_value_for_database'])
         if status_number == "4":
-            db_qc.change_4_to_5(user_email_address, first_selected_item['Key_value_for_database'])
+            db_qc.change_4_to_5(user_email_address, comment_dedicated_to_selected_item, follow_up_dedicated_to_selected_item, first_selected_item['Key_value_for_database'])
 
         reload_quality_check_items()
 
 
     def proceed_reject_button():
-        db_qc.change_4_to_2(user_email_address, first_selected_item['Key_value_for_database'])
+        comment_dedicated_to_selected_item = text_box_comment.get_text()
+        follow_up_dedicated_to_selected_item = text_box_follow_up.get_text()
+        print(comment_dedicated_to_selected_item)
+        print(follow_up_dedicated_to_selected_item)
+
+        db_qc.change_4_to_2(user_email_address, comment_dedicated_to_selected_item, follow_up_dedicated_to_selected_item, first_selected_item['Key_value_for_database'])
         reload_quality_check_items()
 
     def proceed_error_not_valid_button():
-        db_qc.change_4_to_3(user_email_address, first_selected_item['Key_value_for_database'])
+        comment_dedicated_to_selected_item = text_box_comment.get_text()
+        follow_up_dedicated_to_selected_item = text_box_follow_up.get_text()
+        print(comment_dedicated_to_selected_item)
+        print(follow_up_dedicated_to_selected_item)
+
+        db_qc.change_4_to_3(user_email_address, comment_dedicated_to_selected_item, follow_up_dedicated_to_selected_item, first_selected_item['Key_value_for_database'])
         reload_quality_check_items()
 
 
