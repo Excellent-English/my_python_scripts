@@ -90,7 +90,6 @@ def run_quality_check_menu(menu_page, sap_id, admin_role, user_email_address):
 
         total_items, items_not_mine = db.get_number_of_items_found_all(
         sap_id=sap_id,
-        admin_role=admin_role,
         country = country,
         company_code = company_code,
         qc_status = qc_status,

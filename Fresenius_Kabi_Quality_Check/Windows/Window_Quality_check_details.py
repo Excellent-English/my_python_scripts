@@ -13,6 +13,7 @@ from Fresenius_Kabi_Quality_Check.AllClasses.App_Database import Database
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Database_QC import Database_QC
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Radio_Button import App_Radio_Button
 from Fresenius_Kabi_Quality_Check.AllClasses.Resource_Path import resource_path
+from Fresenius_Kabi_Quality_Check.Windows.Window_Administration_Limit import db_admin
 
 db = Database()
 db_qc = Database_QC()
@@ -59,6 +60,15 @@ def run_quality_check_details(quality_check_page,
     # Dodanie przycisku zawierającego ikonę return- przycisk powracający do poprzedniego okna
     def return_to_previous_window():
         quality_check_page_details.withdraw()
+
+        db.get_number_of_items_found_all(
+            sap_id=sap_id,
+            country=country,
+            company_code=company_code,
+            qc_status=qc_status,
+            vendor_type=vendor_type,
+            vendor_number=vendor_number)
+
         quality_check_page.deiconify()
         quality_check_page.lift()
         quality_check_page.focus_force()
@@ -273,27 +283,30 @@ def run_quality_check_details(quality_check_page,
     line_frame_top.place(x=25, y=35)
 
 
+# -------------------------------------------------------------------------------------------------------------------
+# domyślne ustawienia związane z 3 przyciskami u dołu ekranu
+# -------------------------------------------------------------------------------------------------------------------
+
 # ustawienie buttona save and next + konfiguracja normal/disable
+
     button_save_and_next = Button_Brown(quality_check_page_details, text= " Save and Next Item   ► ", command=proceed_save_and_next_button)
     button_save_and_next.place(x=380, y=540)
 
-
-
+# ustawienie przycisku "Reject"
 
     button_reject = Button_Standard(quality_check_page_details, text="Reject", command=proceed_reject_button, fg_color="#A94442", hover_color="#8B3837", text_color="white")
     button_reject.place(x=650, y=540)
 
-# domyślna opcja związana z klikalnością przycisku Reject
     if (str(status_number) in ["1", "2"] or (str(status_number) == "4" and admin_role != "admin")):
         button_reject.configure(state="disabled")
     else:
         button_reject.configure(state="normal")
 
+# ustawienie przycisku "Error not valid"
 
     button_error_not_valid = Button_Standard(quality_check_page_details, text= "Error not valid", command=proceed_error_not_valid_button)
     button_error_not_valid.place(x=820, y=540)
 
-# domyślna opcja związana z klikalnością przycisku Error not valid
     if (str(status_number) in ["1", "2"] or (str(status_number) == "4" and admin_role != "admin")):
         button_error_not_valid.configure(state="disabled")
     else:
