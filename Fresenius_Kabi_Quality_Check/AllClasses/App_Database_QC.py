@@ -15,20 +15,20 @@ class Database_QC:
 
 # 3 funkcje, które są uruchamiane po kliknięciu na "Save & next" button
 
-    def change_1_to_2(self, Who_changed_from_1_to_2_or_3, Key_value_for_database):
+    def change_1_to_2(self, Who_changed_from_1_to_2_or_3, Key_value_for_database, Controls_column):
 
         conn = self.get_connection()
         cursor = conn.cursor()
 
         query_to_update_from_1_to_2 = """
             UPDATE quality_check_database
-            SET Verified = 2, Who_changed_from_1_to_2_or_3 = ?, When_changed_from_1_to_2_or_3 = GETDATE()
+            SET Verified = 2, Who_changed_from_1_to_2_or_3 = ?, When_changed_from_1_to_2_or_3 = GETDATE(), Controls = ?
             WHERE Key_value_for_database = ?
             """
 
         cursor.execute(
             query_to_update_from_1_to_2,
-            (Who_changed_from_1_to_2_or_3, Key_value_for_database)
+            (Who_changed_from_1_to_2_or_3, Controls_column, Key_value_for_database)
         )
 
         conn.commit()
@@ -37,20 +37,20 @@ class Database_QC:
         conn.close()
 
 
-    def change_1_to_3(self, Who_changed_from_1_to_2_or_3, Key_value_for_database):
+    def change_1_to_3(self, Who_changed_from_1_to_2_or_3, Key_value_for_database, Controls_column):
 
         conn = self.get_connection()
         cursor = conn.cursor()
 
         query_to_update_from_1_to_3 = """
             UPDATE quality_check_database
-            SET Verified = 3, Who_changed_from_1_to_2_or_3 = ?, When_changed_from_1_to_2_or_3 = GETDATE()
+            SET Verified = 3, Who_changed_from_1_to_2_or_3 = ?, When_changed_from_1_to_2_or_3 = GETDATE(), Controls = ?
             WHERE Key_value_for_database = ?
             """
 
         cursor.execute(
             query_to_update_from_1_to_3,
-            (Who_changed_from_1_to_2_or_3, Key_value_for_database)
+            (Who_changed_from_1_to_2_or_3, Controls_column, Key_value_for_database)
         )
 
         conn.commit()

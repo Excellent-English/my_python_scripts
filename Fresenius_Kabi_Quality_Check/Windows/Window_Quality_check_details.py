@@ -256,10 +256,26 @@ def run_quality_check_details(quality_check_page,
             ]
         )
 
+        controls_column = ",".join([
+            str(radio_result_1.get()),
+            str(radio_result_2.get()),
+            str(radio_result_3.get()),
+            str(radio_result_4.get()),
+            str(radio_result_5.get()),
+            str(radio_result_6.get()),
+            str(radio_result_7.get()),
+            str(radio_result_8.get()),
+            str(radio_result_9.get()),
+            str(radio_result_10.get()),
+            str(radio_result_11.get()),
+            str(radio_result_12.get()),
+            str(radio_result_13.get())
+        ])
+
         if status_number == "1" and not any_error:
-            db_qc.change_1_to_3(user_email_address, first_selected_item['Key_value_for_database'])
+            db_qc.change_1_to_3(user_email_address, first_selected_item['Key_value_for_database'], controls_column)
         if status_number == "1" and any_error:
-            db_qc.change_1_to_2(user_email_address, first_selected_item['Key_value_for_database'])
+            db_qc.change_1_to_2(user_email_address, first_selected_item['Key_value_for_database'], controls_column)
         if status_number == "2":
             db_qc.change_2_to_4(user_email_address, first_selected_item['Key_value_for_database'])
         if status_number == "4":
