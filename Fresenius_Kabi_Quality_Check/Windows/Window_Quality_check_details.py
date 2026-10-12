@@ -39,6 +39,10 @@ def run_quality_check_details(quality_check_page,
     print(f"SAP ID who posted invoice: {sap_id_who_posted_invoice}")
 
     print(f"Oto przekazany słownik: {first_selected_item}")
+
+    psinova_vim_document_number = first_selected_item['Document_number_Psinova_VIM']
+    print(f"Oto przekazany Psinova VIM document number: {psinova_vim_document_number}")
+
     print(f"Oto przekazane total items: {total_items}")
     print(f"Oto przekazane items not mine: {items_not_mine}")
     print(f"Oto przekazane status number: {status_number}")
@@ -102,8 +106,11 @@ def run_quality_check_details(quality_check_page,
     quality_check_page_details.protocol("WM_DELETE_WINDOW", disable_close)
 
 
-# Funkcja kopiująca bieżący SAP Document number
-    def copy_to_clipboard(text):
+# ---------------------------------------------------------------------------------
+# Funkcje kopiujące bieżące wartości z aplikacji
+# ---------------------------------------------------------------------------------
+
+    def copy_to_clipboard_sap_document_number(text):
         quality_check_page_details.clipboard_clear()
         quality_check_page_details.clipboard_append(str(text))
         quality_check_page_details.update_idletasks()
@@ -112,6 +119,26 @@ def run_quality_check_details(quality_check_page,
         label_quality_check_element_1.configure(text="✓ Copied")
 
         quality_check_page_details.after(1000,lambda: label_quality_check_element_1.configure(text=original_text))
+
+    def copy_to_clipboard_vendor_number(text):
+        quality_check_page_details.clipboard_clear()
+        quality_check_page_details.clipboard_append(str(text))
+        quality_check_page_details.update_idletasks()
+
+        original_text = label_quality_check_element_8.cget("text")
+        label_quality_check_element_8.configure(text="✓ Copied")
+
+        quality_check_page_details.after(1000,lambda: label_quality_check_element_8.configure(text=original_text))
+
+    def copy_to_clipboard_psinova_vim_document_number(text):
+        quality_check_page_details.clipboard_clear()
+        quality_check_page_details.clipboard_append(str(text))
+        quality_check_page_details.update_idletasks()
+
+        original_text = label_quality_check_element_10.cget("text")
+        label_quality_check_element_10.configure(text="✓ Copied")
+
+        quality_check_page_details.after(1000,lambda: label_quality_check_element_10.configure(text=original_text))
 
 
 # ---------------------------------------------------------------------------------
@@ -317,7 +344,7 @@ def run_quality_check_details(quality_check_page,
     frame_quality_check_details_top.place(x=50, y=65)
 
     label_number_of_items_found = App_Label_Title(frame_quality_check_details_top, text=f"Items to audit: {items_not_mine} ({total_items} in total)", font= ("Open Sans", 12), text_color = "#8B7A6B")
-    label_number_of_items_found.place(x=750, y=8)
+    label_number_of_items_found.place(x=820, y=8)
     label_number_of_items_found.configure(text=f"Items to audit: {items_not_mine} ({total_items} in total)")
 
     label_quality_check_title = App_Label_Title(frame_quality_check_details_top, text="ITEM DETAILS", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
@@ -331,54 +358,60 @@ def run_quality_check_details(quality_check_page,
     label_quality_check_element_1.configure(cursor="hand2")
 
     label_quality_check_subtitle_2 = App_Label_Title(frame_quality_check_details_top, text="Company code", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_2.place(x=150, y=40)
+    label_quality_check_subtitle_2.place(x=135, y=40)
 
     label_quality_check_element_2 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_2.place(x=165, y=60)
+    label_quality_check_element_2.place(x=150, y=60)
 
     label_quality_check_subtitle_3 = App_Label_Title(frame_quality_check_details_top, text="Document date", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_3.place(x=250, y=40)
+    label_quality_check_subtitle_3.place(x=215, y=40)
 
     label_quality_check_element_3 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_3.place(x=251, y=60)
+    label_quality_check_element_3.place(x=216, y=60)
 
     label_quality_check_subtitle_4 = App_Label_Title(frame_quality_check_details_top, text="Due date", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_4.place(x=360, y=40)
+    label_quality_check_subtitle_4.place(x=315, y=40)
 
     label_quality_check_element_4 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_4.place(x=350, y=60)
+    label_quality_check_element_4.place(x=305, y=60)
 
     label_quality_check_subtitle_5 = App_Label_Title(frame_quality_check_details_top, text="Amount in local currency", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_5.place(x=442, y=40)
+    label_quality_check_subtitle_5.place(x=387, y=40)
 
     label_quality_check_element_5 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_5.place(x=460, y=60)
+    label_quality_check_element_5.place(x=405, y=60)
 
     label_quality_check_subtitle_6 = App_Label_Title(frame_quality_check_details_top, text="Currency", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_6.place(x=580, y=40)
+    label_quality_check_subtitle_6.place(x=510, y=40)
 
     label_quality_check_element_6 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_6.place(x=583, y=60)
+    label_quality_check_element_6.place(x=513, y=60)
 
     label_quality_check_subtitle_7 = App_Label_Title(frame_quality_check_details_top, text="Amount in EUR", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_7.place(x=650, y=40)
+    label_quality_check_subtitle_7.place(x=570, y=40)
 
     label_quality_check_element_7 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_7.place(x=657, y=60)
+    label_quality_check_element_7.place(x=577, y=60)
 
     label_quality_check_subtitle_8 = App_Label_Title(frame_quality_check_details_top, text="Vendor number", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_8.place(x=750, y=40)
+    label_quality_check_subtitle_8.place(x=660, y=40)
 
     label_quality_check_element_8 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_8.place(x=750, y=60)
+    label_quality_check_element_8.place(x=660, y=60)
 
     label_quality_check_subtitle_9 = App_Label_Title(frame_quality_check_details_top, text="Vendor type", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_9.place(x=850, y=40)
+    label_quality_check_subtitle_9.place(x=750, y=40)
 
     label_quality_check_element_9 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_9.place(x=851, y=60)
+    label_quality_check_element_9.place(x=751, y=60)
 
-    line_frame_top = ctk.CTkFrame(frame_quality_check_details_top, height=2, width=895, fg_color="#DDE2E7", corner_radius=0)
+    label_quality_check_subtitle_10 = App_Label_Title(frame_quality_check_details_top, text="Psinova/VIM Document number", font= ("Open Sans", 10), text_color = "#8B7A6B")
+    label_quality_check_subtitle_10.place(x=820, y=40)
+
+    label_quality_check_element_10 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
+    label_quality_check_element_10.place(x=845, y=60)
+
+    line_frame_top = ctk.CTkFrame(frame_quality_check_details_top, height=2, width=950, fg_color="#DDE2E7", corner_radius=0)
     line_frame_top.place(x=25, y=35)
 
 
@@ -644,9 +677,9 @@ def run_quality_check_details(quality_check_page,
     label_comment = App_Label_Title(frame_quality_check_details_bottom, text="Comment:", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     label_comment.place(x=485, y=235)
 
-    if ((str(status_number) == "1" and sap_id == sap_id_who_posted_invoice)
+    if ((str(status_number) == "1" and sap_id == sap_id_who_postepiotr.szczubiala@fresenius-kabi.comd_invoice)
             or (str(status_number) == "2")
-            or (str(status_number) == "4" and admin_role != "admin")):
+            or (str(status_number) == "4")):
         text_box_comment.configure(state="disabled", fg_color="#E5E5E5", text_color="#808080")
         label_comment.configure(text_color="#9AA3AD")
     else:
@@ -708,9 +741,10 @@ def run_quality_check_details(quality_check_page,
     amount_in_eur = f"{float(first_selected_item['Amount_EUR']):,.2f}"
     display_vendor_number = first_selected_item["Vendor_number"]
     display_vendor_type = first_selected_item["Internal_external_vendor"]
+    psinova_vim_document_number = first_selected_item["Document_number_Psinova_VIM"]
 
-    label_quality_check_element_1.configure(text=sap_document_number)
-    label_quality_check_element_1.bind("<Button-1>",lambda event: copy_to_clipboard(sap_document_number))
+    label_quality_check_element_1.configure(text=sap_document_number, cursor="hand2")
+    label_quality_check_element_1.bind("<Button-1>",lambda event: copy_to_clipboard_sap_document_number(sap_document_number))
 
     label_quality_check_element_2.configure(text=display_company_code)
     label_quality_check_element_3.configure(text=document_date)
@@ -718,8 +752,15 @@ def run_quality_check_details(quality_check_page,
     label_quality_check_element_5.configure(text=amount_in_local_currency)
     label_quality_check_element_6.configure(text=currency)
     label_quality_check_element_7.configure(text=amount_in_eur)
-    label_quality_check_element_8.configure(text=display_vendor_number)
+
+    label_quality_check_element_8.configure(text=display_vendor_number, cursor="hand2")
+    label_quality_check_element_8.bind("<Button-1>", lambda event: copy_to_clipboard_vendor_number(display_vendor_number))
+
     label_quality_check_element_9.configure(text=display_vendor_type)
+
+    label_quality_check_element_10.configure(text=psinova_vim_document_number, cursor="hand2")
+    label_quality_check_element_10.bind("<Button-1>", lambda event: copy_to_clipboard_psinova_vim_document_number(psinova_vim_document_number))
+
 
 
 
@@ -767,7 +808,13 @@ if __name__ == "__main__":
         "Currency": "PLN",
         "Amount_EUR": 23500,
         "Vendor_number": "0000123456",
-        "Internal_external_vendor": "External"
+        "Internal_external_vendor": "External",
+        "First_comment": "",
+        "Second_comment": "",
+        "Controls": "1,1,1,1,1,1,1,1,1,1,1,1,1",
+        "User_name": "TEST_POSTER",
+        "Verified": "1",
+        "Document_number_Psinova_VIM": "12345678"
     }
 
     run_quality_check_details(
@@ -782,5 +829,10 @@ if __name__ == "__main__":
         qc_status="Open",
         vendor_type="External",
         vendor_number="0000123456",
-        order_by="Document_number_SAP"
+        order_by="Document_number_SAP",
+        admin_role=None,
+        user_email_address=None,
+        refresh_main_window=None
     )
+
+    main_page.mainloop()

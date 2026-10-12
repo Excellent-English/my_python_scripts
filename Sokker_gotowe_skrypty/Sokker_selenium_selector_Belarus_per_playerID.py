@@ -14,7 +14,9 @@ driver = webdriver.Chrome()
 
 # Otwiera stronę internetową
 driver.get('https://sokker.org/pl/')
-WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/main/div[1]/div/div[2]/div[1]/div/div/div[2]/button/span/span'))).click()
+# WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/main/div[1]/div/div[2]/div[1]/div/div/div[2]/button/span/span'))).click()
+sleep(1)
+WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, '/html/body/div[1]/div/div[4]/div[1]/div/div[2]/button[4]'))).click()
 
 # Maksymalizuje okno przeglądarki
 driver.maximize_window()

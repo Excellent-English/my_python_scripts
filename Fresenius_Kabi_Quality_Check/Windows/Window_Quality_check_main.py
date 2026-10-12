@@ -144,7 +144,7 @@ def run_quality_check_menu(menu_page, sap_id, admin_role, user_email_address):
     label_quality_check_country = App_Label_Title(frame_quality_check, text="Country", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_country.place(x=35, y=140)
 
-    dropdown_countries = AppComboBox(frame_quality_check, width = 300, values=countries, command=on_country_changed)
+    dropdown_countries = AppComboBox(frame_quality_check, width = 300, values=countries, command=on_country_changed, state="readonly")
     dropdown_countries.place(x=40, y=170)
     dropdown_countries.set("---")
     print(countries)
@@ -152,7 +152,7 @@ def run_quality_check_menu(menu_page, sap_id, admin_role, user_email_address):
     label_quality_check_company_code = App_Label_Title(frame_quality_check, text="Company Code", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_company_code.place(x=35, y=220)
 
-    dropdown_company_codes = AppComboBox(frame_quality_check, width = 300, values=["---"], command=when_selection_changes)
+    dropdown_company_codes = AppComboBox(frame_quality_check, width = 300, values=["---"], command=when_selection_changes, state="readonly")
     dropdown_company_codes.place(x=40, y=250)
 
     label_quality_check_qc_status = App_Label_Title(frame_quality_check, text="QC status", font= ("Open Sans", 14, "bold"), text_color = "#755a44")

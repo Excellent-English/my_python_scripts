@@ -11,7 +11,7 @@ class Database_Admin:
             Driver={ODBC Driver 18 for SQL Server};
             Server=tcp:sscciq.database.windows.net,1433;
             Database=SSC CIQ;
-            Authentication=ActiveDirectoryIntegrated;
+            Authentication=ActiveDirectoryInteractive;
             """
         )
 
