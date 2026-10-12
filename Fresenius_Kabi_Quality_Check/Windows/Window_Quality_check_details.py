@@ -15,6 +15,7 @@ from Fresenius_Kabi_Quality_Check.AllClasses.App_Database_QC import Database_QC
 from Fresenius_Kabi_Quality_Check.AllClasses.App_Radio_Button import App_Radio_Button
 from Fresenius_Kabi_Quality_Check.AllClasses.Resource_Path import resource_path
 from Fresenius_Kabi_Quality_Check.Windows.Window_Administration_Limit import db_admin
+from Fresenius_Kabi_Quality_Check.AllClasses.App_Check_Box import App_Check_Box
 
 db = Database()
 db_qc = Database_QC()
@@ -403,7 +404,7 @@ def run_quality_check_details(quality_check_page,
     label_quality_check_subtitle_9.place(x=750, y=40)
 
     label_quality_check_element_9 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_9.place(x=751, y=60)
+    label_quality_check_element_9.place(x=752, y=60)
 
     label_quality_check_subtitle_10 = App_Label_Title(frame_quality_check_details_top, text="Psinova/VIM Document number", font= ("Open Sans", 10), text_color = "#8B7A6B")
     label_quality_check_subtitle_10.place(x=820, y=40)
@@ -454,6 +455,13 @@ def run_quality_check_details(quality_check_page,
 
     label_quality_check_title_bottom = App_Label_Title(frame_quality_check_details_bottom, text="AUDIT CONTROLS", font=("Open Sans", 12, "bold"), text_color="#755a44")
     label_quality_check_title_bottom.place(x=20, y=8)
+
+    check_box_select_yes_to_all = App_Check_Box(frame_quality_check_details_bottom, text="Apply OK to all")
+    check_box_select_yes_to_all.place(x=810, y=8)
+    if str(status_number) == "1":
+        check_box_select_yes_to_all.configure(state="normal")
+    else:
+        check_box_select_yes_to_all.configure(state="disabled")
 
     line_frame_bottom = ctk.CTkFrame(frame_quality_check_details_bottom, height=2, width=895, fg_color="#DDE2E7", corner_radius=0)
     line_frame_bottom.place(x=25, y=35)
@@ -664,6 +672,22 @@ def run_quality_check_details(quality_check_page,
     for i, status in enumerate(control_statuses_list):
         radio_variables[i].set(int(status))
 
+
+
+    def apply_ok_to_all():
+        if check_box_select_yes_to_all.get() == 1:
+            # Checkbox zaznaczony, ustaw wszystkie kontrole na OK
+            for radio_variable in radio_variables:
+                radio_variable.set(1)
+        else:
+            # Checkbox odznaczony, wyczyść wszystkie kontrole
+            for radio_variable in radio_variables:
+                radio_variable.set(-1)
+
+        check_save_button()
+
+    check_box_select_yes_to_all.configure(command=apply_ok_to_all)
+
 # -----------------------------------------------------------------------------------
 # pola na dole okna aplikacji: comment i follow up
 # -----------------------------------------------------------------------------------
@@ -677,7 +701,7 @@ def run_quality_check_details(quality_check_page,
     label_comment = App_Label_Title(frame_quality_check_details_bottom, text="Comment:", font=("Open Sans", 13), text_color="#755a44", fg_color = "transparent")
     label_comment.place(x=485, y=235)
 
-    if ((str(status_number) == "1" and sap_id == sap_id_who_postepiotr.szczubiala@fresenius-kabi.comd_invoice)
+    if ((str(status_number) == "1" and sap_id == sap_id_who_posted_invoice)
             or (str(status_number) == "2")
             or (str(status_number) == "4")):
         text_box_comment.configure(state="disabled", fg_color="#E5E5E5", text_color="#808080")

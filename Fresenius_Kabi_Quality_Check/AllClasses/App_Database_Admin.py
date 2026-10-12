@@ -27,6 +27,7 @@ class Database_Admin:
             """
 
         df = pd.read_sql_query(query, conn)
+        conn.close()
         return df["Country"].tolist()
 
 
@@ -43,6 +44,8 @@ class Database_Admin:
         conn,
             params=[country, company_code]
         )
+
+        conn.close()
         return [
             {
                 "monthly_posted_documents": row["Monthly_posted_documents"],
@@ -66,6 +69,7 @@ class Database_Admin:
 
         df = pd.read_sql_query(query, conn)
 
+        conn.close()
         return df["Country"].tolist()
 
 
@@ -80,7 +84,7 @@ class Database_Admin:
         query = """
             SELECT DISTINCT Company_code
             FROM quality_check_limits
-            WHERE Country = ?
+            WHERE Country = ? AND Line_status = 'Active'
             ORDER BY Company_code
             """
 
@@ -90,6 +94,7 @@ class Database_Admin:
             params=[country]
         )
 
+        conn.close()
         return df["Company_code"].tolist()
 
 
@@ -105,7 +110,7 @@ class Database_Admin:
         conn = self.get_connection()
         query = """
             SELECT Email_address from quality_check_users
-            WHERE Email_address = ?
+            WHERE Email_address = ? AND Active_to IS NULL
             """
 
         df = pd.read_sql_query(
@@ -130,7 +135,7 @@ class Database_Admin:
         conn = self.get_connection()
         query = """
             SELECT Admin_role from quality_check_users
-            WHERE Email_address = ? AND Admin_role = 'Admin'
+            WHERE Email_address = ? AND Admin_role = 'admin' AND Active_to IS NULL
             """
 
         df = pd.read_sql_query(
@@ -153,7 +158,7 @@ class Database_Admin:
 
         query = """
                 SELECT SAP_user from quality_check_users
-                WHERE Email_address = ?
+                WHERE Email_address = ? AND Active_to IS NULL
                 """
 
         df = pd.read_sql_query(
@@ -187,13 +192,14 @@ class Database_Admin:
             params=[sap_id]
         )
 
+        conn.close()
         return df["New_joiner"].tolist()
 
 
 # funkcja umieszczona w people management - middle left
 # funkcja nadająca użytkownikowi dostęp admina
 
-    def grant_admin_access(self, sap_id, who_changed, typed_email_address):
+    def grant_admin_access(self, sap_id, who_closed_line, typed_email_address, who_created_line):
 
         conn = self.get_connection()
         cursor = conn.cursor()
@@ -202,7 +208,7 @@ class Database_Admin:
 
             script_to_deactivate_row = """
                     UPDATE quality_check_users
-                    SET Active_to = GETDATE(), Who_changed = ?
+                    SET Active_to = GETDATE(), Who_closed_line = ?
                     WHERE Email_address = ? AND Active_to IS NULL
                     """
 
@@ -212,7 +218,7 @@ class Database_Admin:
                     SAP_user,
                     Email_address,
                     Admin_role,
-                    Who_changed,
+                    Who_created_line,
                     Active_from
                 )
                 VALUES
@@ -227,7 +233,7 @@ class Database_Admin:
 
             cursor.execute(
                 script_to_deactivate_row,
-                who_changed,
+                who_closed_line,
                 typed_email_address
             )
 
@@ -235,7 +241,7 @@ class Database_Admin:
                 script_to_insert_row,
                 sap_id,
                 typed_email_address,
-                who_changed
+                who_created_line
             )
 
             conn.commit()
@@ -250,27 +256,59 @@ class Database_Admin:
 # funkcja umieszczona w people management - middle left
 # funkcja zabierająca użytkownikowi dostęp admina
 
-    def revoke_admin_access(self, who_changed, typed_email_address):
+    def revoke_admin_access(self, sap_id, who_closed_line, typed_email_address, who_created_line):
 
         conn = self.get_connection()
         cursor = conn.cursor()
 
-        script_to_update_row = """
-            UPDATE quality_check_users
-            SET Admin_role = NULL, Active_to = GETDATE(), Who_changed = ?
-            WHERE Email_address = ? AND Active_to IS NULL
-        """
+        try:
 
-        cursor.execute(
-            script_to_update_row,
-            who_changed,
-            typed_email_address
-        )
+            script_to_deactivate_row = """
+                UPDATE quality_check_users
+                SET Active_to = GETDATE(), Who_closed_line = ?
+                WHERE Email_address = ? AND Active_to IS NULL
+            """
 
-        conn.commit()
+            script_to_insert_row = """
+                INSERT INTO quality_check_users
+                (
+                    SAP_user,
+                    Email_address,
+                    Admin_role,
+                    Who_created_line,
+                    Active_from
+                )
+                VALUES
+                (
+                    ?,
+                    ?,
+                    NULL,
+                    ?,
+                    GETDATE()
+                );
+                """
 
-        cursor.close()
-        conn.close()
+            cursor.execute(
+                script_to_deactivate_row,
+                who_closed_line,
+                typed_email_address
+            )
+
+            cursor.execute(
+                script_to_insert_row,
+                sap_id,
+                typed_email_address,
+                who_created_line
+            )
+
+            conn.commit()
+
+        except Exception:
+            conn.rollback()
+            raise
+        finally:
+            cursor.close()
+            conn.close()
 
 
 # funkcja umieszczona w people management - middle left
@@ -291,6 +329,7 @@ class Database_Admin:
         )
 
         print(df["Country"].tolist())
+        conn.close()
         return df["Country"].tolist()
 
 
@@ -392,7 +431,7 @@ class Database_Admin:
 # funkcja umieszczona w people management - middle right
 # funkcja dodająca nowego użytkownika do tabeli users
 
-    def create_user_if_does_not_exist_new_line(self, sap_user, email_address, admin_role, who_changed):
+    def create_user_if_does_not_exist_new_line(self, sap_user, email_address, admin_role, who_created_line):
 
         conn = self.get_connection()
         cursor = conn.cursor()
@@ -404,7 +443,8 @@ class Database_Admin:
             Email_address,
             Admin_role,
             Active_from,
-            Who_changed
+            Who_created_line,
+            Who_closed_line
         )
         VALUES
         (
@@ -412,7 +452,8 @@ class Database_Admin:
             ?,
             ?,
             GETDATE(),
-            ?
+            ?,
+            NULL
         );
         """
 
@@ -421,7 +462,7 @@ class Database_Admin:
             sap_user,
             email_address,
             admin_role,
-            who_changed
+            who_created_line
         )
         conn.commit()
 
@@ -489,13 +530,14 @@ class Database_Admin:
             conn
         )
 
+        conn.close()
         return df["User_name"].tolist()
 
 
 # funkcja umieszczona w people management - bottom left
 # funkcja wprowadzająca nowego usera do tabeli users, który wcześniej postował faktury
 
-    def create_user_who_posted_invoices(self, selected_sap_id, typed_email_address):
+    def create_user_who_posted_invoices(self, selected_sap_id, typed_email_address, who_created_line):
 
         conn = self.get_connection()
         cursor = conn.cursor()
@@ -505,20 +547,23 @@ class Database_Admin:
                 (
                     SAP_user,
                     Email_address,
-                    Active_from
+                    Active_from,
+                    Who_created_line
                 )
                 VALUES
                 (
                     ?,
                     ?,
-                    GETDATE()
+                    GETDATE(),
+                    ?
                 );
                 """
 
         cursor.execute(
             script_to_insert_new_row,
+            selected_sap_id,
             typed_email_address,
-            selected_sap_id
+            who_created_line
         )
         conn.commit()
 
@@ -541,6 +586,7 @@ class Database_Admin:
             conn
         )
 
+        conn.close()
         return df["SAP_user"].tolist()
 
 

@@ -166,7 +166,7 @@ def run_window_administraton_people(adm_page, user_email_address):
     def grant_admin_access():
 
         typed_email_address_top_right, sap_id, countries_where_new_joiner_is_added = check_if_user_exists_top_right()
-        db_admin.grant_admin_access(sap_id, user_email_address, typed_email_address_top_right)
+        db_admin.grant_admin_access(sap_id, user_email_address, typed_email_address_top_right, user_email_address)
 
         updated_admin_rights = db_admin.is_selected_employee_admin(typed_email_address_top_right)
         if updated_admin_rights:
@@ -180,7 +180,7 @@ def run_window_administraton_people(adm_page, user_email_address):
     def revoke_admin_access():
 
         typed_email_address_top_right, sap_id, countries_where_new_joiner_is_added = check_if_user_exists_top_right()
-        db_admin.revoke_admin_access(user_email_address, typed_email_address_top_right)
+        db_admin.revoke_admin_access(sap_id, user_email_address, typed_email_address_top_right, user_email_address)
 
         updated_admin_rights = db_admin.is_selected_employee_admin(typed_email_address_top_right)
         if updated_admin_rights:
@@ -298,7 +298,7 @@ def run_window_administraton_people(adm_page, user_email_address):
         selected_sap_id = dropdown_bottom_left_sap_ids.get()
         typed_email_address = text_input_bottom_left_email_address.get()
 
-        db_admin.create_user_who_posted_invoices(selected_sap_id, typed_email_address)
+        db_admin.create_user_who_posted_invoices(selected_sap_id, typed_email_address, user_email_address)
 
         text_input_bottom_left_email_address.delete(0, "end")
 
