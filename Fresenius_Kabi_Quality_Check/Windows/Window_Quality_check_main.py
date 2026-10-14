@@ -38,6 +38,11 @@ def run_quality_check_menu(menu_page, sap_id, admin_role, user_email_address):
     items_not_mine = 0
 # ---------------------------------------------------------------------------------
 
+    # zablokuj zamknięcie okna za pomocą "X"
+    def disable_close():
+        pass
+    quality_check_page.protocol("WM_DELETE_WINDOW", disable_close)
+
     # Dodanie przycisku zawierającego ikonę return- przycisk powracający do poprzedniego okna
     def return_to_previous_window():
         quality_check_page.withdraw()
@@ -63,11 +68,6 @@ def run_quality_check_menu(menu_page, sap_id, admin_role, user_email_address):
     power_btn.place(x=50, y=7)
 
 # ---------------------------------------------------------------------------------
-
-    # zablokuj zamknięcie okna za pomocą "X"
-    def disable_close():
-        pass
-    menu_page.protocol("WM_DELETE_WINDOW", disable_close)
 
 
     def on_country_changed(selected_country):

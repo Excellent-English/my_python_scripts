@@ -32,6 +32,11 @@ def run_quality_check_details(quality_check_page,
     # Utwórz nowe okno
     quality_check_page_details = AppWindow(banner_text = "Quality check audit", width=1100, height=610, x= 120, y = 25, fg_color="#F6F7F9")
 
+    # zablokuj zamknięcie okna za pomocą "X"
+    def disable_close():
+        pass
+    quality_check_page_details.protocol("WM_DELETE_WINDOW", disable_close)
+
     print(f"SAP ID used in quality_check_details: {sap_id}")
     print(f"Logged user admin rights: {admin_role}")
     print(f"Logged user email address: {user_email_address}")
@@ -99,13 +104,6 @@ def run_quality_check_details(quality_check_page,
     power_btn.image = power_off_icon  # trzymaj referencję!
     power_btn.place(x=50, y=7)
 
-# ---------------------------------------------------------------------------------
-
-    # zablokuj zamknięcie okna za pomocą "X"
-    def disable_close():
-        pass
-    quality_check_page_details.protocol("WM_DELETE_WINDOW", disable_close)
-
 
 # ---------------------------------------------------------------------------------
 # Funkcje kopiujące bieżące wartości z aplikacji
@@ -150,8 +148,12 @@ def run_quality_check_details(quality_check_page,
     def check_save_button(event=None):
         can_save = False
 
-        if str(status_number) in ["1", "2"]:
+        if str(status_number) == "1":
             can_save = (sap_id != sap_id_who_posted_invoice)
+
+        elif str(status_number) == "2":
+            can_save = True
+
         elif str(status_number) == "4":
             can_save = (admin_role == "admin")
 
@@ -726,8 +728,6 @@ def run_quality_check_details(quality_check_page,
     label_follow_up.place(x=765, y=235)
 
     if (str(status_number) == "1"
-            or
-            (str(status_number) == "2" and sap_id == sap_id_who_posted_invoice)
             or
             (str(status_number) == "4" and admin_role != "admin")):
         text_box_follow_up.configure(state="disabled", fg_color="#E5E5E5", text_color="#808080")
