@@ -692,7 +692,7 @@ def run_quality_check_details(quality_check_page,
 # pola na dole okna aplikacji: comment i follow up
 # -----------------------------------------------------------------------------------
 
-    text_box_comment = App_Text_Box(frame_quality_check_details_bottom, width = 270, height = 85, fg_color = "white", max_length=170)
+    text_box_comment = App_Text_Box(frame_quality_check_details_bottom, width = 270, height = 85, fg_color = "white", max_length=250)
     text_box_comment.place(x=445, y=250)
     text_box_comment._textbox.configure(pady = 12)
 
@@ -716,7 +716,7 @@ def run_quality_check_details(quality_check_page,
     # else:
     #     text_box_comment.configure(state="normal")
 
-    text_box_follow_up = App_Text_Box(frame_quality_check_details_bottom, width = 270, height = 85, fg_color = "white", max_length=170)
+    text_box_follow_up = App_Text_Box(frame_quality_check_details_bottom, width = 270, height = 85, fg_color = "white", max_length=250)
     text_box_follow_up.place(x=720, y=250)
     text_box_follow_up._textbox.configure(pady = 12)
 

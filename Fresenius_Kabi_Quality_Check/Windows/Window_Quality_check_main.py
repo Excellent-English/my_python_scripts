@@ -158,7 +158,7 @@ def run_quality_check_menu(menu_page, sap_id, admin_role, user_email_address):
     label_quality_check_qc_status = App_Label_Title(frame_quality_check, text="QC status", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_qc_status.place(x=35, y=300)
 
-    dropdown_qc_status = AppComboBox(frame_quality_check, width = 300, values=["All","Pending Verification (1)","Verification Failed (2)", "Requires confirmation (4)"], command=when_selection_changes)
+    dropdown_qc_status = AppComboBox(frame_quality_check, width = 300, values=["Pending Verification (1)","Verification Failed (2)", "Requires confirmation (4)"], command=when_selection_changes)
     dropdown_qc_status.place(x=40, y=330)
 
     label_quality_check_vendor_type = App_Label_Title(frame_quality_check, text="Vendor type", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
