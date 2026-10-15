@@ -9,7 +9,7 @@ class Database_QC:
             Driver={ODBC Driver 18 for SQL Server};
             Server=tcp:sscciq.database.windows.net,1433;
             Database=SSC CIQ;
-            Authentication=ActiveDirectoryInteractive;
+            Authentication=ActiveDirectoryIntegrated;
             """
         )
 

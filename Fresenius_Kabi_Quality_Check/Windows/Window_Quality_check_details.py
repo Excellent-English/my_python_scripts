@@ -353,66 +353,67 @@ def run_quality_check_details(quality_check_page,
     label_quality_check_title = App_Label_Title(frame_quality_check_details_top, text="ITEM DETAILS", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
     label_quality_check_title.place(x=20, y=8)
 
+# najpierw jest element 10, bo na samym początku był pierwszym elementem od prawej strony
+    label_quality_check_subtitle_10 = App_Label_Title(frame_quality_check_details_top, text="Psinova/VIM Document number", font= ("Open Sans", 10), text_color = "#8B7A6B")
+    label_quality_check_subtitle_10.place(x=20, y=40)
+
+    label_quality_check_element_10 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
+    label_quality_check_element_10.place(x=55, y=60)
+
     label_quality_check_subtitle_1 = App_Label_Title(frame_quality_check_details_top, text="SAP Document number", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_1.place(x=20, y=40)
+    label_quality_check_subtitle_1.place(x=165, y=40)
 
     label_quality_check_element_1 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_1.place(x=34, y=60)
+    label_quality_check_element_1.place(x=179, y=60)
     label_quality_check_element_1.configure(cursor="hand2")
 
     label_quality_check_subtitle_2 = App_Label_Title(frame_quality_check_details_top, text="Company code", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_2.place(x=135, y=40)
+    label_quality_check_subtitle_2.place(x=280, y=40)
 
     label_quality_check_element_2 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_2.place(x=150, y=60)
+    label_quality_check_element_2.place(x=295, y=60)
 
     label_quality_check_subtitle_3 = App_Label_Title(frame_quality_check_details_top, text="Document date", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_3.place(x=215, y=40)
+    label_quality_check_subtitle_3.place(x=365, y=40)
 
     label_quality_check_element_3 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_3.place(x=216, y=60)
+    label_quality_check_element_3.place(x=366, y=60)
 
     label_quality_check_subtitle_4 = App_Label_Title(frame_quality_check_details_top, text="Due date", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_4.place(x=315, y=40)
+    label_quality_check_subtitle_4.place(x=465, y=40)
 
     label_quality_check_element_4 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_4.place(x=305, y=60)
+    label_quality_check_element_4.place(x=455, y=60)
 
     label_quality_check_subtitle_5 = App_Label_Title(frame_quality_check_details_top, text="Amount in local currency", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_5.place(x=387, y=40)
+    label_quality_check_subtitle_5.place(x=537, y=40)
 
     label_quality_check_element_5 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_5.place(x=405, y=60)
+    label_quality_check_element_5.place(x=555, y=60)
 
     label_quality_check_subtitle_6 = App_Label_Title(frame_quality_check_details_top, text="Currency", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_6.place(x=510, y=40)
+    label_quality_check_subtitle_6.place(x=660, y=40)
 
     label_quality_check_element_6 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_6.place(x=513, y=60)
+    label_quality_check_element_6.place(x=665, y=60)
 
     label_quality_check_subtitle_7 = App_Label_Title(frame_quality_check_details_top, text="Amount in EUR", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_7.place(x=570, y=40)
+    label_quality_check_subtitle_7.place(x=720, y=40)
 
     label_quality_check_element_7 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_7.place(x=577, y=60)
+    label_quality_check_element_7.place(x=727, y=60)
 
     label_quality_check_subtitle_8 = App_Label_Title(frame_quality_check_details_top, text="Vendor number", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_8.place(x=660, y=40)
+    label_quality_check_subtitle_8.place(x=810, y=40)
 
     label_quality_check_element_8 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_8.place(x=660, y=60)
+    label_quality_check_element_8.place(x=810, y=60)
 
     label_quality_check_subtitle_9 = App_Label_Title(frame_quality_check_details_top, text="Vendor type", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_9.place(x=750, y=40)
+    label_quality_check_subtitle_9.place(x=900, y=40)
 
     label_quality_check_element_9 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_9.place(x=752, y=60)
-
-    label_quality_check_subtitle_10 = App_Label_Title(frame_quality_check_details_top, text="Psinova/VIM Document number", font= ("Open Sans", 10), text_color = "#8B7A6B")
-    label_quality_check_subtitle_10.place(x=820, y=40)
-
-    label_quality_check_element_10 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_10.place(x=845, y=60)
+    label_quality_check_element_9.place(x=902, y=60)
 
     line_frame_top = ctk.CTkFrame(frame_quality_check_details_top, height=2, width=950, fg_color="#DDE2E7", corner_radius=0)
     line_frame_top.place(x=25, y=35)
