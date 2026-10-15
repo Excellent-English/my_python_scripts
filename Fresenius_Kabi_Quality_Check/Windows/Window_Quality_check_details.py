@@ -66,22 +66,19 @@ def run_quality_check_details(quality_check_page,
     control_statuses_list = control_statuses.split(",")
     print(control_statuses_list)
 
+    db_qc.block_selected_item(first_selected_item['Key_value_for_database'])
 
 
 # ---------------------------------------------------------------------------------
 
     # Dodanie przycisku zawierającego ikonę return- przycisk powracający do poprzedniego okna
     def return_to_previous_window():
+
+        db_qc.unblock_selected_item(first_selected_item['Key_value_for_database'])
+
         quality_check_page_details.destroy()
 
         refresh_main_window()
-        # db.get_number_of_items_found_all(
-        #     sap_id=sap_id,
-        #     country=country,
-        #     company_code=company_code,
-        #     qc_status=qc_status,
-        #     vendor_type=vendor_type,
-        #     vendor_number=vendor_number)
 
         quality_check_page.deiconify()
         quality_check_page.lift()
@@ -104,6 +101,11 @@ def run_quality_check_details(quality_check_page,
     power_btn.image = power_off_icon  # trzymaj referencję!
     power_btn.place(x=50, y=7)
 
+
+# funkcja odblokowująca item
+
+    def unblock_current_item():
+        db_qc.unblock_selected_item(first_selected_item['Key_value_for_database'])
 
 # ---------------------------------------------------------------------------------
 # Funkcje kopiujące bieżące wartości z aplikacji
@@ -208,6 +210,8 @@ def run_quality_check_details(quality_check_page,
 
     def reload_quality_check_items():
 
+        db_qc.unblock_selected_item(first_selected_item['Key_value_for_database'])
+
         new_first_selected_item = db.get_first_item_quality_check(
             sap_id=sap_id,
             country=country,
@@ -215,7 +219,8 @@ def run_quality_check_details(quality_check_page,
             qc_status=qc_status,
             vendor_type=vendor_type,
             vendor_number=vendor_number,
-            order_by=order_by
+            order_by=order_by,
+            admin_role=admin_role
         )
 
         print("NEW ITEM:")
@@ -229,6 +234,8 @@ def run_quality_check_details(quality_check_page,
             quality_check_page.focus_force()
             return
 
+        # db_qc.block_selected_item(new_first_selected_item['Key_value_for_database'])
+
         new_status_number = new_first_selected_item["Verified"]
 
         new_total_items, new_items_not_mine = db.get_number_of_items_found_all(
@@ -237,7 +244,8 @@ def run_quality_check_details(quality_check_page,
             company_code=company_code,
             qc_status=qc_status,
             vendor_type=vendor_type,
-            vendor_number=vendor_number
+            vendor_number=vendor_number,
+            admin_role=admin_role
         )
 
         quality_check_page_details.destroy()
@@ -347,7 +355,7 @@ def run_quality_check_details(quality_check_page,
     frame_quality_check_details_top.place(x=50, y=65)
 
     label_number_of_items_found = App_Label_Title(frame_quality_check_details_top, text=f"Items to audit: {items_not_mine} ({total_items} in total)", font= ("Open Sans", 12), text_color = "#8B7A6B")
-    label_number_of_items_found.place(x=820, y=8)
+    label_number_of_items_found.place(x=805, y=8)
     label_number_of_items_found.configure(text=f"Items to audit: {items_not_mine} ({total_items} in total)")
 
     label_quality_check_title = App_Label_Title(frame_quality_check_details_top, text="ITEM DETAILS", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
@@ -364,7 +372,7 @@ def run_quality_check_details(quality_check_page,
     label_quality_check_subtitle_1.place(x=165, y=40)
 
     label_quality_check_element_1 = App_Label_Title(frame_quality_check_details_top, text="", font= ("Open Sans", 12, "bold"), text_color = "#755a44")
-    label_quality_check_element_1.place(x=179, y=60)
+    label_quality_check_element_1.place(x=181, y=60)
     label_quality_check_element_1.configure(cursor="hand2")
 
     label_quality_check_subtitle_2 = App_Label_Title(frame_quality_check_details_top, text="Company code", font= ("Open Sans", 10), text_color = "#8B7A6B")
@@ -806,7 +814,8 @@ def run_quality_check_details(quality_check_page,
         width=35, height=35,
         fg_color="transparent",
         hover_color="#755a44",
-        command= lambda: quality_check_page.close_the_app(quality_check_page_details)
+        command=lambda: quality_check_page.close_the_app(quality_check_page_details, before_close=unblock_current_item)
+        # command= lambda: quality_check_page.close_the_app(quality_check_page_details)
     )
     power_btn.image = power_off_icon  # trzymaj referencję!
     power_btn.place(x=880, y=5)

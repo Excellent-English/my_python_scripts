@@ -93,7 +93,8 @@ def run_quality_check_menu(menu_page, sap_id, admin_role, user_email_address):
         company_code = company_code,
         qc_status = qc_status,
         vendor_type = vendor_type,
-        vendor_number = vendor_number)
+        vendor_number = vendor_number,
+        admin_role=admin_role)
 
         label_number_of_items_found.configure(text = f"Items to audit: {items_not_mine} ({total_items} in total)")
 
@@ -113,7 +114,8 @@ def run_quality_check_menu(menu_page, sap_id, admin_role, user_email_address):
         qc_status = qc_status,
         vendor_type = vendor_type,
         vendor_number = vendor_number,
-        order_by = order_by)
+        order_by = order_by,
+        admin_role=admin_role)
 
         if not first_selected_item:
             print("No items found for selected criteria")
@@ -158,7 +160,7 @@ def run_quality_check_menu(menu_page, sap_id, admin_role, user_email_address):
     label_quality_check_qc_status = App_Label_Title(frame_quality_check, text="QC status", font= ("Open Sans", 14, "bold"), text_color = "#755a44")
     label_quality_check_qc_status.place(x=35, y=300)
 
-    dropdown_qc_status = AppComboBox(frame_quality_check, width = 300, values=["Pending Verification (1)","Verification Failed (2)", "Requires confirmation (4)"], command=when_selection_changes)
+    dropdown_qc_status = AppComboBox(frame_quality_check, width = 300, values=["Pending Verification (1)","Verification Failed (2) - all", "Verification Failed (2) - my invoices", "Requires confirmation (4)"], command=when_selection_changes)
     dropdown_qc_status.place(x=40, y=330)
 
     label_quality_check_vendor_type = App_Label_Title(frame_quality_check, text="Vendor type", font= ("Open Sans", 14, "bold"), text_color = "#755a44")

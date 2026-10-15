@@ -9,7 +9,7 @@ class Database_QC:
             Driver={ODBC Driver 18 for SQL Server};
             Server=tcp:sscciq.database.windows.net,1433;
             Database=SSC CIQ;
-            Authentication=ActiveDirectoryIntegrated;
+            Authentication=ActiveDirectoryInteractive;
             """
         )
 
@@ -144,6 +144,54 @@ class Database_QC:
         cursor.execute(
             query_to_update_from_4_to_3,
             (Who_changed_from_4_to_3, First_comment, Second_comment, Key_value_for_database)
+        )
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+
+# ------------------------------------------------------------------------------------------------------------------------------------------------
+
+# funkcja wysyłająca flagę "Yes" do itemu, który aktualnie jest przeglądany
+
+    def block_selected_item(self, Key_value_for_database):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+        query_to_block_item = """
+            UPDATE quality_check_database
+            SET Item_blocked = 'Yes'
+            WHERE Key_value_for_database = ?
+            """
+
+        cursor.execute(
+            query_to_block_item,
+            (Key_value_for_database,)
+        )
+
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+
+# funkcja odwołująca flagę "Yes" do itemu, który aktualnie jest przeglądany
+
+    def unblock_selected_item(self, Key_value_for_database):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+        query_to_unblock_item = """
+                UPDATE quality_check_database
+                SET Item_blocked = Null
+                WHERE Key_value_for_database = ?
+                """
+
+        cursor.execute(
+            query_to_unblock_item,
+            (Key_value_for_database,)
         )
 
         conn.commit()
